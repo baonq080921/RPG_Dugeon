@@ -3,6 +3,7 @@ using System.Collections;
 using Base;
 using stateMachine;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace player
 {
@@ -19,6 +20,9 @@ namespace player
         public float dashDuration = 0.2f;
         public float dashCooldown = 1f;
         public bool canDash{get; private set;} = true;
+
+        /// <summary>Fired when dash cooldown begins. Parameter is the total cooldown duration.</summary>
+        public event Action<float> DashCooldownStarted;
         public void SetCanDash(bool value) => canDash = value;
         private float _dashCooldownTimer;
 
@@ -152,6 +156,7 @@ namespace player
         {
             canDash = false;
             _dashCooldownTimer = dashCooldown;
+            DashCooldownStarted?.Invoke(dashCooldown);
         }
 
         private void TickDashCooldown()
