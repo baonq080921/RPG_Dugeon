@@ -20,6 +20,7 @@ namespace player
             rb.gravityScale = 0f;
             _dashDirection = player.movementInput.x != 0 ? _dashDirection = (int) player.movementInput.x : _dashDirection = (int) player.direction;
             ApplyDashVelocity();
+            player.AfterImageEffect?.StartEffect();
         }
 
         public override void Update()
@@ -47,6 +48,7 @@ namespace player
             player.SetCanDash(true);
             rb.gravityScale = 3.5f;
             player.StartDashCooldown();
+            player.AfterImageEffect?.StopEffect();
         }
 
           private void ApplyDashVelocity()

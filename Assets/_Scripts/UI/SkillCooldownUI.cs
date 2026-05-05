@@ -9,7 +9,9 @@ namespace UI
     /// Generic skill cooldown overlay. Attach to any skill button, assign the fill
     /// image and timer text, then call <see cref="StartCooldown"/> to run the effect.
     /// </summary>
-    public class SkillCooldownUI : MonoBehaviour
+    public class 
+    
+    SkillCooldownUI : MonoBehaviour
     {
         [SerializeField] private Image _fillImage;
         [SerializeField] private TMP_Text _timerText;

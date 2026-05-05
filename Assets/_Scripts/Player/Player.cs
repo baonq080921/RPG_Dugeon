@@ -60,6 +60,8 @@ namespace player
 
         
 
+        public AfterImageEffect AfterImageEffect { get; private set; }
+
         public PlayerIdleState playerIdleState {get; private set;}
 
         public PlayerMoveState playerMovementState {get; private set;}
@@ -91,6 +93,7 @@ namespace player
 
             animator = GetComponentInChildren<Animator>();
             rb = GetComponent<Rigidbody2D>();
+            AfterImageEffect = GetComponent<AfterImageEffect>();
 
 
 
