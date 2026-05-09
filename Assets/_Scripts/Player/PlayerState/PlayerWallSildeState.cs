@@ -1,8 +1,7 @@
 
-using Base;
 using UnityEngine;
 namespace player{
-    public class PlayerWallSildeState : EntityState
+    public class PlayerWallSildeState : PlayerState
     {
         public PlayerWallSildeState(Player player, stateMachine.StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
         {

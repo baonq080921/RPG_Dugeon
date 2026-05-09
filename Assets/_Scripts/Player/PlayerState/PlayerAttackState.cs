@@ -3,7 +3,7 @@ using stateMachine;
 using Base;
 namespace player
 {
-    public class PlayerAttackState : EntityState
+    public class PlayerAttackState : PlayerState
     {
         private int _attackDefaultIndex = 1;
         private Vector2 _attackVelocity;
@@ -20,7 +20,7 @@ namespace player
         {
             base.Enter();
             _attackComboQueue = false;
-            _attackDirection = player.movementInput.x !=0 ? _attackDirection = (int)player.movementInput.x :_attackDirection = (int)player.direction;
+            _attackDirection = player.movementInput.x != 0 ? (int)Mathf.Sign(player.movementInput.x) : (int)player.direction;
             ResetComboAttack();
             ApplyAttackVelocity();
             animator.SetInteger("AttackIndex", _attackIndex);
@@ -29,6 +29,7 @@ namespace player
         public override void Update()
         {
             base.Update();
+            if(isTriggered == false) return;
 
             if(input.Player.Dash.WasPressedThisFrame())
                 stateMachine.ChangeState(player.playerDashState);

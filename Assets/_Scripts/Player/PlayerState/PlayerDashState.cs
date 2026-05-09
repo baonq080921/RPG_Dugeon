@@ -3,7 +3,7 @@ using Base;
 using stateMachine;
 namespace player
 {
-    public class PlayerDashState : EntityState
+    public class PlayerDashState : PlayerState
     {
         private float lastDashTime;
         private int _dashDirection;
@@ -18,7 +18,7 @@ namespace player
             player.SetCanDash(false);
             lastDashTime = Time.time;
             rb.gravityScale = 0f;
-            _dashDirection = player.movementInput.x != 0 ? _dashDirection = (int) player.movementInput.x : _dashDirection = (int) player.direction;
+            _dashDirection = player.movementInput.x != 0 ? (int)Mathf.Sign(player.movementInput.x) : (int)player.direction;
             ApplyDashVelocity();
             player.AfterImageEffect?.StartEffect();
         }

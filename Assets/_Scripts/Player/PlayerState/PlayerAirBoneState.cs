@@ -1,9 +1,9 @@
-using Base;
+
 using stateMachine;
 using UnityEngine;
 namespace player
 {
-    public class PlayerAirBoneState : EntityState
+    public class PlayerAirBoneState : PlayerState
     {
         public PlayerAirBoneState(Player player, StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName){}
 

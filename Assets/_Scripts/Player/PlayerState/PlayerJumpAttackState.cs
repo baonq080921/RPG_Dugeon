@@ -1,6 +1,5 @@
 using UnityEngine;
 using stateMachine;
-using Base;
 
 namespace player
 {
@@ -9,7 +8,7 @@ namespace player
     /// JumpAttack_1: triggered by pressing Jump + Attack from the ground.
     /// JumpAttack_2: triggered by pressing Attack while holding up direction in the air.
     /// </summary>
-    public class PlayerJumpAttackState : EntityState
+    public class PlayerJumpAttackState : PlayerState
     {
         /// <summary>When true, applies jump force on enter (triggered from ground).</summary>
         public bool IsFromGround { get; set; }
