@@ -28,7 +28,7 @@ namespace player
                 return;
             }
             if(player.movementInput.x != 0)
-                 player.SetVelocity(new Vector2(player.movementInput.x * player.moveSpeed * player.coyoteTime, rb.velocity.y));
+                player.SetVelocity(new Vector2(player.movementInput.x * player.moveSpeed * player.airControlFactor, rb.velocity.y));
         }
     }
 }

@@ -13,6 +13,11 @@ namespace Base
       var helperObject = new GameObject(nameof(Helper));
       helperObject.AddComponent<Helper>();
       Object.DontDestroyOnLoad(helperObject);
+
+      var cameraFitterObject = new GameObject(nameof(CameraResolutionFitter));
+      cameraFitterObject.AddComponent<CameraResolutionFitter>();
+      Object.DontDestroyOnLoad(cameraFitterObject);
+
     }
   }
 }
