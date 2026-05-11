@@ -7,6 +7,7 @@ public class EntityState
     protected Animator animator;
     protected Rigidbody2D rb;
     protected bool isTriggered;
+    protected float stateTimer;
 
     public EntityState(StateMachine stateMachine,string animBoolName)
     {
@@ -23,6 +24,7 @@ public class EntityState
 
     public virtual void Update()
     {
+        stateTimer -= Time.deltaTime;
     }
 
 
@@ -31,6 +33,12 @@ public class EntityState
         animator.SetBool(animBoolName, false);
     }
 
+    public void TriggerAnimation()
+    {
+        if (isTriggered) return;
+        isTriggered = true;
+    }
 
+    
 
 }

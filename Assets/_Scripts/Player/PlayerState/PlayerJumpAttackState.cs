@@ -49,7 +49,7 @@ namespace player
         }
 
 
-        public void Trigger()
+        public void TriggerFallState()
         {
             stateMachine.ChangeState(player.playerFallState);
         }

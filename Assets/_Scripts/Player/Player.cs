@@ -166,12 +166,12 @@ namespace player
         public void ConsumeDash() => DashJustPressed = false;
 
         public void SetCanDash(bool value) => canDash = value;
-
-        public void SetVelocity(Vector2 velocity)
+        public override void SetVelocity(Vector2 velocity)
         {
-            rb.velocity = velocity;
+            base.SetVelocity(velocity);
             HandleFlip(movementInput.x);
         }
+
 
         public void HandleFlip(float horizontalInput)
         {

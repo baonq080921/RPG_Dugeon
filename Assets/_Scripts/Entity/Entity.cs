@@ -15,15 +15,19 @@ public abstract class Entity : MonoBehaviour
     [SerializeField] protected float _groundCheckRadius = 0.1f;
 
     [Space]
-    [Range(0,1f)]
+    [Range(0,10f)]
     [SerializeField] protected float _wallCheckDistance = 0.5f;
 
 
     public float direction {get; protected set;} = 1f; // 1 for right, -1 for left
+    public void SetDirection(float dir) => direction = dir;
 
     public bool isGrounded{get; protected set;}
     public bool isTouchingWall {get; protected set;}
 
+
+
+    private Vector3 _originalScale;
 
 
     protected virtual void Awake()
@@ -31,6 +35,7 @@ public abstract class Entity : MonoBehaviour
         stateMachine = new StateMachine();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        _originalScale = transform.localScale;
     }
 
     protected virtual void Start(){}
@@ -46,7 +51,12 @@ public abstract class Entity : MonoBehaviour
 
     public void Flip(float direction)
     {
-        transform.localScale = new Vector3(direction, 1f, 1f);
+        transform.localScale = new Vector3(_originalScale.x * direction, _originalScale.y, _originalScale.z) ;
+    }
+
+    public virtual void SetVelocity(Vector2 velocity)
+    {
+        rb.velocity = velocity;
     }
 
 
@@ -59,21 +69,30 @@ public abstract class Entity : MonoBehaviour
         isTouchingWall = Physics2D.Raycast(transform.position, Vector2.right * direction, _wallCheckDistance, _whatIsWall);
     }
 
+    public void TriggerAnimationEvent()
+    {
+        stateMachine.currentState.TriggerAnimation();
+    }
+    
 
-    public void OnDrawGizmos()
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position,_wallCheckDistance * Vector2.right * direction + (Vector2)transform.position);
+
+    
 
 
-            if(isGrounded){
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
-                return;
-            }
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);           
+    protected virtual void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position,_wallCheckDistance * Vector2.right * direction + (Vector2)transform.position);
+
+
+        if(isGrounded){
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
+            return;
         }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);           
+    }
 
     
 }

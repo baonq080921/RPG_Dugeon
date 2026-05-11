@@ -4,15 +4,15 @@ using UnityEngine;
 namespace UI
 {
     /// <summary>
-    /// Connects the Player's dash cooldown event to the <see cref="SkillCooldownUI"/>
-    /// on this GameObject. Add this alongside <see cref="SkillCooldownUI"/> on the DashButton.
+    /// Automatically hooks into whichever <see cref="Player"/> is currently active.
+    /// Listens to <see cref="Player.ActivePlayerChanged"/> so it works with character
+    /// switching without any manual Inspector wiring.
     /// </summary>
     [RequireComponent(typeof(SkillCooldownUI))]
     public class DashCooldownConnector : MonoBehaviour
     {
-        [SerializeField] private Player _player;
-
         private SkillCooldownUI _skillCooldownUI;
+        private Player _currentPlayer;
 
         private void Awake()
         {
@@ -21,12 +21,30 @@ namespace UI
 
         private void OnEnable()
         {
-            _player.DashCooldownStarted += OnDashCooldownStarted;
+            Player.ActivePlayerChanged += OnActivePlayerChanged;
+            // Player.OnEnable may have already fired before we subscribed, grab it directly
+            var existing = FindObjectOfType<Player>();
+            if (existing != null)
+                OnActivePlayerChanged(existing);
         }
 
         private void OnDisable()
         {
-            _player.DashCooldownStarted -= OnDashCooldownStarted;
+            Player.ActivePlayerChanged -= OnActivePlayerChanged;
+            UnsubscribeFromPlayer(_currentPlayer);
+        }
+
+        private void OnActivePlayerChanged(Player newPlayer)
+        {
+            UnsubscribeFromPlayer(_currentPlayer);
+            _currentPlayer = newPlayer;
+            _currentPlayer.DashCooldownStarted += OnDashCooldownStarted;
+        }
+
+        private void UnsubscribeFromPlayer(Player player)
+        {
+            if (player != null)
+                player.DashCooldownStarted -= OnDashCooldownStarted;
         }
 
         private void OnDashCooldownStarted(float duration)

@@ -37,13 +37,6 @@ namespace player
             base.Exit();
         }
 
-
-
-        public void TriggerAnimation()
-        {
-            if (isTriggered) return;
-            isTriggered = true;
-        }
     }
 
 }

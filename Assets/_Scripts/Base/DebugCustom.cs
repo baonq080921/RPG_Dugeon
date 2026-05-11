@@ -8,7 +8,7 @@ namespace Base
     {
         public static void Log(string message)
         {
-            Debug.Log($"<color=green>[Custom Log]</color> <color=white>{message}</color>");
+            Debug.Log($"<color=green>[Custom Log]</color> <color=yellow>{message}</color>");
         }
 
         public static void LogWarning(string message)
