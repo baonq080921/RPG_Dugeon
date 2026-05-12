@@ -7340,7 +7340,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -7407,8 +7407,9 @@ MonoBehaviour:
     m_Bits: 128
   _groundCheckPoint: {fileID: 713385090}
   _groundCheckRadius: 0.1
-  _wallCheckDistance: 6.9
+  _wallCheckDistance: 1
   <enemyData>k__BackingField: {fileID: 11400000, guid: 58074875e7c5a4e41964ce02729a9ab8, type: 2}
+  _minDistanceRetreat: 0.07
 --- !u!1 &1663125763
 GameObject:
   m_ObjectHideFlags: 0

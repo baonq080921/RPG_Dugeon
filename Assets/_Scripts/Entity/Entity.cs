@@ -24,9 +24,6 @@ public abstract class Entity : MonoBehaviour
 
     public bool isGrounded{get; protected set;}
     public bool isTouchingWall {get; protected set;}
-
-
-
     private Vector3 _originalScale;
 
 
@@ -74,11 +71,6 @@ public abstract class Entity : MonoBehaviour
         stateMachine.currentState.TriggerAnimation();
     }
     
-
-
-    
-
-
     protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;

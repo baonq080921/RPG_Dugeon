@@ -1,3 +1,4 @@
+using Base;
 using UnityEngine;
 
 namespace enemy
@@ -74,6 +75,34 @@ namespace enemy
             return Physics2D.OverlapCircle(transform.position, enemyData.AttackRange, enemyData.WhatIsPlayer);
         }
 
+
+
+        public bool ShouldEnemyRetreat()
+        {
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, new Vector2(direction, 0), enemyData.minDistanceRetreat, enemyData.WhatIsPlayer);
+            Collider2D collider2D = raycastHit2D.collider;
+            if(collider2D == null) return false;
+
+            Entity entity = collider2D.GetComponent<Entity>();
+            if(entity != null)
+            {
+                float distance = Mathf.Abs(transform.position.x - entity.transform.position.x);
+                // DebugCustom.Log(distance.ToString());
+                return distance < enemyData.minDistanceRetreat ? true : false;
+            }
+            return false;
+        }
+
+
+        public void FacePlayer()
+        {
+            if (DetectedPlayer == null) return;
+            float newDir = DetectedPlayer.position.x > transform.position.x ? 1f : -1f;
+            if (newDir == direction) return;
+            SetDirection(newDir);
+            Flip(newDir);
+        }
+
         protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
@@ -82,6 +111,9 @@ namespace enemy
             Gizmos.DrawWireSphere(transform.position, enemyData.DetectionRange);
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, enemyData.AttackRange);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
         }
 
     }

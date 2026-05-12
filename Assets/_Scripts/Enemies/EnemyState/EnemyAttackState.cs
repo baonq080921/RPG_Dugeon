@@ -14,12 +14,19 @@ namespace enemy
         public override void Enter()
         {
             base.Enter();
-            enemy.SetVelocity(new Vector2(enemy.direction * enemy.enemyData.attackVelocity.x, enemy.enemyData.attackVelocity.y));
+            if (enemy.ShouldEnemyRetreat())
+            {
+                enemy.Flip(enemy.direction);
+                rb.velocity = new Vector2(enemy.enemyData.attackVelocityRetreat.x * -enemy.direction, enemy.enemyData.attackVelocityRetreat.y);
+                return;
+            }
+            enemy.SetVelocity(new Vector2(0, rb.velocity.y));
         }
 
         public override void Update()
         {
             base.Update();
+            enemy.FacePlayer();
             if (!isTriggered) return;
 
             if (enemy.IsPlayerDetected())

@@ -15,9 +15,12 @@ namespace enemy
         [field: SerializeField] public float JumpForce { get; private set; } = 10f;
 
         [field: Header("Detection")]
+        [field: SerializeField] public float minDistanceRetreat { get; private set; } = 1f;
+
         [field: SerializeField] public float DetectionRange { get; private set; } = 7f;
         [field: SerializeField] public float AttackRange { get; private set; } = 1.5f;
         [field: SerializeField] public LayerMask WhatIsPlayer { get; private set; }
-        [field: SerializeField] public Vector2 attackVelocity;
+        [field: SerializeField] public Vector2 attackVelocityRetreat{get; private set;}
+
     }
 }

@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IdleTime>k__BackingField: 2
   <MoveSpeed>k__BackingField: 5
-  <MoveMultiplier>k__BackingField: 1.5
+  <MoveMultiplier>k__BackingField: 2
+  <JumpForce>k__BackingField: 10
+  <minDistanceRetreat>k__BackingField: 1.5
   <DetectionRange>k__BackingField: 9
-  <AttackRange>k__BackingField: 3
+  <AttackRange>k__BackingField: 2.5
   <WhatIsPlayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 256
-  attackVelocity: {x: 2, y: 2}
+  <attackVelocityRetreat>k__BackingField: {x: 5, y: 3}

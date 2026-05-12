@@ -1,3 +1,4 @@
+using Base;
 using stateMachine;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ namespace enemy
                 return;
             }
 
-            FacePlayer();
+            enemy.FacePlayer();
 
             if (enemy.isTouchingWall && enemy.isGrounded && _jumpCooldownTimer <= 0f)
             {
@@ -54,13 +55,6 @@ namespace enemy
             base.Exit();
         }
 
-        private void FacePlayer()
-        {
-            if (enemy.DetectedPlayer == null) return;
-            float newDir = enemy.DetectedPlayer.position.x > enemy.transform.position.x ? 1f : -1f;
-            if (newDir == enemy.direction) return;
-            enemy.SetDirection(newDir);
-            enemy.Flip(newDir);
-        }
+        
     }
 }
