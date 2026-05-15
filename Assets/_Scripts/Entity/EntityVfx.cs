@@ -16,6 +16,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
      private Coroutine _hitVfxCoroutine;
 
+
     protected virtual void Awake()
     {
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -38,4 +39,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
             _hitVfxCoroutine = null;
 
         }
+
+
+    
 }

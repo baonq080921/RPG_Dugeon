@@ -13,13 +13,13 @@ public class EntityCombat : MonoBehaviour
     [SerializeField] protected List<Collider2D> targetColliders;
     [SerializeField] private Transform _targetCheck;
     [SerializeField] protected float _targetRadius = 0.75f;
-    [SerializeField] private GameObject _hitEffect;
-    [SerializeField] private Color _hitColor;
     protected Entity entity;
+    protected EntityStat entityStat;
 
     protected virtual void Awake()
     {
         entity = GetComponent<Entity>();
+        entityStat = GetComponent<EntityStat>();
     }
 
     /// <summary>
@@ -31,19 +31,12 @@ public class EntityCombat : MonoBehaviour
         foreach (var target in targetColliders)
         {
             if (target.TryGetComponent<IHit>(out var hit))
-                hit?.TakeDamage(entity.Damage, entity.CanKnockBackOnHit);
-                CreateHitEffect(target.GetComponent<Transform>());
+                hit?.TakeDamage(10, entity.CanKnockBackOnHit, target.transform);
         }
     }
 
 
-    private void CreateHitEffect(Transform target)
-    {
-        float randomX = Random.Range(-0.3f,0.3f);
-        float randomY = Random.Range(-0.7f,0.7f);
-        Vector2 randomHitOffSet = new Vector2(randomX,randomY);
-        ServiceLocator.Get<HitEffectPool>().SpawnHitEffect(target,_hitColor, randomHitOffSet);
-    }
+   
 
     protected void DetectTargetColliders()
     {

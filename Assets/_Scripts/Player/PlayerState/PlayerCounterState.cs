@@ -18,6 +18,8 @@ namespace player
             stateTimer = player.SkillManager.GetDefinition((int)SkillName.CounterSkill).Duration;
             isCounter = _playerCombat.IsPerformedCounter();
             animator.SetBool("CanCounter", isCounter);
+            player.SetVelocity(new Vector2(0, rb.velocity.y));
+
         }
 
         public override void Update()

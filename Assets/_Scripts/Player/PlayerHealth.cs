@@ -12,17 +12,20 @@ namespace player
             base.Awake();
             _player = GetComponent<Player>();
         }
-
-        protected override float MaxHealth => _player.Data.MaxHealth;
-
         /// <inheritdoc/>
-        public override void TakeDamage(float damage, bool applyKnockBack)
+        public override bool TakeDamage(float damage, bool applyKnockBack, Transform target)
         {
-            base.TakeDamage(damage, applyKnockBack);
-            if (!applyKnockBack) return;
+            bool canDamage = base.TakeDamage(damage, applyKnockBack,target);
+            if (!canDamage) return false;
+
+            if (!applyKnockBack) return false;
+
+
             Vector2 knockBack = new Vector2(_player.Data.KnockBack.x * -_player.direction, _player.Data.KnockBack.y);
             _player.ReciveKnockBack(knockBack, _player.Data.KnockBackDuration);
             _player.stateMachine.ChangeState(_player.playerKnockBackState);
+
+            return true;
         }
     }
 }

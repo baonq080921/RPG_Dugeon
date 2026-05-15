@@ -23,7 +23,6 @@ namespace player
         [field: SerializeField] public float DashCooldown { get; private set; } = 1f;
 
         [field: Header("Combat")]
-        [field: SerializeField] public float MaxHealth { get; private set; } = 100f;
         [field: SerializeField] public float Damage { get; private set; } = 10f;
         [field:SerializeField] public float CounterDamage{get; private set;} = 5f;
         [field: SerializeField] public Vector2 KnockBack { get; private set; }

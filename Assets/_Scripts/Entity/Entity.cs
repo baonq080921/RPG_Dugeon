@@ -46,6 +46,9 @@ public abstract class Entity : MonoBehaviour
     private Coroutine _knockBackCoroutine;
     public bool IsKnocked { get; private set; }
 
+
+    public EntityStat entityStat { get; private set; }
+
     protected virtual void Awake()
     {
         stateMachine = new StateMachine();
@@ -53,6 +56,7 @@ public abstract class Entity : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         _originalScale = transform.localScale;
         col = GetComponent<Collider2D>();
+        entityStat = GetComponent<EntityStat>();
 
     }
 

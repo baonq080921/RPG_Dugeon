@@ -2525,6 +2525,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
+--- !u!1 &745203693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6229336110876845623, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+  m_PrefabInstance: {fileID: 5554261571940762513}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &745203702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745203693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29dd3eb31c3753c418514d1a817ab9c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _majorStats: {fileID: 11400000, guid: 223d3932409b7d04c9f4b6e0940754db, type: 2}
+  _defensiveStats: {fileID: 11400000, guid: ef32f9792cc21194cab4438a37042b8b, type: 2}
 --- !u!1 &757890337
 GameObject:
   m_ObjectHideFlags: 0
@@ -8757,6 +8776,7 @@ GameObject:
   - component: {fileID: 1632231620}
   - component: {fileID: 1632231621}
   - component: {fileID: 1632231622}
+  - component: {fileID: 1632231623}
   m_Layer: 6
   m_Name: EnemySkeleton
   m_TagString: Untagged
@@ -8897,7 +8917,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29fab77cef9bb04c92ec601805692a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <CurrentHealth>k__BackingField: 0
   _slider: {fileID: 531237938}
+  _hitEffect: {fileID: 0}
+  _hitColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1632231622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8912,6 +8935,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitFlashDuration: 0.15
   _alertCounterSignal: {fileID: 0}
+--- !u!114 &1632231623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632231614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29dd3eb31c3753c418514d1a817ab9c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _majorStats: {fileID: 11400000, guid: 2a6d404b85ee1b24a8a3e987f7d8eb8d, type: 2}
+  _defensiveStats: {fileID: 11400000, guid: c1e29906abd0570468c2199fb5270379, type: 2}
 --- !u!1 &1663125763
 GameObject:
   m_ObjectHideFlags: 0
@@ -10271,6 +10308,22 @@ PrefabInstance:
       propertyPath: _slider
       value: 
       objectReference: {fileID: 1959646843}
+    - target: {fileID: 8776204991553526451, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _hitColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8776204991553526451, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _hitColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8776204991553526451, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _hitColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8776204991553526451, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _hitColor.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6285091662517772949, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
@@ -10278,7 +10331,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6031478058514801146, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1940205795}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6229336110876845623, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 745203702}
   m_SourcePrefab: {fileID: 100100000, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

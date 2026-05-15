@@ -14,14 +14,13 @@ namespace enemy
             _enemy = GetComponent<Enemy>();
         }
 
-        protected override float MaxHealth => _enemy.enemyData.MaxHealth;
-
         /// <inheritdoc/>
-        public override void TakeDamage(float damage, bool applyKnockBack)
+        public override bool TakeDamage(float damage, bool applyKnockBack ,Transform target)
         {
-            base.TakeDamage(damage, applyKnockBack);
-            GetComponent<IHitVFX>()?.PlayHitVFX();
+            bool canDamage = base.TakeDamage(damage, applyKnockBack, target);
+            if (!canDamage) return false;
             _enemy.stateMachine.ChangeState(_enemy.enemyStunState);
+            return true;
         }
 
         

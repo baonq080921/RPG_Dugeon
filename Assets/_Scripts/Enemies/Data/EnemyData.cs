@@ -9,7 +9,6 @@ namespace enemy
         [field: SerializeField] public float IdleTime { get; private set; } = 2f;
 
         [field: Header("Combat")]
-        [field: SerializeField] public float MaxHealth { get; private set; } = 50f;
         [field: SerializeField] public float Damage { get; private set; } = 5f;
         [field: SerializeField] public bool CanKnockBackPlayer { get; private set; } = true;
         [field:SerializeField] public Vector2 AttackVelocityRetreat {get; private set;}

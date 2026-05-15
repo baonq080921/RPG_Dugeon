@@ -131,7 +131,7 @@ namespace enemy
 
         public void ApplyKnockBack(float damage)
         {
-            float ratio = damage / enemyData.MaxHealth;
+            float ratio = damage / entityStat.GetHealthValue();
 
             // Heavy when hit is a small fraction of max health, light otherwise
             Vector2 power = ratio < enemyData.KnockBackThreshHold
