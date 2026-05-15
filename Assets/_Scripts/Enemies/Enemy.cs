@@ -1,4 +1,6 @@
+using System;
 using Base;
+using Interfaces;
 using UnityEngine;
 
 namespace enemy
@@ -6,17 +8,32 @@ namespace enemy
     /// <summary>
     /// Base enemy entity. Holds all states and player-detection helpers used by every enemy type.
     /// </summary>
-    public class Enemy : Entity
+    public class Enemy : Entity,ICounterable
     {
         [field: SerializeField] public EnemyData enemyData { get; private set; }
+
+        /// <inheritdoc/>
+        public override LayerMask LayerMask => enemyData.WhatIsPlayer;
+        /// <inheritdoc/>
+        public override bool CanKnockBackOnHit => enemyData.CanKnockBackPlayer;
+
 
         public EnemyIdleState enemyIdleState { get; protected set; }
         public EnemyMoveState enemyMoveState { get; protected set; }
         public EnemyChaseState enemyChaseState { get; protected set; }
         public EnemyAttackState enemyAttackState { get; protected set; }
+        public EnemyStunState enemyStunState { get; protected set; }
+        public EnemyDeathState enemyDeathState { get; protected set; }
 
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
+
+        public override float Damage => enemyData.Damage;
+
+        public bool CanCounter { get ; set ; }
+
+        public event Action OnDied;
+        public bool isDead{get; private set;}
 
         protected override void Awake()
         {
@@ -25,6 +42,8 @@ namespace enemy
             enemyMoveState = new EnemyMoveState(this, stateMachine, "Move");
             enemyChaseState = new EnemyChaseState(this, stateMachine, "Move");
             enemyAttackState = new EnemyAttackState(this, stateMachine, "Attack");
+            enemyStunState = new EnemyStunState(this, stateMachine, "Hit");
+            enemyDeathState = new EnemyDeathState(this, stateMachine,"Died");
         }
 
         protected override void Start()
@@ -103,6 +122,27 @@ namespace enemy
             Flip(newDir);
         }
 
+        public override void Die()
+        {
+            OnDied?.Invoke();
+            isDead = true;
+        }
+
+
+        public void ApplyKnockBack(float damage)
+        {
+            float ratio = damage / enemyData.MaxHealth;
+
+            // Heavy when hit is a small fraction of max health, light otherwise
+            Vector2 power = ratio < enemyData.KnockBackThreshHold
+                ? enemyData.KnockBackPowerHeavy
+                : enemyData.KnockBackPowerLight;
+
+            // Negate x so the enemy is pushed away from the player (enemy faces toward player)
+            Vector2 knockBack = new Vector2(power.x * - direction, power.y);
+            ReciveKnockBack(knockBack,enemyData.StunDuration);
+        }
+
         protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
@@ -116,5 +156,51 @@ namespace enemy
             Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
         }
 
+        /// <summary>
+        /// Resets the enemy to its initial state when retrieved from the pool.
+        /// Called automatically by <see cref="EnemyPool"/> — do not call directly.
+        /// </summary>
+        public void OnGetFromPool()
+        {
+            isDead = false;
+            col.enabled = true;
+            animator.enabled = true;
+            ResetKnockbackState();
+            rb.velocity = Vector2.zero;
+            GetComponent<EntityHealth>().ResetHealth();
+            ResetAllAnimatorBools();
+            stateMachine.Initialize(enemyIdleState);
+        }
+
+        /// <summary>
+        /// Returns this enemy to the <see cref="EnemyPool"/> registered in <see cref="ServiceLocator"/>.
+        /// Falls back to <see cref="Object.Destroy"/> if no pool is registered.
+        /// </summary>
+        public void ReturnToPool()
+        {
+            var pool = ServiceLocator.Get<EnemyPool>();
+            if (pool == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            pool.Return(this);
+        }
+
+        public void EnableCounter()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void DisableCounter()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void HandleCounter()
+        {
+            if(CanCounter == false) return;
+            stateMachine.ChangeState(enemyStunState);
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace enemy
             if (enemy.ShouldEnemyRetreat())
             {
                 enemy.Flip(enemy.direction);
-                rb.velocity = new Vector2(enemy.enemyData.attackVelocityRetreat.x * -enemy.direction, enemy.enemyData.attackVelocityRetreat.y);
+                rb.velocity = new Vector2(enemy.enemyData.AttackVelocityRetreat.x * -enemy.direction, enemy.enemyData.AttackVelocityRetreat.y);
                 return;
             }
             enemy.SetVelocity(new Vector2(0, rb.velocity.y));

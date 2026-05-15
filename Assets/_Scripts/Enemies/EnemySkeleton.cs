@@ -6,7 +6,6 @@ namespace enemy
     public class EnemySkeleton : Enemy
     {
         
-        [SerializeField] private float _minDistanceRetreat;
         protected override void Awake()
         {
             base.Awake();

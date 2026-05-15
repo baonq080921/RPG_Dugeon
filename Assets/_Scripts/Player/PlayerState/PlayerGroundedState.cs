@@ -44,6 +44,15 @@ namespace player
 
             if (player.canAttack && input.Player.BasicAttack.WasPressedThisFrame())
                 stateMachine.ChangeState(player.playerBasicAttackState);
+
+            for (int i = 0; i < player.SkillManager.SlotCount; i++)
+            {
+                if (player.SkillManager.TryConsumeSkill(i, out PlayerState skillState))
+                {
+                    stateMachine.ChangeState(skillState);
+                    return;
+                }
+            }
             
         }
     }

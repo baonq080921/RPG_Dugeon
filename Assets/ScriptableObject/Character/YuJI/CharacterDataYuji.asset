@@ -17,15 +17,24 @@ MonoBehaviour:
   <MaxJumpCount>k__BackingField: 1
   <AirControlFactor>k__BackingField: 0.5
   <SlideDownSpeed>k__BackingField: 0.5
-  <WallJumpForce>k__BackingField: {x: 0, y: 0}
+  <WallJumpForce>k__BackingField: {x: 12, y: 12}
   <DashSpeed>k__BackingField: 25
   <DashDuration>k__BackingField: 0.2
   <DashCooldown>k__BackingField: 1.5
+  <MaxHealth>k__BackingField: 100
+  <Damage>k__BackingField: 10
+  <CounterDamage>k__BackingField: 5
+  <KnockBack>k__BackingField: {x: 3, y: 5}
+  <KnockBackDuration>k__BackingField: 0.3
   <AttackVelocities>k__BackingField:
   - {x: 0, y: 0}
-  - {x: 0.5, y: 0}
-  - {x: 1, y: 2}
-  - {x: 0, y: 2}
+  - {x: 3, y: 0}
+  - {x: 4, y: 2}
+  - {x: 4, y: 4}
   <ComboLimit>k__BackingField: 4
   <TimeResetCombo>k__BackingField: 0.5
   <ComboEndDelay>k__BackingField: 0.5
+  WhatisTarget:
+    serializedVersion: 2
+    m_Bits: 64
+  <Material>k__BackingField: {fileID: 2100000, guid: b3f1139abae8ade42a6b46a18dddf8f5, type: 2}

@@ -55,7 +55,7 @@ namespace Base
         {
             if (maxSize <= 0)
                 throw new ArgumentException("maxSize must be greater than zero.", nameof(maxSize));
-
+                
             _createFunc = createFunc ?? throw new ArgumentNullException(nameof(createFunc));
             _actionOnGet = actionOnGet;
             _actionOnRelease = actionOnRelease;

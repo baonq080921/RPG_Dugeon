@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using stateMachine;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace player
 {
@@ -10,11 +12,14 @@ namespace player
     /// Override <see cref="CreateStates"/> in a subclass to swap individual states for a
     /// different character without touching any shared logic.
     /// </summary>
+    [RequireComponent(typeof(SkillManager))]
     public class Player : Entity
     {
         [field: SerializeField] public CharacterData Data { get; private set; }
+        /// <inheritdoc/>
+        public override LayerMask LayerMask => Data.WhatisTarget;
 
-        // Stat delegation — states keep referencing the same names they already know
+
         public float moveSpeed => Data.MoveSpeed;
         public float jumpForce => Data.JumpForce;
         public int MaxJumpCount => Data.MaxJumpCount;
@@ -33,6 +38,7 @@ namespace player
 
         /// <summary>Fired when dash cooldown begins. Parameter is the total cooldown duration.</summary>
         public event Action<float> DashCooldownStarted;
+        public event Action OnDie;
 
         public bool canDash { get; private set; } = true;
         private float _dashCooldownTimer;
@@ -50,8 +56,12 @@ namespace player
         public PlayerDashState playerDashState { get; protected set; }
         public PlayerAttackState playerBasicAttackState { get; protected set; }
         public PlayerJumpAttackState playerJumpAttackState { get; protected set; }
+        public PlayerKnockBackState playerKnockBackState { get; protected set; }
+        public PlayerDeadState playerDeadState {get; private set;}
+        public PlayerCounterState playerCounterState {get; private set;}
 
         public PlayerInputSet input { get; private set; }
+        public SkillManager SkillManager { get; private set; }
         public AfterImageEffect AfterImageEffect { get; private set; }
 
         public Vector2 movementInput { get; private set; }
@@ -61,6 +71,9 @@ namespace player
         public int JumpCount { get; set; }
         public float LastWallJumpDirection { get; set; } = 0f;
 
+        public override float Damage => Data.Damage;
+
+
         private Coroutine _queueComboCouroutine;
 
         protected override void Awake()
@@ -68,6 +81,7 @@ namespace player
             base.Awake();
             Application.targetFrameRate = 60;
             AfterImageEffect = GetComponent<AfterImageEffect>();
+            SkillManager = GetComponent<SkillManager>();
             input = new PlayerInputSet();
             CreateStates();
         }
@@ -87,7 +101,11 @@ namespace player
             playerDashState = new PlayerDashState(this, stateMachine, "Dash");
             playerBasicAttackState = new PlayerAttackState(this, stateMachine, "BasicAttack");
             playerJumpAttackState = new PlayerJumpAttackState(this, stateMachine, "BasicAttack");
-        }
+            playerKnockBackState = new PlayerKnockBackState(this, stateMachine, "Hit");
+            playerDeadState = new PlayerDeadState(this, stateMachine,"Dead");
+            playerCounterState = new PlayerCounterState(this, stateMachine, "EnterCounter");
+            SkillManager.RegisterState((int)SkillName.CounterSkill, playerCounterState);      
+            }
 
         void OnEnable()
         {
@@ -98,6 +116,9 @@ namespace player
             input.Player.Jump.performed += ctx => { isJump = true; JumpJustPressed = true; };
             input.Player.Jump.canceled += ctx => isJump = false;
             input.Player.Dash.performed += ctx => { DashJustPressed = true; };
+
+            // Keyboard fallback for skill slot 0 (Counter). Mobile uses on-screen SkillButton instead.
+            input.Player.Counter.performed += ctx => SkillManager.PressSkill(0);
         }
 
         void OnDisable()
@@ -136,6 +157,14 @@ namespace player
             canDash = false;
             _dashCooldownTimer = dashCooldown;
             DashCooldownStarted?.Invoke(dashCooldown);
+        }
+
+        public override void Die()
+        {
+            base.Die();
+            // OnDie.Invoke();
+            stateMachine.ChangeState(playerDeadState);
+
         }
 
         private void TickDashCooldown()

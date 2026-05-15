@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 2457656789895837874}
   - component: {fileID: 7142382804217579489}
   - component: {fileID: 9156516419989981331}
-  m_Layer: 0
+  - component: {fileID: 1748362436564798290}
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,6 +141,19 @@ MonoBehaviour:
   _ghostColor: {r: 0.3, g: 0.7, b: 1, a: 1}
   _poolDefaultCapacity: 10
   _poolMaxSize: 20
+--- !u!114 &1748362436564798290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157392830176014161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63a4159408d6ae14fb9543c7f9231b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HitFlashDuration: 0.15
 --- !u!1 &2610158883347660421
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +166,7 @@ GameObject:
   - component: {fileID: 3396099396216794463}
   - component: {fileID: 8956547994579673846}
   - component: {fileID: 6620116998512061988}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PlayerAnimation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5403136114685450251}
   - component: {fileID: 1049664741345496420}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Light 2D (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6093428813525780096}
   - component: {fileID: 8461818920136855179}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GroundDection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -418,7 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7010809224251241708}
   - component: {fileID: 5970088761235447337}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}

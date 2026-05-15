@@ -6,49 +6,42 @@ namespace player
 {
     /// <summary>
     /// Spawns pooled <see cref="AfterImageGhost"/> copies of the player sprite during the dash.
-    /// Uses <see cref="ObjectPool{T}"/> to avoid per-ghost Instantiate/Destroy GC pressure.
+    /// Extends <see cref="MonoBehaviourPool{T}"/> to handle all pool lifecycle concerns.
     /// </summary>
-    public class AfterImageEffect : MonoBehaviour
+    public class AfterImageEffect : MonoBehaviourPool<AfterImageGhost>
     {
         [SerializeField] private float _spawnInterval = 0.05f;
         [SerializeField] private float _ghostDuration = 0.3f;
         [SerializeField] private Color _ghostColor = new Color(0.3f, 0.7f, 1f, 0.7f);
-        [SerializeField] private int _poolDefaultCapacity = 10;
-        [SerializeField] private int _poolMaxSize = 20;
+
+        // Ghosts return to pool on their own via the tween callback — no need for double-release checks.
+        protected override bool CollectionCheck => false;
 
         private SpriteRenderer _spriteRenderer;
-        private ObjectPool<AfterImageGhost> _pool;
         private Coroutine _spawnCoroutine;
         private WaitForSeconds _spawnWait;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
             // Cache once to avoid a WaitForSeconds allocation every spawn cycle.
             _spawnWait = new WaitForSeconds(_spawnInterval);
-
-            _pool = new ObjectPool<AfterImageGhost>(
-                createFunc: CreateGhost,
-                actionOnGet: ghost => ghost.gameObject.SetActive(true),
-                actionOnRelease: ghost =>
-                {
-                    ghost.ResetState();
-                    ghost.gameObject.SetActive(false);
-                },
-                actionOnDestroy: ghost => Destroy(ghost.gameObject),
-                collectionCheck: false,
-                defaultCapacity: _poolDefaultCapacity,
-                maxSize: _poolMaxSize
-            );
         }
 
-        private void OnDestroy()
+        /// <inheritdoc/>
+        protected override AfterImageGhost CreateInstance()
         {
-            _pool.Dispose();
+            var ghost = new GameObject("AfterImageGhost").AddComponent<AfterImageGhost>();
+            ghost.gameObject.SetActive(false);
+            return ghost;
         }
 
-        /// <summary>Starts spawning ghost images. Call when dash begins.</summary>
+        /// <inheritdoc/>
+        protected override void OnRelease(AfterImageGhost ghost) => ghost.ResetState();
+
+        /// <summary>Starts spawning ghost images. Call when the dash begins.</summary>
         public void StartEffect()
         {
             if (_spawnCoroutine != null)
@@ -56,7 +49,7 @@ namespace player
             _spawnCoroutine = StartCoroutine(SpawnLoop());
         }
 
-        /// <summary>Stops spawning ghost images. Call when dash ends.</summary>
+        /// <summary>Stops spawning ghost images. Call when the dash ends.</summary>
         public void StopEffect()
         {
             if (_spawnCoroutine == null) return;
@@ -75,7 +68,7 @@ namespace player
 
         private void SpawnGhost()
         {
-            var ghost = _pool.Get();
+            var ghost = Get();
             ghost.transform.SetPositionAndRotation(
                 _spriteRenderer.transform.position,
                 _spriteRenderer.transform.rotation
@@ -89,20 +82,8 @@ namespace player
                 _spriteRenderer.flipX,
                 _ghostColor,
                 _ghostDuration,
-                ReturnToPool
+                g => Release(g)
             );
-        }
-
-        private AfterImageGhost CreateGhost()
-        {
-            var ghost = new GameObject("AfterImageGhost").AddComponent<AfterImageGhost>();
-            ghost.gameObject.SetActive(false);
-            return ghost;
-        }
-
-        private void ReturnToPool(AfterImageGhost ghost)
-        {
-            _pool.Release(ghost);
         }
     }
 }
