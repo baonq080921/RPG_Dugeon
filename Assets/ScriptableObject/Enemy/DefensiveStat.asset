@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f02524749cd6d244998fac1df300da2, type: 3}
   m_Name: DefensiveStat
   m_EditorClassIdentifier: 
+  <KnockBackThreshHold>k__BackingField:
+    baseValue: 0.3
   <MaxHealth>k__BackingField:
-    baseValue: 50
+    baseValue: 100
   <Envasion>k__BackingField:
+    baseValue: 0
+  <Armor>k__BackingField:
     baseValue: 0

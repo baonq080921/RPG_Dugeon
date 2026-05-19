@@ -218,7 +218,7 @@ AnimatorStateMachine:
     m_Position: {x: 570, y: 500, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2998664626352190636}
-    m_Position: {x: 350, y: -130, z: 0}
+    m_Position: {x: 320, y: -180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7791858768312749759}
     m_Position: {x: 1120, y: 450, z: 0}
@@ -416,7 +416,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New StateMachine
+  m_Name: AttackStateSubMachine
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -7975961643893285838}

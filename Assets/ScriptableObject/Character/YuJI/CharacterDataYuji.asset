@@ -21,7 +21,6 @@ MonoBehaviour:
   <DashSpeed>k__BackingField: 25
   <DashDuration>k__BackingField: 0.2
   <DashCooldown>k__BackingField: 1.5
-  <MaxHealth>k__BackingField: 100
   <Damage>k__BackingField: 10
   <CounterDamage>k__BackingField: 5
   <KnockBack>k__BackingField: {x: 3, y: 5}
@@ -34,6 +33,7 @@ MonoBehaviour:
   <ComboLimit>k__BackingField: 4
   <TimeResetCombo>k__BackingField: 0.5
   <ComboEndDelay>k__BackingField: 0.5
+  <AirAttackCooldown>k__BackingField: 0.25
   WhatisTarget:
     serializedVersion: 2
     m_Bits: 64
