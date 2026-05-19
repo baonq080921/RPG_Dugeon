@@ -8,8 +8,7 @@ namespace enemy
     {
         [field: SerializeField] public float IdleTime { get; private set; } = 2f;
 
-        [field: Header("Combat")]
-        [field: SerializeField] public bool CanKnockBackPlayer { get; private set; } = true;
+        [field: Header("Attack Velocity")]
         [field:SerializeField] public Vector2 AttackVelocityRetreat {get; private set;}
         
 

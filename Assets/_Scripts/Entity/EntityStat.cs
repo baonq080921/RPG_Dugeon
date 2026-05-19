@@ -10,7 +10,6 @@ public class EntityStat : MonoBehaviour
     //[SerializeField] private OffensiveStats _offensiveStats;
     [SerializeField] private DefensiveStats _defensiveStats;
     [SerializeField] private OffensiveStats _offensiveStats;
-    public bool isCrit;
     [field: SerializeField] public float StunDuration {get; private set;} = 0.3f;
 
     public float GetHealthValue()
@@ -34,7 +33,7 @@ public class EntityStat : MonoBehaviour
     }
 
 
-    public float GetDamageValue()
+    public float GetPhysicalDamageValue(out bool isCrit)
     {
         // Calculate damage based on offensive stats and major stats
         float baseDamage = _offensiveStats.Damage.GetValue();

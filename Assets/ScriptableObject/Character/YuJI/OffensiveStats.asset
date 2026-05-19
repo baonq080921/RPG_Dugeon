@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: OffensiveStats
   m_EditorClassIdentifier: 
   <Damage>k__BackingField:
-    baseValue: 40
+    baseValue: 20
   <CritPower>k__BackingField:
     baseValue: 50
   <CritChance>k__BackingField:
-    baseValue: 1
+    baseValue: 10

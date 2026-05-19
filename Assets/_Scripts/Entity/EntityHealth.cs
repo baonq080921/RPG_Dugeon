@@ -13,8 +13,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
 
     [SerializeField] private Slider _slider;
 
-    [SerializeField] private GameObject _hitEffect;
-    [SerializeField] private Color _hitColor;
+  
 
 
     protected virtual void Awake()
@@ -37,8 +36,6 @@ public abstract class EntityHealth : MonoBehaviour, IHit
             return false ;
         }
         CaculateDamage(damage);
-        CreateHitEffect(target);
-
         if (CurrentHealth <= 0)
             _entity.Die();
 
@@ -63,12 +60,6 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     }
 
 
-    private void CreateHitEffect(Transform target)
-    {
-        float randomX = Random.Range(-0.3f, 0.3f);
-        float randomY = Random.Range(-0.7f, 0.7f);
-        Vector2 randomHitOffSet = new Vector2(randomX, randomY);
-        ServiceLocator.Get<HitEffectPool>().SpawnHitEffect(target, _hitColor, randomHitOffSet);
-    }
+    
 
 }

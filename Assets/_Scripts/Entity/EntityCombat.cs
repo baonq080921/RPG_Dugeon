@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Base;
@@ -15,12 +16,14 @@ public class EntityCombat : MonoBehaviour
     [SerializeField] protected float _targetRadius = 0.75f;
     protected Entity entity;
     protected EntityStat entityStat;
+    public event Action<Transform,bool> OnTargetHit;
   
 
     protected virtual void Awake()
     {
         entity = GetComponent<Entity>();
         entityStat = GetComponent<EntityStat>();
+        ServiceLocator.Register(this);
     }
 
     /// <summary>
@@ -31,8 +34,13 @@ public class EntityCombat : MonoBehaviour
         DetectTargetColliders();
         foreach (var target in targetColliders)
         {
-            if (target.TryGetComponent<IHit>(out var hit))
-                hit?.TakeDamage(entityStat.GetDamageValue(), target.transform);
+            IHit hit = target.GetComponent<IHit>();
+            if(hit == null) continue;
+            float damage = entityStat.GetPhysicalDamageValue(out bool isCrit);
+            bool targetGotHit = hit.TakeDamage(damage, _targetCheck);
+            if(targetGotHit)
+                OnTargetHit?.Invoke(target.transform,isCrit);
+
         }
     }
 
