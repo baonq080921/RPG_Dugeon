@@ -33,6 +33,7 @@ namespace player
         [field: SerializeField] public int ComboLimit { get; private set; } = 3;
         [field: SerializeField, Range(0f, 1f)] public float TimeResetCombo { get; private set; } = 0.2f;
         [field: SerializeField] public float ComboEndDelay { get; private set; } = 0.8f;
+        [field: SerializeField] public float AirAttackCooldown { get; private set; } = 0.8f;
         [field : SerializeField] public LayerMask WhatisTarget;
         [field: SerializeField] public Material Material {get; private set;}
     }

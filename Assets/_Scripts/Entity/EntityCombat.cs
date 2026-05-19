@@ -15,6 +15,7 @@ public class EntityCombat : MonoBehaviour
     [SerializeField] protected float _targetRadius = 0.75f;
     protected Entity entity;
     protected EntityStat entityStat;
+  
 
     protected virtual void Awake()
     {
@@ -31,7 +32,7 @@ public class EntityCombat : MonoBehaviour
         foreach (var target in targetColliders)
         {
             if (target.TryGetComponent<IHit>(out var hit))
-                hit?.TakeDamage(10, entity.CanKnockBackOnHit, target.transform);
+                hit?.TakeDamage(entityStat.GetDamageValue(), target.transform);
         }
     }
 

@@ -15,10 +15,12 @@ namespace enemy
         }
 
         /// <inheritdoc/>
-        public override bool TakeDamage(float damage, bool applyKnockBack ,Transform target)
+        public override bool TakeDamage(float damage,Transform target)
         {
-            bool canDamage = base.TakeDamage(damage, applyKnockBack, target);
+            bool canDamage = base.TakeDamage(damage, target);
             if (!canDamage) return false;
+            
+            _enemy.ApplyKnockBack(damage);
             _enemy.stateMachine.ChangeState(_enemy.enemyStunState);
             return true;
         }

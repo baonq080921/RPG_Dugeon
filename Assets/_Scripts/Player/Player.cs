@@ -46,6 +46,9 @@ namespace player
         public bool canAttack { get; private set; } = true;
         private float _attackCooldownTimer;
 
+        public bool canAirAttack { get; private set; } = true;
+        private float _airAttackCooldownTimer;
+
         // Protected set so character subclasses can swap states in CreateStates()
         public PlayerIdleState playerIdleState { get; protected set; }
         public PlayerMoveState playerMovementState { get; protected set; }
@@ -60,7 +63,7 @@ namespace player
         public PlayerDeadState playerDeadState {get; private set;}
         public PlayerCounterState playerCounterState {get; private set;}
 
-        public PlayerInputSet input { get; private set; }
+        public PlayerInputSet input;
         public SkillManager SkillManager { get; private set; }
         public AfterImageEffect AfterImageEffect { get; private set; }
 
@@ -70,11 +73,10 @@ namespace player
         public bool DashJustPressed { get; private set; }
         public int JumpCount { get; set; }
         public float LastWallJumpDirection { get; set; } = 0f;
-
-        public override float Damage => Data.Damage;
-
-
         private Coroutine _queueComboCouroutine;
+
+
+        [field:SerializeField]public float attackElapsedTime { get; set; }
 
         protected override void Awake()
         {
@@ -137,6 +139,13 @@ namespace player
             base.Update();
             TickDashCooldown();
             TickAttackCooldown();
+            TickAirAttackCooldown();
+        }
+
+        public override void ApplyKnockBack(float damage)
+        {
+            if(damage/entityStat.GetHealthValue() < 0.5f) return;
+            base.ApplyKnockBack(damage);
         }
 
         public void EnterAttackComboCoroutine()
@@ -181,12 +190,26 @@ namespace player
             _attackCooldownTimer = Data.ComboEndDelay;
         }
 
+        public void StartAirAttackCooldown()
+        {
+            canAirAttack = false;
+            _airAttackCooldownTimer = Data.AirAttackCooldown;
+        }
+
         private void TickAttackCooldown()
         {
             if (_attackCooldownTimer <= 0) return;
             _attackCooldownTimer -= Time.deltaTime;
             if (_attackCooldownTimer <= 0)
                 canAttack = true;
+        }
+
+        private void TickAirAttackCooldown()
+        {
+            if (_airAttackCooldownTimer <= 0) return;
+            _airAttackCooldownTimer -= Time.deltaTime;
+            if (_airAttackCooldownTimer <= 0)
+                canAirAttack = true;
         }
 
         /// <summary>Clears JumpJustPressed after it has been consumed by a state.</summary>

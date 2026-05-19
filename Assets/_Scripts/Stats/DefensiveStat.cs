@@ -7,9 +7,9 @@ namespace Stats
     public class DefensiveStats : ScriptableObject
     {
 
-
+        [field: SerializeField] public Stat KnockBackThreshHold { get; private set; }
         [field: SerializeField] public Stat MaxHealth { get; private set; }
         [field:SerializeField] public Stat Envasion { get; private set; }
-
+        [field: SerializeField] public Stat Armor { get; private set; }
     }
 }

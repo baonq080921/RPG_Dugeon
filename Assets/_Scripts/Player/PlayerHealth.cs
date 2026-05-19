@@ -13,16 +13,13 @@ namespace player
             _player = GetComponent<Player>();
         }
         /// <inheritdoc/>
-        public override bool TakeDamage(float damage, bool applyKnockBack, Transform target)
+        public override bool TakeDamage(float damage,Transform target)
         {
-            bool canDamage = base.TakeDamage(damage, applyKnockBack,target);
-            if (!canDamage) return false;
-
-            if (!applyKnockBack) return false;
-
+            bool canDamage = base.TakeDamage(damage,target);
+            if (!canDamage) return false;      
 
             Vector2 knockBack = new Vector2(_player.Data.KnockBack.x * -_player.direction, _player.Data.KnockBack.y);
-            _player.ReciveKnockBack(knockBack, _player.Data.KnockBackDuration);
+            _player.ApplyKnockBack(damage);
             _player.stateMachine.ChangeState(_player.playerKnockBackState);
 
             return true;

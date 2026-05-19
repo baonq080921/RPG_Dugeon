@@ -23,8 +23,7 @@ namespace enemy
                 stateMachine.ChangeState(enemy.enemyDeathState);
 
                 
-            stateTimer = enemy.enemyData.StunDuration;
-            enemy.ApplyKnockBack(enemy.enemyData.Damage);
+            stateTimer = enemy.entityStat.StunDuration;
             enemy.CanCounter = false;
         }
 

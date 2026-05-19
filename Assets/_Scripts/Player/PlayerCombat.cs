@@ -28,7 +28,6 @@ namespace player
                 if (counter.CanCounter)
                 {
                     counter?.HandleCounter();
-                    hit?.TakeDamage(_player.Data.CounterDamage, _player.CanKnockBackOnHit,target.transform);
                     isCounter = true;
                 }
             }

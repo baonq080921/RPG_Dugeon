@@ -37,14 +37,15 @@ public abstract class Entity : MonoBehaviour
     public bool isGrounded{get; protected set;}
     public bool isTouchingWall {get; protected set;}
     private Vector3 _originalScale;
-    public abstract float Damage {get;}
     public abstract LayerMask LayerMask { get; }
     /// <summary>Whether attacks from this entity apply knockback to the target.</summary>
-    public virtual bool CanKnockBackOnHit => true;
+    [field:SerializeField]public bool CanKnockBackOnHit { get; protected set; } = true;
 
     public event Action OnFlip;
     private Coroutine _knockBackCoroutine;
     public bool IsKnocked { get; private set; }
+    [SerializeField] private Vector2 _knockBackPowerLight;
+    [SerializeField] private Vector2 _knockBackPowerHeavy;
 
 
     public EntityStat entityStat { get; private set; }
@@ -105,7 +106,21 @@ public abstract class Entity : MonoBehaviour
 
 
 
-    public void ReciveKnockBack(Vector2 knockBack, float duration)
+    public virtual void ApplyKnockBack(float damage)
+        {
+            float ratio = damage / entityStat.GetHealthValue();
+            // Heavy when hit is a  bigger fraction of max health, light otherwise
+            Vector2 power = ratio < entityStat.GetKnockBackThreshHold()
+                ?  _knockBackPowerLight
+                :_knockBackPowerHeavy;
+            // Negate x so the enemy is pushed away from the player (enemy faces toward player)
+            Vector2 knockBack = new Vector2(power.x * - direction, power.y);
+            ReciveKnockBack(knockBack,entityStat.StunDuration);
+        }
+
+
+
+    private void ReciveKnockBack(Vector2 knockBack, float duration)
     {
         if(_knockBackCoroutine != null)
             StopCoroutine(_knockBackCoroutine);

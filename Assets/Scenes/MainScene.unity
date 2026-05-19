@@ -2544,6 +2544,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _majorStats: {fileID: 11400000, guid: 223d3932409b7d04c9f4b6e0940754db, type: 2}
   _defensiveStats: {fileID: 11400000, guid: ef32f9792cc21194cab4438a37042b8b, type: 2}
+  _offensiveStats: {fileID: 11400000, guid: 87709ae0620cefd4088fd6f8d4c00cc7, type: 2}
+  isCrit: 0
+  <StunDuration>k__BackingField: 0.05
 --- !u!1 &757890337
 GameObject:
   m_ObjectHideFlags: 0
@@ -8887,6 +8890,9 @@ MonoBehaviour:
   _groundCheckPoint: {fileID: 713385090}
   _groundCheckRadius: 0.1
   _wallCheckDistance: 1
+  <CanKnockBackOnHit>k__BackingField: 1
+  _knockBackPowerLight: {x: 0, y: 0}
+  _knockBackPowerHeavy: {x: 3, y: 6}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 58074875e7c5a4e41964ce02729a9ab8, type: 2}
 --- !u!114 &1632231620
 MonoBehaviour:
@@ -8903,8 +8909,6 @@ MonoBehaviour:
   targetColliders: []
   _targetCheck: {fileID: 224386560}
   _targetRadius: 1.13
-  _hitEffect: {fileID: 0}
-  _hitColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1632231621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8949,6 +8953,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _majorStats: {fileID: 11400000, guid: 2a6d404b85ee1b24a8a3e987f7d8eb8d, type: 2}
   _defensiveStats: {fileID: 11400000, guid: c1e29906abd0570468c2199fb5270379, type: 2}
+  _offensiveStats: {fileID: 11400000, guid: e44e9f607fee0a14c8705aa65df3aec3, type: 2}
+  isCrit: 0
+  <StunDuration>k__BackingField: 0.3
 --- !u!1 &1663125763
 GameObject:
   m_ObjectHideFlags: 0
@@ -10243,6 +10250,26 @@ PrefabInstance:
     - target: {fileID: 3730215218738896279, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
       propertyPath: m_SortingLayerID
       value: 1695169479
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570775543317089856, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _knockBackPowerHeavy.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570775543317089856, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _knockBackPowerHeavy.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570775543317089856, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: _knockBackPowerLight.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570775543317089856, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: <CanKnockBackOnHit>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570775543317089856, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
+      propertyPath: <attackElapsedTime>k__BackingField
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5362638908182556387, guid: 7b4e07c2592382745819ff04339c6e01, type: 3}
       propertyPath: m_LocalPosition.x

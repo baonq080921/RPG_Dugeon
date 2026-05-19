@@ -25,7 +25,7 @@ namespace Base
         createFunc: CreateInstance,
         actionOnGet: item => { item.gameObject.SetActive(true); OnGet(item); },
         actionOnRelease: item => { OnRelease(item); item.gameObject.SetActive(false); },
-        actionOnDestroy: item => Destroy(item.gameObject),
+        actionOnDestroy: item => { if (item != null) Destroy(item.gameObject); },
         collectionCheck: CollectionCheck,
         defaultCapacity: _defaultCapacity,
         maxSize: _maxSize);

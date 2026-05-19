@@ -1,5 +1,5 @@
 using stateMachine;
-
+using UnityEngine;
 namespace player
 {
     /// <summary>
@@ -12,15 +12,31 @@ namespace player
         public PlayerKnockBackState(Player player, StateMachine stateMachine, string animBoolName)
             : base(player, stateMachine, animBoolName) { }
 
+
+        public override void Enter()
+        {
+            base.Enter();
+            stateTimer = player.entityStat.StunDuration;
+            input.Disable();
+            player.SetVelocity(Vector2.zero);
+        }
         public override void Update()
         {
             base.Update();
+            if(stateTimer > 0) return;
+
             if (player.IsKnocked) return;
 
             if (player.isGrounded)
                 stateMachine.ChangeState(player.playerIdleState);
             else
                 stateMachine.ChangeState(player.playerFallState);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            input.Enable();
         }
     }
 }

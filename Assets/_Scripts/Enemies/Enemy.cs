@@ -15,8 +15,6 @@ namespace enemy
         /// <inheritdoc/>
         public override LayerMask LayerMask => enemyData.WhatIsPlayer;
         /// <inheritdoc/>
-        public override bool CanKnockBackOnHit => enemyData.CanKnockBackPlayer;
-
 
         public EnemyIdleState enemyIdleState { get; protected set; }
         public EnemyMoveState enemyMoveState { get; protected set; }
@@ -27,11 +25,7 @@ namespace enemy
 
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
-
-        public override float Damage => enemyData.Damage;
-
         public bool CanCounter { get ; set ; }
-
         public event Action OnDied;
         public bool isDead{get; private set;}
 
@@ -129,19 +123,7 @@ namespace enemy
         }
 
 
-        public void ApplyKnockBack(float damage)
-        {
-            float ratio = damage / entityStat.GetHealthValue();
-
-            // Heavy when hit is a small fraction of max health, light otherwise
-            Vector2 power = ratio < enemyData.KnockBackThreshHold
-                ? enemyData.KnockBackPowerHeavy
-                : enemyData.KnockBackPowerLight;
-
-            // Negate x so the enemy is pushed away from the player (enemy faces toward player)
-            Vector2 knockBack = new Vector2(power.x * - direction, power.y);
-            ReciveKnockBack(knockBack,enemyData.StunDuration);
-        }
+        
 
         protected override void OnDrawGizmos()
         {

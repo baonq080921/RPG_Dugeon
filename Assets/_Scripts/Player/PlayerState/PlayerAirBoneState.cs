@@ -15,11 +15,12 @@ namespace player
         public override void Update()
         {
             base.Update();
-            if(input.Player.BasicAttack.WasPressedThisFrame())
+            if (player.canAirAttack && input.Player.BasicAttack.WasPressedThisFrame())
             {
                 player.playerJumpAttackState.IsUpAttack = player.movementInput.y > 0;
                 player.playerJumpAttackState.IsFromGround = false;
                 stateMachine.ChangeState(player.playerJumpAttackState);
+                return;
             }
 
             if(player.canDash && player.DashJustPressed)

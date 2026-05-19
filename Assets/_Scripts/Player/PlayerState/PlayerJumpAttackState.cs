@@ -46,6 +46,7 @@ namespace player
             base.Exit();
             animator.SetBool("JumpAttack", false);
             animator.SetBool("JumpAttack_2", false);
+            player.StartAirAttackCooldown();
         }
 
 

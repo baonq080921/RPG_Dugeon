@@ -9,13 +9,9 @@ namespace enemy
         [field: SerializeField] public float IdleTime { get; private set; } = 2f;
 
         [field: Header("Combat")]
-        [field: SerializeField] public float Damage { get; private set; } = 5f;
         [field: SerializeField] public bool CanKnockBackPlayer { get; private set; } = true;
         [field:SerializeField] public Vector2 AttackVelocityRetreat {get; private set;}
-        [field: SerializeField] public float StunDuration {get; private set;}
-        [field: SerializeField] public float KnockBackThreshHold{get; private set;} = 0.3f;
-        [field : SerializeField] public Vector2 KnockBackPowerLight{get; private set;}
-        [field: SerializeField] public Vector2 KnockBackPowerHeavy {get; private set;}
+        
 
         [field: Header("Movement")]
         [field: SerializeField] public float MoveSpeed { get; private set; } = 5f;

@@ -9,7 +9,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     private Entity _entity;
     private EntityStat _entityStat;
     /// <summary>Maximum health sourced from the entity's ScriptableObject data.</summary>
-    protected float MaxHealth { get; }
+    protected float MaxHealth => _entityStat.GetHealthValue();
 
     [SerializeField] private Slider _slider;
 
@@ -30,7 +30,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     }
     
   
-    public  virtual bool TakeDamage(float damage, bool applyKnockBack, Transform target)
+    public  virtual bool TakeDamage(float damage, Transform target)
     {
         if (AttackEnvaded())
         {
@@ -52,7 +52,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     {
         CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
         GetComponent<IHitVFX>()?.PlayHitVFX();
-
+        Debug.Log($"{gameObject.name} took {damage} damage. Current Health: {CurrentHealth}/{MaxHealth}");
         _slider.value = CurrentHealth / MaxHealth;
     }
 
