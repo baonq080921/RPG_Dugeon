@@ -35,9 +35,16 @@ public class EntityCombat : MonoBehaviour
         foreach (var target in targetColliders)
         {
             IHit hit = target.GetComponent<IHit>();
+            EntityStat targetStat = target.GetComponent<EntityStat>();
             if(hit == null) continue;
+            if(targetStat == null) continue;
             float damage = entityStat.GetPhysicalDamageValue(out bool isCrit);
-            bool targetGotHit = hit.TakeDamage(damage, _targetCheck);
+            float targetMigitation = targetStat.GetMigiationValue();
+
+            float finalDamge = damage * targetMigitation;
+            
+            
+            bool targetGotHit = hit.TakeDamage(finalDamge, _targetCheck);
             if(targetGotHit)
                 OnTargetHit?.Invoke(target.transform,isCrit);
 

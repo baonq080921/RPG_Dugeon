@@ -10,6 +10,7 @@ public class EntityStat : MonoBehaviour
     //[SerializeField] private OffensiveStats _offensiveStats;
     [SerializeField] private DefensiveStats _defensiveStats;
     [SerializeField] private OffensiveStats _offensiveStats;
+    private const float K = 100f; //Scaling factor for diminishing returns on armor
     [field: SerializeField] public float StunDuration {get; private set;} = 0.3f;
 
     public float GetHealthValue()
@@ -56,8 +57,18 @@ public class EntityStat : MonoBehaviour
         return finalDamage;
         
     }
+    public float GetMigiationValue()
+    {
 
-
+        float baseAmor = _defensiveStats.Amor.GetValue();
+        float bonusAmor = _majorStats.Vitality.GetValue(); // with each vitality point increase they will bonus 1 armor
+        // Calculate total armor and apply diminishing returns
+        float totalAmor = baseAmor + bonusAmor;
+        float mitigation = K / (K + totalAmor); // Diminishing returns formula
+        return mitigation;
+    }
+    
+  
     public float GetKnockBackThreshHold()
     {
         return _defensiveStats.KnockBackThreshHold.GetValue();

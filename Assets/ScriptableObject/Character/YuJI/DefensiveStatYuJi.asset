@@ -18,5 +18,5 @@ MonoBehaviour:
     baseValue: 300
   <Envasion>k__BackingField:
     baseValue: 10
-  <Armor>k__BackingField:
-    baseValue: 0
+  <Amor>k__BackingField:
+    baseValue: 90

@@ -10,6 +10,6 @@ namespace Stats
         [field: SerializeField] public Stat KnockBackThreshHold { get; private set; }
         [field: SerializeField] public Stat MaxHealth { get; private set; }
         [field:SerializeField] public Stat Envasion { get; private set; }
-        [field: SerializeField] public Stat Armor { get; private set; }
+        [field: SerializeField] public Stat Amor { get; private set; }
     }
 }
