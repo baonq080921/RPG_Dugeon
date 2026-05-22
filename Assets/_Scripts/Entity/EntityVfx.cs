@@ -21,6 +21,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     [Header("Elemental Hit VFX")]
     [SerializeField] private Color _electricHitColor;
+    [SerializeField] private float _electricBlinkInterval = 0.15f;
     private Color defaultHitColor;
     private EntityCombat _entityCombat;
     private Coroutine _electricStatusEffectCoroutine;
@@ -76,8 +77,18 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     private IEnumerator ElectricStatusEffectVFX(float duration)
     {
-        SpriteRenderer.color = _electricHitColor;
-        yield return new WaitForSeconds(duration);
+        float elapsed = 0f;
+        bool useBright = true;
+        Color darkColor = new Color(_electricHitColor.r * 0.5f, _electricHitColor.g * 0.5f, _electricHitColor.b * 0.5f, _electricHitColor.a);
+
+        while (elapsed < duration)
+        {
+            SpriteRenderer.color = useBright ? _electricHitColor : darkColor;
+            useBright = !useBright;
+            yield return new WaitForSeconds(_electricBlinkInterval);
+            elapsed += _electricBlinkInterval;
+        }
+
         SpriteRenderer.color = Color.white;
         _electricStatusEffectCoroutine = null;
     }
