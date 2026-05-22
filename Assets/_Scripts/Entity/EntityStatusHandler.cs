@@ -12,6 +12,7 @@ public class EntityStatusHandler : MonoBehaviour
     [Header("Reference")]
     private EntityHealth _entityHealth;
     private EntityVfx _entityVfx;
+    private Entity _entity;
 
 
     [Header("Coroutine")]
@@ -21,6 +22,7 @@ public class EntityStatusHandler : MonoBehaviour
     {
         _entityHealth = GetComponent<EntityHealth>();
         _entityVfx = GetComponent<EntityVfx>();
+        _entity = GetComponent<Entity>();
     }
 
 
@@ -62,6 +64,7 @@ public class EntityStatusHandler : MonoBehaviour
 
     private void DoElectricStrike(float damage)
     {
+        _entity.SetVelocity(new Vector2(0, _entity.rb.velocity.y));
         Instantiate(_electricEffectPrefab, transform.position, Quaternion.identity);
         Debug.Log(transform.name + " is struck by electric shock!");
         _entityHealth.ReduceHP(damage);

@@ -46,8 +46,6 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         // Apply elemental mitigation
         float elementalMigitation = entityStatDealDamage.GetElementalResitanceValue();
         float finalElementalDamage = elementalDamage *elementalMigitation;
-
-
         ReduceHP(finalDamge + finalElementalDamage);
 
         if (CurrentHealth <= 0)

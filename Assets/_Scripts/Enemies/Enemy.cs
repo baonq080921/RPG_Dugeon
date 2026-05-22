@@ -26,8 +26,6 @@ namespace enemy
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
         public bool CanCounter { get ; set ; }
-        public bool isDead{get; private set;}
-
         protected override void Awake()
         {
             base.Awake();
