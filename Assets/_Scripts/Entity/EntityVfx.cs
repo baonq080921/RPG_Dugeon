@@ -19,42 +19,89 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
      private Coroutine _hitVfxCoroutine;
     [SerializeField] private Color _hitColor;
 
+    [Header("Elemental Hit VFX")]
+    [SerializeField] private Color _electricHitColor;
+    private Color defaultHitColor;
+    private EntityCombat _entityCombat;
+    private Coroutine _electricStatusEffectCoroutine;
+
 
     protected virtual void Awake()
     {
+        ServiceLocator.Register(this);
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         OriginalMaterial = SpriteRenderer.material;
+        defaultHitColor = _hitColor;
+        _entityCombat = GetComponent<EntityCombat>();
     }
 
     protected virtual void OnEnable()
     {
-        ServiceLocator.Get<EntityCombat>().OnTargetHit += CreateHitEffect;
+        _entityCombat.OnTargetHit += CreateHitEffect;
     }
 
     protected virtual void OnDisable()
     {
-        ServiceLocator.Get<EntityCombat>().OnTargetHit -= CreateHitEffect;
+        _entityCombat.OnTargetHit -= CreateHitEffect;
     }
 
+    public void UpdateHitColor(ElementType elementType)
+    {
+        // Debug.Log(_electricHitColor);
+        if(elementType == ElementType.Electric)
+        {
+            _hitColor = _electricHitColor;
+        }
+        else
+        {
+            _hitColor = defaultHitColor;
+        }
+    }
+
+    //Status effect vfx can be implemented here as well, for example we can change the color of the entity when it is under electric status effect, and change it back when the status effect ends. We can also spawn some particle effects to indicate the status effect.
+    public void UpdateStatusEffectVFX(ElementType elementType,float duration)
+    {
+        if(elementType == ElementType.Electric)
+        {
+            PlayElectricCoroutine(duration);
+        }
+    }
+
+    private void PlayElectricCoroutine(float duration)
+    {
+        if (_electricStatusEffectCoroutine != null)
+            StopCoroutine(_electricStatusEffectCoroutine);
+        _electricStatusEffectCoroutine = StartCoroutine(ElectricStatusEffectVFX(duration));
+    }
+
+    private IEnumerator ElectricStatusEffectVFX(float duration)
+    {
+        SpriteRenderer.color = _electricHitColor;
+        yield return new WaitForSeconds(duration);
+        SpriteRenderer.color = Color.white;
+        _electricStatusEffectCoroutine = null;
+    }
+
+
+
+
+
      /// <inheritdoc/>
-        public virtual void PlayHitVFX()
-        {
-            if (_hitVfxCoroutine != null)
-                StopCoroutine(_hitVfxCoroutine);
-            _hitVfxCoroutine = StartCoroutine(HitVfxCoroutine());
-        }
+    public virtual void PlayHitVFX()
+    {
+        if (_hitVfxCoroutine != null)
+            StopCoroutine(_hitVfxCoroutine);
+        _hitVfxCoroutine = StartCoroutine(HitVfxCoroutine());
+    }
 
-        private IEnumerator HitVfxCoroutine()
-        {
-            SpriteRenderer.material = KnockBackMat;
-            yield return new WaitForSeconds(HitFlashDuration);
-            SpriteRenderer.material = OriginalMaterial;
-            _hitVfxCoroutine = null;
+    private IEnumerator HitVfxCoroutine()
+    {
+        SpriteRenderer.material = KnockBackMat;
+        yield return new WaitForSeconds(HitFlashDuration);
+        SpriteRenderer.material = OriginalMaterial;
+        _hitVfxCoroutine = null;
 
-        }
-
-
-
+    }
     private void CreateHitEffect(Transform target, bool isCrit)
     {
         SpawnHitEffect(target, isCrit);

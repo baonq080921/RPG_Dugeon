@@ -8400,6 +8400,7 @@ GameObject:
   - component: {fileID: 1632231621}
   - component: {fileID: 1632231622}
   - component: {fileID: 1632231623}
+  - component: {fileID: 1632231624}
   m_Layer: 6
   m_Name: EnemySkeleton
   m_TagString: Untagged
@@ -8529,6 +8530,9 @@ MonoBehaviour:
   targetColliders: []
   _targetCheck: {fileID: 224386560}
   _targetRadius: 1.13
+  _scaleElementalFactor: 1
+  _electricStatusDuration: 2
+  _electricBuildUpCharge: 0.5
 --- !u!114 &1632231621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8557,6 +8561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitFlashDuration: 0.15
   _hitColor: {r: 1, g: 1, b: 1, a: 1}
+  _electricHitColor: {r: 1, g: 0.9372549, b: 0.23137255, a: 1}
   _alertCounterSignal: {fileID: 0}
 --- !u!114 &1632231623
 MonoBehaviour:
@@ -8570,10 +8575,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dd3eb31c3753c418514d1a817ab9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _entityType: 3
   _majorStats: {fileID: 11400000, guid: 2a6d404b85ee1b24a8a3e987f7d8eb8d, type: 2}
   _defensiveStats: {fileID: 11400000, guid: c1e29906abd0570468c2199fb5270379, type: 2}
   _offensiveStats: {fileID: 11400000, guid: e44e9f607fee0a14c8705aa65df3aec3, type: 2}
   <StunDuration>k__BackingField: 0.3
+--- !u!114 &1632231624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632231614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040117eeddf436a4cb48499e8e207bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _electricEffectPrefab: {fileID: 6004947700731378671, guid: 4205389ab85a13046ad637f3b40a1149, type: 3}
+  _currentCharge: 0
+  _maxiumCharge: 1
 --- !u!1 &1663125763
 GameObject:
   m_ObjectHideFlags: 0

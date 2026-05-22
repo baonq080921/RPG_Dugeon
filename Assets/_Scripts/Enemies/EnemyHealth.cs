@@ -15,9 +15,9 @@ namespace enemy
         }
 
         /// <inheritdoc/>
-        public override bool TakeDamage(float damage,Transform target)
+        public override bool TakeDamage(float damage,float elementalDamage,ElementType elementType,Transform target)
         {
-            bool canDamage = base.TakeDamage(damage, target);
+            bool canDamage = base.TakeDamage(damage,elementalDamage,elementType,target);
             if (!canDamage) return false;
             
             _enemy.ApplyKnockBack(damage);

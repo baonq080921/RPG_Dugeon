@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Base;
 using stateMachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,7 +39,6 @@ namespace player
 
         /// <summary>Fired when dash cooldown begins. Parameter is the total cooldown duration.</summary>
         public event Action<float> DashCooldownStarted;
-        public event Action OnDie;
 
         public bool canDash { get; private set; } = true;
         private float _dashCooldownTimer;
@@ -106,7 +106,7 @@ namespace player
             playerKnockBackState = new PlayerKnockBackState(this, stateMachine, "Hit");
             playerDeadState = new PlayerDeadState(this, stateMachine,"Dead");
             playerCounterState = new PlayerCounterState(this, stateMachine, "EnterCounter");
-            SkillManager.RegisterState((int)SkillName.CounterSkill, playerCounterState);      
+            SkillManager.RegisterState((int)SkillName.CounterSkill, playerCounterState);   
             }
 
         void OnEnable()
@@ -154,7 +154,6 @@ namespace player
                 StopCoroutine(_queueComboCouroutine);
             _queueComboCouroutine = StartCoroutine(AttackQueueCouroutine());
         }
-
         IEnumerator AttackQueueCouroutine()
         {
             yield return new WaitForEndOfFrame();
@@ -171,9 +170,8 @@ namespace player
         public override void Die()
         {
             base.Die();
-            // OnDie.Invoke();
+            EventBus<PlayerDiedEvent>.Raise(new PlayerDiedEvent());
             stateMachine.ChangeState(playerDeadState);
-
         }
 
         private void TickDashCooldown()

@@ -18,5 +18,9 @@ MonoBehaviour:
     baseValue: 300
   <Envasion>k__BackingField:
     baseValue: 0
-  <Armor>k__BackingField:
+  <Amor>k__BackingField:
+    baseValue: 0
+  <ElementalResitance>k__BackingField:
+    baseValue: 20
+  <HealthRegen>k__BackingField:
     baseValue: 0

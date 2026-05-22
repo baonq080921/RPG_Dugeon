@@ -502,6 +502,7 @@ GameObject:
   - component: {fileID: 8706496832175264497}
   - component: {fileID: 2595452044410493718}
   - component: {fileID: 2663837527512780959}
+  - component: {fileID: 3639380412088480431}
   m_Layer: 8
   m_Name: PlayerYuji
   m_TagString: Untagged
@@ -662,6 +663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitFlashDuration: 0.15
   _hitColor: {r: 1, g: 0, b: 0, a: 1}
+  _electricHitColor: {r: 1, g: 0.93911874, b: 0.23113209, a: 1}
 --- !u!114 &8706496832175264497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -691,6 +693,9 @@ MonoBehaviour:
   targetColliders: []
   _targetCheck: {fileID: 2045506061250869345}
   _targetRadius: 0.75
+  _scaleElementalFactor: 1
+  _electricStatusDuration: 5
+  _electricBuildUpCharge: 0.5
 --- !u!114 &2663837527512780959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,10 +708,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dd3eb31c3753c418514d1a817ab9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _entityType: 1
   _majorStats: {fileID: 11400000, guid: 223d3932409b7d04c9f4b6e0940754db, type: 2}
   _defensiveStats: {fileID: 11400000, guid: ef32f9792cc21194cab4438a37042b8b, type: 2}
   _offensiveStats: {fileID: 11400000, guid: 87709ae0620cefd4088fd6f8d4c00cc7, type: 2}
   <StunDuration>k__BackingField: 0.05
+--- !u!114 &3639380412088480431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6229336110876845623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040117eeddf436a4cb48499e8e207bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _electricEffectPrefab: {fileID: 6004947700731378671, guid: 4205389ab85a13046ad637f3b40a1149, type: 3}
+  _currentCharge: 0
+  _maxiumCharge: 1
 --- !u!1 &7929125038485472551
 GameObject:
   m_ObjectHideFlags: 0

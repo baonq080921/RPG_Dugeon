@@ -3,9 +3,17 @@
 using Base;
 using Stats;
 using UnityEngine;
+public enum EntityType
+{
+    None,
+    PlayerNormal,
+    PlayerSpecial,
+    Enemy
+}
 
 public class EntityStat : MonoBehaviour
 {
+    [SerializeField]private EntityType _entityType;
     [SerializeField] private MajorStats _majorStats;
     //[SerializeField] private OffensiveStats _offensiveStats;
     [SerializeField] private DefensiveStats _defensiveStats;
@@ -57,6 +65,45 @@ public class EntityStat : MonoBehaviour
         return finalDamage;
         
     }
+
+    public float GetElementalDamageValue(out ElementType elementType)
+    {
+        float fireDamage = _offensiveStats.fireDamage.GetValue();
+        float lightDamage = _offensiveStats.lightDamage.GetValue();
+        float bonusElementalDamage = _majorStats.Intelligence.GetValue(); // with each intelligence point increase they will bonus 0.5 % elemental damage
+        float totalFireDamage = fireDamage + bonusElementalDamage;
+        float totalLightDamage = lightDamage + bonusElementalDamage;
+
+        if(_entityType == EntityType.PlayerNormal)
+        {
+            elementType = ElementType.Electric;
+            return totalLightDamage; // Player normal attack will only deal light damage
+        }
+
+        else if(_entityType == EntityType.PlayerSpecial)
+        {
+            elementType = ElementType.Fire;
+            return totalFireDamage + totalLightDamage * 0.5f; //player special attack will deal both fire and light damage but light damage will be reduced by 50%
+        }
+
+        else 
+        {
+                elementType = ElementType.None;
+            return 0f; // Enemies do not deal elemental damage in this design
+        }
+    }
+
+
+
+
+    public float GetElementalResitanceValue()
+    {
+        float baseResitance = _defensiveStats.ElementalResitance.GetValue();
+        float bonusResitance = _majorStats.Intelligence.GetValue() * 0.5f; // with each intelligence point increase they will bonus 0.5 % elemental resitance
+        float totalResitance = baseResitance + bonusResitance;
+        float mitigation = K / (K + totalResitance); // Diminishing returns formula
+        return mitigation;
+    }
     public float GetMigiationValue()
     {
 
@@ -72,5 +119,22 @@ public class EntityStat : MonoBehaviour
     public float GetKnockBackThreshHold()
     {
         return _defensiveStats.KnockBackThreshHold.GetValue();
+    }
+
+
+    public float GetAttackMultiplier()
+    {
+        float baseAttackSpeed = _offensiveStats.AttackMultiplier.GetValue();
+        float bonusAttackSpeed = _majorStats.Agility.GetValue() * 0.5f; // with each Agility point increase they will bonus 0.5 % attack speed
+        float totalAttackSpeed = baseAttackSpeed + bonusAttackSpeed;
+        return totalAttackSpeed;
+    }
+
+    public float GetHealthRegen()
+    {
+        float maxHealth = GetHealthValue();
+        float baseRegen = _defensiveStats.HealthRegen.GetValue();
+        float regenCap = maxHealth * 0.05f;
+        return baseRegen > regenCap ? regenCap : baseRegen;
     }
 }

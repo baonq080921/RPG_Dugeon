@@ -18,3 +18,9 @@ MonoBehaviour:
     baseValue: 50
   <CritChance>k__BackingField:
     baseValue: 10
+  <AttackMultiplier>k__BackingField:
+    baseValue: 1
+  <fireDamage>k__BackingField:
+    baseValue: 50
+  <lightDamage>k__BackingField:
+    baseValue: 30

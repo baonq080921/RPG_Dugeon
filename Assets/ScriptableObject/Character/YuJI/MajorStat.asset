@@ -15,7 +15,7 @@ MonoBehaviour:
   <Strength>k__BackingField:
     baseValue: 0
   <Agility>k__BackingField:
-    baseValue: 0
+    baseValue: 2
   <Intelligence>k__BackingField:
     baseValue: 0
   <Vitality>k__BackingField:

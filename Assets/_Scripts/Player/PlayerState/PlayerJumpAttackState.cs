@@ -24,12 +24,15 @@ namespace player
         public override void Enter()
         {
             base.Enter();
+            float attackMultiplier = player.entityStat.GetAttackMultiplier();
             if (IsFromGround)
             {
                 player.JumpCount++;
                 player.SetVelocity(new Vector2(rb.velocity.x, player.jumpForce));
             }
             animator.SetBool(IsUpAttack ? "JumpAttack_2" : "JumpAttack", true);
+            animator.SetFloat("AttackMultplier", attackMultiplier);
+
         }
 
         /// <inheritdoc/>

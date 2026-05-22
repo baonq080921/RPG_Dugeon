@@ -1,7 +1,8 @@
-using Base;
+
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public abstract class EntityHealth : MonoBehaviour, IHit
 {     
@@ -20,22 +21,35 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     {
         _entity = GetComponent<Entity>();
         _entityStat = GetComponent<EntityStat>();
+        _slider = GetComponentInChildren<Slider>();
     }
     
-    void Start()
+    protected virtual void Start()
     {
         CurrentHealth = _entityStat.GetHealthValue();
-        _slider.value = CurrentHealth/MaxHealth;
+        UpdateHealthBar();
     }
     
   
-    public  virtual bool TakeDamage(float damage, Transform target)
+    public  virtual bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform targetDealDamage)
     {
         if (AttackEnvaded())
         {
             return false ;
         }
-        CaculateDamage(damage);
+        EntityStat entityStatDealDamage = targetDealDamage.GetComponent<EntityStat>();
+
+        // Apply physical mitigation
+        float targetMigitation = entityStatDealDamage.GetMigiationValue();
+        float finalDamge = damage * targetMigitation;
+
+        // Apply elemental mitigation
+        float elementalMigitation = entityStatDealDamage.GetElementalResitanceValue();
+        float finalElementalDamage = elementalDamage *elementalMigitation;
+
+
+        ReduceHP(finalDamge + finalElementalDamage);
+
         if (CurrentHealth <= 0)
             _entity.Die();
 
@@ -45,19 +59,41 @@ public abstract class EntityHealth : MonoBehaviour, IHit
 
     private bool AttackEnvaded() => Random.Range(0f, 100f) < _entityStat.GetEnvasionValue();
 
-    private void CaculateDamage(float damage)
+    public void ReduceHP(float damage)
     {
         CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
         GetComponent<IHitVFX>()?.PlayHitVFX();
-        Debug.Log($"{gameObject.name} took {damage} damage. Current Health: {CurrentHealth}/{MaxHealth}");
+        // Debug.Log($"{gameObject.name} took {damage} damage. Current Health: {CurrentHealth}/{MaxHealth}");
+        UpdateHealthBar();
+    }
+
+    protected void UpdateHealthBar()
+    {
         _slider.value = CurrentHealth / MaxHealth;
+    }
+
+    protected void RegenerateHealth()
+    {
+        if (CurrentHealth >= MaxHealth)
+            return;
+
+        float regenAmount = _entityStat.GetHealthRegen();
+        if (regenAmount <= 0f)
+            return;
+
+        CurrentHealth = Mathf.Min(CurrentHealth + regenAmount, MaxHealth);
+        UpdateHealthBar();
     }
 
     /// <summary>Restores health to its maximum value. Call this when retrieving an entity from a pool.</summary>
     public void ResetHealth()
     {
         CurrentHealth = MaxHealth;
+        UpdateHealthBar();
     }
+
+    /// <summary>Stops the health regeneration loop. Call this on death.</summary>
+    public void StopRegen() => CancelInvoke(nameof(RegenerateHealth));
 
 
     

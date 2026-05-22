@@ -13,8 +13,14 @@ MonoBehaviour:
   m_Name: OffensiveStats
   m_EditorClassIdentifier: 
   <Damage>k__BackingField:
-    baseValue: 10
+    baseValue: 100
   <CritPower>k__BackingField:
     baseValue: 0
   <CritChance>k__BackingField:
+    baseValue: 0
+  <AttackMultiplier>k__BackingField:
+    baseValue: 1
+  <fireDamage>k__BackingField:
+    baseValue: 0
+  <lightDamage>k__BackingField:
     baseValue: 0

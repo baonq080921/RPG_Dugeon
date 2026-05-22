@@ -21,7 +21,9 @@ public abstract class Entity : MonoBehaviour
     [SerializeField] protected LayerMask _whatIsGround;
     [SerializeField] protected LayerMask _whatIsWall;
     [SerializeField] protected Transform _groundCheckPoint;
+    
 
+    public bool isDead{get; protected set;} = false;
     [Space]
     [Range(0,1f)]
     [SerializeField] protected float _groundCheckRadius = 0.1f;
@@ -103,7 +105,10 @@ public abstract class Entity : MonoBehaviour
         stateMachine.currentState.TriggerAnimation();
     }
 
-    public virtual void Die(){}
+    public virtual void Die()
+    {
+        isDead = true;
+    }
 
 
 

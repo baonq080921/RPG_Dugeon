@@ -26,12 +26,14 @@ namespace player
         {
             base.Enter();
             _attackComboQueue = false;
+            float attackMultiplier = player.entityStat.GetAttackMultiplier();
             _attackDirection = player.movementInput.x != 0
                 ? (int)Mathf.Sign(player.movementInput.x)
                 : (int)player.direction;
             ResetComboAttack();
             ApplyAttackVelocity();
             animator.SetInteger("AttackIndex", _attackIndex);
+            animator.SetFloat("AttackMultplier", attackMultiplier);
         }
 
         /// <inheritdoc/>

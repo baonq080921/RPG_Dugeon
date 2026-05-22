@@ -26,7 +26,6 @@ namespace enemy
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
         public bool CanCounter { get ; set ; }
-        public event Action OnDied;
         public bool isDead{get; private set;}
 
         protected override void Awake()
@@ -118,8 +117,8 @@ namespace enemy
 
         public override void Die()
         {
-            OnDied?.Invoke();
             isDead = true;
+            EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent());
         }
 
 

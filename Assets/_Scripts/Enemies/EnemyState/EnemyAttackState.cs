@@ -14,6 +14,7 @@ namespace enemy
         public override void Enter()
         {
             base.Enter();
+            float attackMultiplier = enemy.entityStat.GetAttackMultiplier();
             if (enemy.ShouldEnemyRetreat())
             {
                 enemy.Flip(enemy.direction);
@@ -21,6 +22,8 @@ namespace enemy
                 return;
             }
             enemy.SetVelocity(new Vector2(0, rb.velocity.y));
+            animator.SetFloat("AttackMultplier", attackMultiplier);
+
         }
 
         public override void Update()
