@@ -15,6 +15,9 @@ public class EntityStatusHandler : MonoBehaviour
     private Entity _entity;
 
 
+    [Header("Electric Strike")]
+    [SerializeField] private float _shockDuration = 0.5f;
+
     [Header("Coroutine")]
     private Coroutine _electricEffectCoroutine;
 
@@ -64,10 +67,10 @@ public class EntityStatusHandler : MonoBehaviour
 
     private void DoElectricStrike(float damage)
     {
-        _entity.SetVelocity(new Vector2(0, _entity.rb.velocity.y));
         Instantiate(_electricEffectPrefab, transform.position, Quaternion.identity);
-        Debug.Log(transform.name + " is struck by electric shock!");
         _entityHealth.ReduceHP(damage);
+        _entity.Shock(_shockDuration);
+        _entityVfx.UpdateStatusEffectVFX(ElementType.Electric, _shockDuration);
     }
 
     public bool CanElementalStatusApply(ElementType newStatus)

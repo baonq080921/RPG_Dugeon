@@ -17,12 +17,10 @@ MonoBehaviour:
   <MaxJumpCount>k__BackingField: 1
   <AirControlFactor>k__BackingField: 0.5
   <SlideDownSpeed>k__BackingField: 0.5
-  <WallJumpForce>k__BackingField: {x: 12, y: 12}
+  <WallJumpForce>k__BackingField: {x: 12, y: 20}
   <DashSpeed>k__BackingField: 25
   <DashDuration>k__BackingField: 0.2
   <DashCooldown>k__BackingField: 1.5
-  <Damage>k__BackingField: 10
-  <CounterDamage>k__BackingField: 5
   <KnockBack>k__BackingField: {x: 3, y: 5}
   <KnockBackDuration>k__BackingField: 0.3
   <AttackVelocities>k__BackingField:

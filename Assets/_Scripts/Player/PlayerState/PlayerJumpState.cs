@@ -13,6 +13,7 @@ namespace player
         public override void Enter()
         {
             base.Enter();
+            DebugCustom.Log("Enter Jump State");
             player.JumpCount++;
             player.ConsumeJump();
             player.SetVelocity(new Vector2(rb.velocity.x, player.jumpForce));
@@ -22,11 +23,11 @@ namespace player
         {
             base.Update();
 
-            if (player.JumpJustPressed && player.JumpCount < player.MaxJumpCount)
-            {
-                stateMachine.ChangeState(player.playerJumpState);
-                return;
-            }
+            // if (player.JumpJustPressed && player.JumpCount < player.MaxJumpCount)
+            // {
+            //     stateMachine.ChangeState(player.playerJumpState);
+            //     return;
+            // }
 
             if (player.isTouchingWall && !player.isGrounded && player.direction != player.LastWallJumpDirection)
             {

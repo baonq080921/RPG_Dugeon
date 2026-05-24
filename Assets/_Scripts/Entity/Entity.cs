@@ -46,8 +46,10 @@ public abstract class Entity : MonoBehaviour
     public event Action OnFlip;
     private Coroutine _knockBackCoroutine;
     public bool IsKnocked { get; private set; }
+    public bool IsShocked { get; private set; }
     [SerializeField] private Vector2 _knockBackPowerLight;
     [SerializeField] private Vector2 _knockBackPowerHeavy;
+    private Coroutine _shockCoroutine;
 
 
     public EntityStat entityStat { get; private set; }
@@ -85,9 +87,25 @@ public abstract class Entity : MonoBehaviour
 
     public virtual void SetVelocity(Vector2 velocity)
     {
-        if(IsKnocked) return;
-        
+        if (IsKnocked || IsShocked) return;
         rb.velocity = velocity;
+    }
+
+    /// <summary>Freezes the entity in place for <paramref name="duration"/> seconds, then restores movement.</summary>
+    public void Shock(float duration)
+    {
+        if (_shockCoroutine != null)
+            StopCoroutine(_shockCoroutine);
+        _shockCoroutine = StartCoroutine(ShockCo(duration));
+    }
+
+    private IEnumerator ShockCo(float duration)
+    {
+        IsShocked = true;
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSeconds(duration);
+        IsShocked = false;
+        _shockCoroutine = null;
     }
 
 
