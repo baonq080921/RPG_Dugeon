@@ -10,12 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
-  m_Name: SkillTree-Sweep
+  m_Name: SkillTree-TimeEchoAttack
   m_EditorClassIdentifier: 
-  <skillTreeDataName>k__BackingField: Sweep
-  <Description>k__BackingField: 'Create a time echo of yourself
-
-    The echo can
-    distract enemies'
-  <Icon>k__BackingField: {fileID: -1024362965, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  <Cost>k__BackingField: 0
+  <skillTreeDataName>k__BackingField: EchoTimeLessAttack
+  <Description>k__BackingField: Spawning one echo and performe one attack
+  <Icon>k__BackingField: {fileID: 21300000, guid: d69c05ab856c8d84c92ba42789713ce8, type: 3}
+  <Cost>k__BackingField: 2

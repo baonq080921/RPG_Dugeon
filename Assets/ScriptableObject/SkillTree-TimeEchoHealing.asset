@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
-  m_Name: SkillTree-TimeEcho
+  m_Name: SkillTree-TimeEchoHealing
   m_EditorClassIdentifier: 
-  <skillTreeDataName>k__BackingField: Time Echo
-  <Description>k__BackingField: 'Create a time echo of yourself
-
-    The echo can
-    distract enemies'
-  <Icon>k__BackingField: {fileID: 1994286936, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  <Cost>k__BackingField: 1
+  <skillTreeDataName>k__BackingField: HealingWeep
+  <Description>k__BackingField: When the echo die from enemy attack it release a
+    healing weep that move toward player and heal player on contact
+  <Icon>k__BackingField: {fileID: 751563054, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  <Cost>k__BackingField: 2

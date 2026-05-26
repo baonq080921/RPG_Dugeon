@@ -1,6 +1,6 @@
 
 using UnityEngine;
-[CreateAssetMenu(fileName = "SkillNodeTreeData", menuName = "RPG/Skill Tree Data")]
+[CreateAssetMenu(fileName = "SkillTree-", menuName = "RPG/Skill Tree Data")]
 public class SkillTreeData : ScriptableObject {
 
     [field: SerializeField] public string skillTreeDataName { get; private set; }
