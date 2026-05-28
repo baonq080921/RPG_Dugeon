@@ -14,20 +14,11 @@ namespace player
         public override void Enter()
         {
             base.Enter();
-            player.ConsumeDash();
-            // player.ConsumeAttack();
         }
 
         public override void Update()
         {
             base.Update();
-
-            if (player.canDash && player.DashJustPressed)
-            {
-                stateMachine.ChangeState(player.playerDashState);
-                return;
-            }
-
             if (player.JumpJustPressed && player.canAttack && input.Player.BasicAttack.WasPressedThisFrame())
             {
                 player.ConsumeJump();
@@ -45,9 +36,9 @@ namespace player
             if (player.canAttack && input.Player.BasicAttack.WasPressedThisFrame())
                 stateMachine.ChangeState(player.playerBasicAttackState);
 
-            for (int i = 0; i < player.SkillManager.SlotCount; i++)
+            for (int i = 0; i < player.SkillButtonHandler.SlotCount; i++)
             {
-                if (player.SkillManager.TryConsumeSkill(i, out PlayerState skillState))
+                if (player.SkillButtonHandler.TryConsumeSkill(i, out PlayerState skillState))
                 {
                     stateMachine.ChangeState(skillState);
                     return;

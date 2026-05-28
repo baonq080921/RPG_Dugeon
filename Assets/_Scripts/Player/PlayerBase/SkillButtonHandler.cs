@@ -8,9 +8,9 @@ namespace player
     /// Skill states are registered at runtime by <see cref="Player.CreateStates"/>.
     /// On-screen buttons call <see cref="PressSkill"/> to queue a skill for the next state update.
     /// </summary>
-    public class SkillManager : MonoBehaviour
+    public class SkillButtonHandler : MonoBehaviour
     {
-        [SerializeField] private SkillDefinition[] _definitions;
+        [SerializeField] private SkillBaseDefinition[] _skillDefinition;
 
         private PlayerState[] _states;
         private float[] _cooldownTimers;
@@ -22,7 +22,7 @@ namespace player
         public event Action<int, float> SkillCooldownStarted;
 
         /// <summary>Number of configured skill slots.</summary>
-        public int SlotCount => _definitions?.Length ?? 0;
+        public int SlotCount => _skillDefinition?.Length ?? 0;
 
         private void Update()
         {
@@ -50,8 +50,9 @@ namespace player
         /// Silently ignored when the skill is on cooldown or the index is out of range.
         /// Called by on-screen <see cref="UI.SkillButton"/> components.
         /// </summary>
-        public void PressSkill(int index)
+        public void PressSkill(ButtonSkillName skillName)
         {
+            int index = (int)skillName;
             EnsureInitialized();
             if (index < 0 || index >= SlotCount) return;
             if (!IsReady(index)) return;
@@ -71,7 +72,7 @@ namespace player
             if (!_pending[index] || _states[index] == null) return false;
 
             _pending[index] = false;
-            float duration = _definitions[index].Cooldown;
+            float duration = _skillDefinition[index].Cooldown;
             _cooldownTimers[index] = duration;
             SkillCooldownStarted?.Invoke(index, duration);
             state = _states[index];
@@ -79,8 +80,8 @@ namespace player
         }
 
         /// <returns>The <see cref="SkillDefinition"/> for the given slot, or null if out of range.</returns>
-        public SkillDefinition GetDefinition(int index) =>
-            (index >= 0 && index < SlotCount) ? _definitions[index] : null;
+        public SkillBaseDefinition GetSkill(int index) =>
+            (index >= 0 && index < SlotCount) ? _skillDefinition[index] : null;
 
         /// <returns>True if the skill at <paramref name="index"/> has no active cooldown.</returns>
         public bool IsReady(int index)

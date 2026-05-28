@@ -381,6 +381,53 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5265632208087460327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6508565638126517868}
+  - component: {fileID: 1935694926364728682}
+  m_Layer: 8
+  m_Name: SkillHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6508565638126517868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265632208087460327}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6031478058514801146}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1935694926364728682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265632208087460327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8b766db6728a640918e0dbf6bfa684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <SkillData>k__BackingField: {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
+  <skillType>k__BackingField: 0
+  <skillUpgrade>k__BackingField: 0
 --- !u!1 &5500656302924963687
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,6 +550,7 @@ GameObject:
   - component: {fileID: 2595452044410493718}
   - component: {fileID: 2663837527512780959}
   - component: {fileID: 3639380412088480431}
+  - component: {fileID: 6154724270506204396}
   m_Layer: 8
   m_Name: PlayerYuji
   m_TagString: Untagged
@@ -528,6 +576,7 @@ Transform:
   - {fileID: 2045506061250869345}
   - {fileID: 1782024204805197317}
   - {fileID: 4772936102353786152}
+  - {fileID: 6508565638126517868}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4794907317093849844
@@ -664,6 +713,7 @@ MonoBehaviour:
   HitFlashDuration: 0.15
   _hitColor: {r: 1, g: 0, b: 0, a: 1}
   _electricHitColor: {r: 1, g: 0.93911874, b: 0.23113209, a: 1}
+  _electricBlinkInterval: 0.15
 --- !u!114 &8706496832175264497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,8 +726,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee94e9056454e2b4688b5e7e0ff4eb0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _definitions:
-  - {fileID: 11400000, guid: 30ed17f1aa7260e45b2fbe050f2d02f3, type: 2}
+  _skillDefinition:
+  - {fileID: 11400000, guid: 9a727fab2a132a946bb11cea532fe7b1, type: 2}
+  - {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
 --- !u!114 &2595452044410493718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,9 +744,9 @@ MonoBehaviour:
   targetColliders: []
   _targetCheck: {fileID: 2045506061250869345}
   _targetRadius: 0.75
-  _scaleElementalFactor: 1
-  _electricStatusDuration: 5
-  _electricBuildUpCharge: 0.5
+  _scaleElementalFactor: 2
+  _electricStatusDuration: 1
+  _electricBuildUpCharge: 0.3
 --- !u!114 &2663837527512780959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,6 +779,19 @@ MonoBehaviour:
   _electricEffectPrefab: {fileID: 6004947700731378671, guid: 4205389ab85a13046ad637f3b40a1149, type: 3}
   _currentCharge: 0
   _maxiumCharge: 1
+  _shockDuration: 0.5
+--- !u!114 &6154724270506204396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6229336110876845623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ada313ded93a04aa5756fb8c131af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7929125038485472551
 GameObject:
   m_ObjectHideFlags: 0

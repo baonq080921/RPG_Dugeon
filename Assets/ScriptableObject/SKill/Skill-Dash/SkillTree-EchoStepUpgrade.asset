@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
+  m_Name: SkillTree-EchoStepUpgrade
+  m_EditorClassIdentifier: 
+  <SkillType>k__BackingField: 0
+  <UpgradeData>k__BackingField:
+    <SkillUpgrade>k__BackingField: 2
+    <UpgradeCoolDown>k__BackingField: 1.3
+    <UpgradeDuration>k__BackingField: 0.3
+  <skillTreeDataName>k__BackingField: EchoStepUpgrade
+  <Description>k__BackingField: 'Create a Time Echo at arrival .
+
+    (Inherits all
+    the update from the time echo).'
+  <Icon>k__BackingField: {fileID: 21300000, guid: 5251484dd8adb4143a7af0c3bfc7ca19, type: 3}
+  <Cost>k__BackingField: 3

@@ -3,6 +3,7 @@ using UnityEngine;
 using Base;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using player;
 
 public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
@@ -45,6 +46,12 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UpdateIconColor(_lockedColor);
     }
 
+    // void Start()
+    // {
+    //     if (skillTreeData != null && skillTreeData.Cost == 0)
+    //         Unlock();
+    // }
+
     private void Unlock()
     {
         isUnlocked = true;
@@ -52,6 +59,9 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         ServiceLocator.Get<UIManager>().uISkillTree.ReduceSkillPoint(skillTreeData.Cost);
         LockOtherSkillPath();
         RefreshParentLineColors();
+
+        ServiceLocator.Get<PlayerSkillManager>().GetSkillByType(skillTreeData.SkillType).SetSkillUpgradeType(skillTreeData.UpgradeData.SkillUpgrade);
+        ServiceLocator.Get<PlayerSkillManager>().GetSkillByType(skillTreeData.SkillType).SetUpgradeForSkill(skillTreeData.UpgradeData);
     }
 
     private void RefreshParentLineColors()
@@ -86,7 +96,20 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private void LockOtherSkillPath()
     {
         foreach(var node in confilctNode)
-            node.isLocked = true;
+            node.NotifyLocked();
+    }
+
+    /// <summary>Called by a conflicting node when it unlocks, permanently locking this node.</summary>
+    public void NotifyLocked()
+    {
+        isLocked = true;
+        if (_feedbackCoroutine != null)
+        {
+            StopCoroutine(_feedbackCoroutine);
+            _rect.anchoredPosition = _preFeedbackPos;
+            _feedbackCoroutine = null;
+        }
+        UpdateIconColor(_lockedColor);
     }
 
     /// <summary>Resets this node to its initial locked state without refunding points (refund is handled by UISkillTree).</summary>

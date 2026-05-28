@@ -11,7 +11,7 @@ namespace UI
     /// </summary>
     public class SkillButton : MonoBehaviour, IPointerDownHandler
     {
-        [SerializeField] private int _slotIndex;
+        [SerializeField] private ButtonSkillName _skillName;
 
         private Player _player;
 
@@ -41,7 +41,7 @@ namespace UI
         /// <inheritdoc/>
         public void OnPointerDown(PointerEventData eventData)
         {
-            _player?.SkillManager.PressSkill(_slotIndex);
+            _player?.SkillButtonHandler.PressSkill(_skillName);
         }
     }
 }

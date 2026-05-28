@@ -16,7 +16,7 @@ namespace player
         {
             base.Enter();
             player.SetCanDash(false);
-            lastDashTime = Time.time;
+            stateTimer = player.SkillButtonHandler.GetSkill((int)ButtonSkillName.Dash).Duration;
             rb.gravityScale = 0f;
             _dashDirection = player.movementInput.x != 0 ? (int)Mathf.Sign(player.movementInput.x) : (int)player.direction;
             ApplyDashVelocity();
@@ -26,8 +26,7 @@ namespace player
         public override void Update()
         {
             base.Update();
-            if (Time.time < lastDashTime + player.dashDuration)
-                return;
+            if(stateTimer >= 0) return;
 
             if (player.isGrounded)
             {
@@ -47,8 +46,8 @@ namespace player
             base.Exit();
             player.SetCanDash(true);
             rb.gravityScale = 3.5f;
-            player.StartDashCooldown();
             player.AfterImageEffect?.StopEffect();
+            player.SetCanDash(true);
         }
 
           private void ApplyDashVelocity()

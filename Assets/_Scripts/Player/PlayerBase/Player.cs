@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using Base;
 using stateMachine;
-using Unity.VisualScripting;
+using UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace player
 {
@@ -13,7 +12,6 @@ namespace player
     /// Override <see cref="CreateStates"/> in a subclass to swap individual states for a
     /// different character without touching any shared logic.
     /// </summary>
-    [RequireComponent(typeof(SkillManager))]
     public class Player : Entity
     {
         [field: SerializeField] public CharacterData Data { get; private set; }
@@ -64,7 +62,7 @@ namespace player
         public PlayerCounterState playerCounterState {get; private set;}
 
         public PlayerInputSet input;
-        public SkillManager SkillManager { get; private set; }
+        public SkillButtonHandler SkillButtonHandler { get; private set; }
         public AfterImageEffect AfterImageEffect { get; private set; }
 
         public Vector2 movementInput { get; private set; }
@@ -83,7 +81,7 @@ namespace player
             base.Awake();
             Application.targetFrameRate = 60;
             AfterImageEffect = GetComponent<AfterImageEffect>();
-            SkillManager = GetComponent<SkillManager>();
+            SkillButtonHandler = GetComponent<SkillButtonHandler>();
             input = new PlayerInputSet();
             CreateStates();
         }
@@ -106,7 +104,8 @@ namespace player
             playerKnockBackState = new PlayerKnockBackState(this, stateMachine, "Hit");
             playerDeadState = new PlayerDeadState(this, stateMachine,"Dead");
             playerCounterState = new PlayerCounterState(this, stateMachine, "EnterCounter");
-            SkillManager.RegisterState((int)SkillName.CounterSkill, playerCounterState);   
+            SkillButtonHandler.RegisterState((int)ButtonSkillName.CounterSkill, playerCounterState); 
+            SkillButtonHandler.RegisterState((int)ButtonSkillName.Dash, playerDashState);  
             }
 
         void OnEnable()
@@ -117,10 +116,9 @@ namespace player
             input.Player.Movement.canceled += ctx => movementInput = Vector2.zero;
             input.Player.Jump.performed += ctx => { isJump = true; JumpJustPressed = true; };
             input.Player.Jump.canceled += ctx => isJump = false;
-            input.Player.Dash.performed += ctx => { DashJustPressed = true; };
-
+            input.Player.Dash.performed += ctx => {SkillButtonHandler.PressSkill(ButtonSkillName.Dash);};
             // Keyboard fallback for skill slot 0 (Counter). Mobile uses on-screen SkillButton instead.
-            input.Player.Counter.performed += ctx => SkillManager.PressSkill(0);
+            input.Player.Counter.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.CounterSkill);
         }
 
         void OnDisable()
@@ -137,7 +135,6 @@ namespace player
         protected override void Update()
         {
             base.Update();
-            TickDashCooldown();
             TickAttackCooldown();
             TickAirAttackCooldown();
         }
@@ -159,14 +156,6 @@ namespace player
             yield return new WaitForEndOfFrame();
             stateMachine.ChangeState(playerBasicAttackState);
         }
-
-        public void StartDashCooldown()
-        {
-            canDash = false;
-            _dashCooldownTimer = dashCooldown;
-            DashCooldownStarted?.Invoke(dashCooldown);
-        }
-
         public override void Die()
         {
             base.Die();
@@ -174,13 +163,6 @@ namespace player
             stateMachine.ChangeState(playerDeadState);
         }
 
-        private void TickDashCooldown()
-        {
-            if (_dashCooldownTimer <= 0) return;
-            _dashCooldownTimer -= Time.deltaTime;
-            if (_dashCooldownTimer <= 0)
-                canDash = true;
-        }
 
         public void StartAttackCooldown()
         {
@@ -212,9 +194,6 @@ namespace player
 
         /// <summary>Clears JumpJustPressed after it has been consumed by a state.</summary>
         public void ConsumeJump() => JumpJustPressed = false;
-
-        public void ConsumeDash() => DashJustPressed = false;
-
         public void SetCanDash(bool value) => canDash = value;
         public override void SetVelocity(Vector2 velocity)
         {

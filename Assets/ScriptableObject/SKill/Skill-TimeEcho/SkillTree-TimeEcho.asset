@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
   m_Name: SkillTree-TimeEcho
   m_EditorClassIdentifier: 
+  <SkillType>k__BackingField: 1
+  <UpgradeData>k__BackingField:
+    <SkillUpgrade>k__BackingField: 0
+    <SkillBaseDefinition>k__BackingField: {fileID: 0}
+    <UpgradeCoolDown>k__BackingField: 0
+    <UpgradeDuration>k__BackingField: 0
   <skillTreeDataName>k__BackingField: Time Echo
   <Description>k__BackingField: 'Create a time echo of yourself
 

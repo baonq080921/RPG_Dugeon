@@ -15,7 +15,7 @@ namespace player
         public override void Enter()
         {
             base.Enter();
-            stateTimer = player.SkillManager.GetDefinition((int)SkillName.CounterSkill).Duration;
+            stateTimer = player.SkillButtonHandler.GetSkill((int)ButtonSkillName.CounterSkill).Duration;
             isCounter = _playerCombat.IsPerformedCounter();
             animator.SetBool("CanCounter", isCounter);
             player.SetVelocity(new Vector2(0, rb.velocity.y));

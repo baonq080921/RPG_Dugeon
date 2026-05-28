@@ -10,7 +10,6 @@ namespace player
         public override void Enter()
         {
             base.Enter();
-            player.ConsumeDash();
         }
         public override void Update()
         {
@@ -23,9 +22,9 @@ namespace player
                 return;
             }
 
-            if(player.canDash && player.DashJustPressed)
+            if (player.SkillButtonHandler.TryConsumeSkill((int)ButtonSkillName.Dash, out PlayerState dashState))
             {
-                stateMachine.ChangeState(player.playerDashState);
+                stateMachine.ChangeState(dashState);
                 return;
             }
             if(player.movementInput.x != 0)

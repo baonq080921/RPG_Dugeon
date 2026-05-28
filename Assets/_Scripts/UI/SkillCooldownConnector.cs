@@ -11,7 +11,7 @@ namespace UI
     [RequireComponent(typeof(SkillCooldownUI))]
     public class SkillCooldownConnector : MonoBehaviour
     {
-        [SerializeField] private int _slotIndex;
+        [SerializeField] private ButtonSkillName _skillName;
 
         private SkillCooldownUI _cooldownUI;
         private Player _currentPlayer;
@@ -44,18 +44,18 @@ namespace UI
         {
             UnsubscribeFromPlayer(_currentPlayer);
             _currentPlayer = newPlayer;
-            _currentPlayer.SkillManager.SkillCooldownStarted += OnSkillCooldownStarted;
+            _currentPlayer.SkillButtonHandler.SkillCooldownStarted += OnSkillCooldownStarted;
         }
 
         private void UnsubscribeFromPlayer(Player player)
         {
             if (player != null)
-                player.SkillManager.SkillCooldownStarted -= OnSkillCooldownStarted;
+                player.SkillButtonHandler.SkillCooldownStarted -= OnSkillCooldownStarted;
         }
 
         private void OnSkillCooldownStarted(int index, float duration)
         {
-            if (index == _slotIndex)
+            if (index == (int)_skillName)
                 _cooldownUI.StartCooldown(duration);
         }
     }
