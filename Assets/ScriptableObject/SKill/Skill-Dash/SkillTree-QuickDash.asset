@@ -17,6 +17,7 @@ MonoBehaviour:
     <SkillUpgrade>k__BackingField: 0
     <UpgradeCoolDown>k__BackingField: 1
     <UpgradeDuration>k__BackingField: 0.2
+    <UpgradeDamage>k__BackingField: 0
   <skillTreeDataName>k__BackingField: QuickDash
   <Description>k__BackingField: 'Dash To avoid Attacks.
 

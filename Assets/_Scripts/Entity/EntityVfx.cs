@@ -29,7 +29,6 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     protected virtual void Awake()
     {
-        ServiceLocator.Register(this);
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         OriginalMaterial = SpriteRenderer.material;
         defaultHitColor = _hitColor;

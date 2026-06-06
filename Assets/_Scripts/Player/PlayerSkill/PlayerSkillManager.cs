@@ -7,11 +7,15 @@ namespace player
     {
         public SkillDash skillDash {get; private set;}
         public SkillCounter skillCounter {get; private set;}
+        public SkillTimeEcho skillTimeEcho {get; private set;}
 
         void Awake()
         {
+            if (ServiceLocator.Get<PlayerSkillManager>() != null) return;
+
             skillDash = GetComponentInChildren<SkillDash>();
             skillCounter = GetComponentInChildren<SkillCounter>();
+            skillTimeEcho = GetComponentInChildren<SkillTimeEcho>();
             ServiceLocator.Register(this);
         }
 
@@ -20,6 +24,9 @@ namespace player
             switch (type)
             {
                 case SkillType.Dash: return skillDash;
+                case SkillType.TimeEcho: return skillTimeEcho;
+
+
                 default: return null;
             }
         }

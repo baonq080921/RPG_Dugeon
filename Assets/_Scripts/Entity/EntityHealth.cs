@@ -37,15 +37,23 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         {
             return false ;
         }
-        EntityStat entityStatDealDamage = targetDealDamage.GetComponent<EntityStat>();
+        EntityStat entityStatDealDamage = targetDealDamage != null
+            ? targetDealDamage.GetComponent<EntityStat>()
+            : null;
 
-        // Apply physical mitigation
-        float targetMigitation = entityStatDealDamage.GetMigiationValue();
-        float finalDamge = damage * targetMigitation;
-
-        // Apply elemental mitigation
-        float elementalMigitation = entityStatDealDamage.GetElementalResitanceValue();
-        float finalElementalDamage = elementalDamage *elementalMigitation;
+        float finalDamge;
+        float finalElementalDamage;
+        if (entityStatDealDamage != null)
+        {
+            finalDamge = damage * entityStatDealDamage.GetMigiationValue();
+            finalElementalDamage = elementalDamage * entityStatDealDamage.GetElementalResitanceValue();
+        }
+        else
+        {
+            // Attacker has no EntityStat (e.g. a skill object clone) — apply damage as-is.
+            finalDamge = damage;
+            finalElementalDamage = elementalDamage;
+        }
         ReduceHP(finalDamge + finalElementalDamage);
 
         if (CurrentHealth <= 0)

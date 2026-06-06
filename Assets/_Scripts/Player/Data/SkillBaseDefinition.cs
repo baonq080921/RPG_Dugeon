@@ -11,11 +11,16 @@ namespace player
     {
         [field: SerializeField] public float Duration { get; private set; } = 0.5f;
         [field: SerializeField] public float Cooldown { get; private set; } = 1f;
+        [field: SerializeField] public float Damage { get; private set; } = 0f;
 
         public void SetToUpgradeDurationAndCoolDown(float newCool, float newDur)
         {
             Duration = newDur;
             Cooldown = newCool;
+        }
+        public void SetToUpgradeDamage(float newDamage = 0f)
+        {
+            Damage = newDamage;
         }
     }
 }

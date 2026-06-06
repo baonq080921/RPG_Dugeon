@@ -4,6 +4,7 @@ using Base;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using player;
+using System;
 
 public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
@@ -46,11 +47,11 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UpdateIconColor(_lockedColor);
     }
 
-    // void Start()
-    // {
-    //     if (skillTreeData != null && skillTreeData.Cost == 0)
-    //         Unlock();
-    // }
+    void Start()
+    {
+        if (skillTreeData != null && skillTreeData.Cost == 0)
+            Unlock();
+    }
 
     private void Unlock()
     {
@@ -60,8 +61,11 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         LockOtherSkillPath();
         RefreshParentLineColors();
 
-        ServiceLocator.Get<PlayerSkillManager>().GetSkillByType(skillTreeData.SkillType).SetSkillUpgradeType(skillTreeData.UpgradeData.SkillUpgrade);
-        ServiceLocator.Get<PlayerSkillManager>().GetSkillByType(skillTreeData.SkillType).SetUpgradeForSkill(skillTreeData.UpgradeData);
+        var skill = ServiceLocator.Get<PlayerSkillManager>()?.GetSkillByType(skillTreeData.SkillType);
+        if (skill == null) return;
+        skill.Unlock();
+        skill.SetSkillUpgradeType(skillTreeData.UpgradeData.SkillUpgrade);
+        skill.SetUpgradeForSkill(skillTreeData.UpgradeData);
     }
 
     private void RefreshParentLineColors()
@@ -117,6 +121,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         isUnlocked = false;
         isLocked = false;
+
         UpdateIconColor(_lockedColor);
     }
 

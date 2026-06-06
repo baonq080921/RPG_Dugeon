@@ -94,9 +94,9 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Movement"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""d8b9f8ef-2da2-4613-a5d3-8ae5127bc60a"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -132,6 +132,15 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
                     ""name"": ""Counter"",
                     ""type"": ""Button"",
                     ""id"": ""beb15cd8-3082-4a4a-8c83-51a739365c69"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TimeEcho"",
+                    ""type"": ""Button"",
+                    ""id"": ""867abc45-2a69-4331-b140-5c6c5a5f8f47"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -292,6 +301,17 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""Counter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ed857cd-c5a7-43d6-83f0-c24acf1ef3a6"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TimeEcho"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -305,6 +325,7 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_BasicAttack = m_Player.FindAction("BasicAttack", throwIfNotFound: true);
         m_Player_Counter = m_Player.FindAction("Counter", throwIfNotFound: true);
+        m_Player_TimeEcho = m_Player.FindAction("TimeEcho", throwIfNotFound: true);
     }
 
     ~@PlayerInputSet()
@@ -390,6 +411,7 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_BasicAttack;
     private readonly InputAction m_Player_Counter;
+    private readonly InputAction m_Player_TimeEcho;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -421,6 +443,10 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Counter".
         /// </summary>
         public InputAction @Counter => m_Wrapper.m_Player_Counter;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/TimeEcho".
+        /// </summary>
+        public InputAction @TimeEcho => m_Wrapper.m_Player_TimeEcho;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -462,6 +488,9 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
             @Counter.started += instance.OnCounter;
             @Counter.performed += instance.OnCounter;
             @Counter.canceled += instance.OnCounter;
+            @TimeEcho.started += instance.OnTimeEcho;
+            @TimeEcho.performed += instance.OnTimeEcho;
+            @TimeEcho.canceled += instance.OnTimeEcho;
         }
 
         /// <summary>
@@ -488,6 +517,9 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
             @Counter.started -= instance.OnCounter;
             @Counter.performed -= instance.OnCounter;
             @Counter.canceled -= instance.OnCounter;
+            @TimeEcho.started -= instance.OnTimeEcho;
+            @TimeEcho.performed -= instance.OnTimeEcho;
+            @TimeEcho.canceled -= instance.OnTimeEcho;
         }
 
         /// <summary>
@@ -563,5 +595,12 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCounter(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TimeEcho" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTimeEcho(InputAction.CallbackContext context);
     }
 }

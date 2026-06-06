@@ -5,5 +5,11 @@ public enum SkillUpgrade
     Dash_CloneOnStart,
     Dash_CloneOnStartAndArrival,
     Dash_ShardOnStart,
-    Dash_ShardOnStartAndArrival
+    Dash_ShardOnStartAndArrival,
+
+    //Time Echo Tree
+    TimeEcho,
+    TimeEcho_ExtraEchoAttack,
+    TimeEcho_HealOnEcho,
+    TimeEcho_HealOnEchoAndDuration
 }

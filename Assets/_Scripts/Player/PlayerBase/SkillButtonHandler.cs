@@ -13,6 +13,7 @@ namespace player
         [SerializeField] private SkillBaseDefinition[] _skillDefinition;
 
         private PlayerState[] _states;
+        private SkillBase[] _skills;
         private float[] _cooldownTimers;
         private bool[] _pending;
 
@@ -46,6 +47,18 @@ namespace player
         }
 
         /// <summary>
+        /// Binds a <see cref="SkillBase"/> to the given slot index so <see cref="PressSkill"/>
+        /// can gate activation on <see cref="SkillBase.IsUnlocked"/>.
+        /// Call once per skill in <see cref="Player"/>'s Start.
+        /// </summary>
+        public void RegisterSkill(int index, SkillBase skill)
+        {
+            EnsureInitialized();
+            if (index < 0 || index >= SlotCount) return;
+            _skills[index] = skill;
+        }
+
+        /// <summary>
         /// Queues the skill at <paramref name="index"/> to activate on the next state update.
         /// Silently ignored when the skill is on cooldown or the index is out of range.
         /// Called by on-screen <see cref="UI.SkillButton"/> components.
@@ -55,6 +68,7 @@ namespace player
             int index = (int)skillName;
             EnsureInitialized();
             if (index < 0 || index >= SlotCount) return;
+            if (_skills[index] != null && !_skills[index].IsUnlocked) return;
             if (!IsReady(index)) return;
             _pending[index] = true;
         }
@@ -79,6 +93,24 @@ namespace player
             return true;
         }
 
+        /// <summary>
+        /// Consumes a queued skill that has no associated <see cref="PlayerState"/> (e.g. instant-effect skills).
+        /// Starts the cooldown and fires <see cref="SkillCooldownStarted"/>.
+        /// </summary>
+        /// <returns>True when the skill was pending and ready to fire.</returns>
+        public bool TryConsumeEffect(int index)
+        {
+            if (_pending == null) return false;
+            if (index < 0 || index >= SlotCount) return false;
+            if (!_pending[index]) return false;
+
+            _pending[index] = false;
+            float duration = _skillDefinition[index].Cooldown;
+            _cooldownTimers[index] = duration;
+            SkillCooldownStarted?.Invoke(index, duration);
+            return true;
+        }
+
         /// <returns>The <see cref="SkillDefinition"/> for the given slot, or null if out of range.</returns>
         public SkillBaseDefinition GetSkill(int index) =>
             (index >= 0 && index < SlotCount) ? _skillDefinition[index] : null;
@@ -95,6 +127,7 @@ namespace player
             if (_states != null) return;
             int count = SlotCount;
             _states = new PlayerState[count];
+            _skills = new SkillBase[count];
             _cooldownTimers = new float[count];
             _pending = new bool[count];
         }

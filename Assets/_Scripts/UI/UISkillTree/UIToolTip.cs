@@ -28,6 +28,7 @@ public class UIToolTip : MonoBehaviour
 
     private void MoveToTarget(RectTransform rect)
     {
+        if (rectTransform == null || rect == null) return;
         rectTransform.position = GetAdjustedPosition(rect);
     }
 
@@ -64,6 +65,7 @@ public class UIToolTip : MonoBehaviour
 
     private void HideToolTip()
     {
+        if (rectTransform == null) return;
         rectTransform.position = HiddenPos;
     }
 }

@@ -6,13 +6,15 @@ public class UIManager : MonoBehaviour
     public UISkillToolTip uISkillToolTip;
     public UISkillTree uISkillTree;
     
-    private void Awake() {
+    private void Awake()
+    {
+        if (ServiceLocator.Get<UIManager>() != null) return;
+
         if (uISkillToolTip == null)
             uISkillToolTip = GetComponentInChildren<UISkillToolTip>();
-        
-        if(uISkillTree == null)
+        if (uISkillTree == null)
             uISkillTree = GetComponentInChildren<UISkillTree>();
-            
+
         ServiceLocator.Register(this);
     }
 }

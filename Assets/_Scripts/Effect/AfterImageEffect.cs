@@ -17,6 +17,8 @@ namespace player
         // Ghosts return to pool on their own via the tween callback — no need for double-release checks.
         protected override bool CollectionCheck => false;
 
+        private static Transform s_ghostContainer;
+
         private SpriteRenderer _spriteRenderer;
         private Coroutine _spawnCoroutine;
         private WaitForSeconds _spawnWait;
@@ -33,7 +35,13 @@ namespace player
         /// <inheritdoc/>
         protected override AfterImageGhost CreateInstance()
         {
+            if (s_ghostContainer == null)
+            {
+                s_ghostContainer = new GameObject("[AfterImageGhostPool]").transform;
+                DontDestroyOnLoad(s_ghostContainer.gameObject);
+            }
             var ghost = new GameObject("AfterImageGhost").AddComponent<AfterImageGhost>();
+            ghost.transform.SetParent(s_ghostContainer);
             ghost.gameObject.SetActive(false);
             return ghost;
         }

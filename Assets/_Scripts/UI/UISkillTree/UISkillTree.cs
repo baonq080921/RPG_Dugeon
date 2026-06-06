@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class UISkillTree : MonoBehaviour
 {
     [SerializeField] private float _skillPoint;
+        public static event Action OnReset;
+
 
     public bool EnoughSkillPoint(float cost) => _skillPoint >= cost;
 
@@ -42,6 +45,7 @@ public class UISkillTree : MonoBehaviour
                 RefundSkillPoint(node.skillTreeData.Cost);
             node.ResetNode();
         }
+        OnReset?.Invoke();
 
         foreach (var handler in GetComponentsInChildren<UIConnectedHandler>())
             handler.RefreshLineColors();

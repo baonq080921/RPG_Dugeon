@@ -391,6 +391,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6508565638126517868}
   - component: {fileID: 1935694926364728682}
+  - component: {fileID: 3660232992803270282}
   m_Layer: 8
   m_Name: SkillHolder
   m_TagString: Untagged
@@ -425,9 +426,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8b766db6728a640918e0dbf6bfa684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SkillData>k__BackingField: {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
+  <SkillBaseDefinition>k__BackingField: {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
   <skillType>k__BackingField: 0
   <skillUpgrade>k__BackingField: 0
+--- !u!114 &3660232992803270282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265632208087460327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f76a93b75de6e954282eee6de17524a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <SkillBaseDefinition>k__BackingField: {fileID: 11400000, guid: 94800580dcf9f18459ed36b4749ba76e, type: 2}
+  <skillType>k__BackingField: 1
+  <skillUpgrade>k__BackingField: 5
+  _skillObjectTimeEchoPrefab: {fileID: 6283767578240685690, guid: c05536fcee4e9a44f8cfa59c118a5af1, type: 3}
+  _player: {fileID: 4570775543317089856}
 --- !u!1 &5500656302924963687
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +569,7 @@ GameObject:
   - component: {fileID: 2663837527512780959}
   - component: {fileID: 3639380412088480431}
   - component: {fileID: 6154724270506204396}
+  - component: {fileID: 1625586991367169038}
   m_Layer: 8
   m_Name: PlayerYuji
   m_TagString: Untagged
@@ -729,6 +748,7 @@ MonoBehaviour:
   _skillDefinition:
   - {fileID: 11400000, guid: 9a727fab2a132a946bb11cea532fe7b1, type: 2}
   - {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
+  - {fileID: 11400000, guid: 94800580dcf9f18459ed36b4749ba76e, type: 2}
 --- !u!114 &2595452044410493718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,6 +810,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97ada313ded93a04aa5756fb8c131af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1625586991367169038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6229336110876845623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e092e80fa8bb142ad228792f48e541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7929125038485472551

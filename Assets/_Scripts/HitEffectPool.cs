@@ -15,6 +15,8 @@ public class HitEffectPool : MonoBehaviourPool<HitEffect>
 
     protected override void Awake()
     {
+        if (ServiceLocator.Get<HitEffectPool>() != null) return;
+
         base.Awake();
         _critPool = new ObjectPool<HitEffect>(
             createFunc: () => { var h = Instantiate(_hitCritPrefab); h.gameObject.SetActive(false); return h; },

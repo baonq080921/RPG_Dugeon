@@ -34,10 +34,6 @@ namespace player
 
         /// <summary>Fired when this player becomes the active controlled character.</summary>
         public static event Action<Player> ActivePlayerChanged;
-
-        /// <summary>Fired when dash cooldown begins. Parameter is the total cooldown duration.</summary>
-        public event Action<float> DashCooldownStarted;
-
         public bool canDash { get; private set; } = true;
         private float _dashCooldownTimer;
 
@@ -119,6 +115,7 @@ namespace player
             input.Player.Dash.performed += ctx => {SkillButtonHandler.PressSkill(ButtonSkillName.Dash);};
             // Keyboard fallback for skill slot 0 (Counter). Mobile uses on-screen SkillButton instead.
             input.Player.Counter.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.CounterSkill);
+            input.Player.TimeEcho.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.TimeEcho);
         }
 
         void OnDisable()
@@ -130,6 +127,14 @@ namespace player
         {
             base.Start();
             stateMachine.Initialize(playerIdleState);
+            RegisterSkillReferences();
+        }
+
+        private void RegisterSkillReferences()
+        {
+            var skillManager = ServiceLocator.Get<PlayerSkillManager>();
+            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dash, skillManager.skillDash);
+            // Add RegisterSkill calls here for each new skill that requires a skill-tree unlock.
         }
 
         protected override void Update()
@@ -137,6 +142,13 @@ namespace player
             base.Update();
             TickAttackCooldown();
             TickAirAttackCooldown();
+            TickTimeEchoSkill();
+        }
+
+        private void TickTimeEchoSkill()
+        {
+            if (!SkillButtonHandler.TryConsumeEffect((int)ButtonSkillName.TimeEcho)) return;
+            ServiceLocator.Get<PlayerSkillManager>().skillTimeEcho.ExecuteSkillEffect();
         }
 
         public override void ApplyKnockBack(float damage)

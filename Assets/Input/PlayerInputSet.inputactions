@@ -8,9 +8,9 @@
             "actions": [
                 {
                     "name": "Movement",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "d8b9f8ef-2da2-4613-a5d3-8ae5127bc60a",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -46,6 +46,15 @@
                     "name": "Counter",
                     "type": "Button",
                     "id": "beb15cd8-3082-4a4a-8c83-51a739365c69",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TimeEcho",
+                    "type": "Button",
+                    "id": "867abc45-2a69-4331-b140-5c6c5a5f8f47",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -204,6 +213,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Counter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ed857cd-c5a7-43d6-83f0-c24acf1ef3a6",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TimeEcho",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
