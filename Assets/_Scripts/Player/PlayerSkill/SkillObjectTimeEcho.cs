@@ -1,45 +1,45 @@
-using System;
+﻿using System;
 using System.Collections;
 using Base;
+using Interfaces;
 using player;
 using UnityEngine;
 
 public class SkillObjectTimeEcho : SkillObject_Base
 {
-
-    
     [Header("Ground Check")]
     [SerializeField] private Transform _groundCheckPoint;
     [SerializeField] private LayerMask _whatIsGround;
     [Range(0, 1f)]
     [SerializeField] private float _groundCheckRadius = 0.1f;
-
     public bool IsGrounded { get; private set; }
-
 
     [SerializeField] private SkillBaseDefinition _skillTimeEchoDefinition;
     [SerializeField] private GameObject _healingVfxPrefab;
-    [Range(0,10f)]
+    [SerializeField] private PoolableVfx _onDeathVfxPrefab;
+    [Range(0, 10f)]
     [SerializeField] private float _dectectionRange = 5f;
     [SerializeField] private float _stoppingDistance = 0.5f;
+    [SerializeField] private float _followStopDistance = 1f;
     [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _maxHealth = 100f;
+
+    private float _currentHealth;
     private Coroutine _deathCoroutine;
     private Transform _currentTarget;
+    private Transform _ownerTransform;
     private bool _isMultiAttack;
-    private float _multiAttackEndTime;
-
-    [SerializeField] private PoolableVfx _onDeathVfxPrefab;
     private Action _onRelease;
+    private float _sideKickLifeTime;
 
-    /// <summary>Called by the pool after getting this instance. Wires up the release callback.</summary>
     public void Init(Action onRelease) => _onRelease = onRelease;
 
-    /// <summary>Resets all runtime state so this instance is safe for pool reuse.</summary>
     public void ResetObject()
     {
+        _currentHealth = _maxHealth;
         _currentTarget = null;
+        _ownerTransform = null;
         _isMultiAttack = false;
-        _multiAttackEndTime = 0f;
         if (_deathCoroutine != null)
         {
             StopCoroutine(_deathCoroutine);
@@ -48,22 +48,31 @@ public class SkillObjectTimeEcho : SkillObject_Base
         if (rb != null) rb.velocity = Vector2.zero;
         if (anim != null)
         {
-            // Rebind resets the Animator fully to its entry state, discarding any in-progress
-            // animation or stale trigger/parameter values left over from the previous use.
             anim.Rebind();
             anim.Update(0f);
         }
     }
 
-    /// <inheritdoc/>
+    // public bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform attacker)
+    // {
+    //     _currentHealth -= damage;
+    //     if (_currentHealth <= 0f)
+    //     {
+    //         HandleDeath();
+    //         return false;
+    //     }
+    //     return true;
+    // }
+
     public override void HandleDeath()
     {
-        base.HandleDeath();
+        if (_onRelease == null) return; // already released — second concurrent call (timer + TakeDamage race)
         SpawnSmokeEffect();
         ResetObject();
-        _onRelease?.Invoke();
+        var release = _onRelease;
+        _onRelease = null; // null before invoke so any re-entrant call hits the guard above
+        release.Invoke();
     }
-
 
     protected override void Awake()
     {
@@ -73,77 +82,104 @@ public class SkillObjectTimeEcho : SkillObject_Base
     protected override void Update()
     {
         base.Update();
-        if (anim != null)
-        {
-            if(IsGrounded) anim.SetFloat("yVelocity", 1);
-            else anim.SetFloat("yVelocity", rb.velocity.y);
-        }
 
-        if(_groundCheckPoint != null)
+        if (anim != null)
+            anim.SetFloat("yVelocity", IsGrounded ? 1f : rb.velocity.y);
+
+        if (_groundCheckPoint != null)
             IsGrounded = Physics2D.OverlapCircle(_groundCheckPoint.position, _groundCheckRadius, _whatIsGround);
+
+        if (_isMultiAttack)
+        {
+            if (_currentTarget != null)
+                PursueTarget();
+            else
+                ScanAndFollow();
+            return;
+        }
 
         if (_currentTarget != null)
             PursueTarget();
-
-        // Multi-attack: if duration expired with no target left, clean up
-        if (_isMultiAttack && _currentTarget == null && Time.time > _multiAttackEndTime)
-            EchoDisappearEffect();
     }
 
     public void SpawnTimeEcho(Transform spawnTransform = null, float offSetX = 0f)
     {
-        // Implement the logic to spawn the time echo effect here.
-        // This could involve instantiating a prefab, playing an animation, etc.
+        _sideKickLifeTime = _skillTimeEchoDefinition.Duration;
         transform.position = spawnTransform != null ? spawnTransform.position : Vector3.zero;
-        transform.position += new Vector3(UnityEngine.Random.Range(-offSetX, offSetX), 0f, transform.position.z); // Apply horizontal offset if provided
+        transform.position += new Vector3(UnityEngine.Random.Range(-offSetX, offSetX), 0f, transform.position.z);
     }
 
     public void TimeEchoBase(Transform spawnTransform = null)
     {
-        SpawnTimeEcho(spawnTransform, UnityEngine.Random.Range(0.5f, 1.5f)); // Example of random horizontal offset for visual variety
-        // Additional logic for the time echo effect can be added here.
-        // For example, you might want to set a timer to destroy this object after a certain duration.    
-        EchoDisappearEffect();    
+        SpawnTimeEcho(spawnTransform, UnityEngine.Random.Range(0.5f, 1.5f));
+        EchoDisappearEffect();
     }
-
-
 
     #region Side Kick Attack Skill logic
 
     public void TimeEchoSideKickAttack(Transform spawnTransform = null, float damage = 0f)
     {
-        // Implement the logic for the extra echo attack here.
-        // This could involve creating a new attack hitbox, applying damage to enemies, etc.
         SpawnTimeEcho(spawnTransform);
-        //Dectect enemies in range:
         DetectEnemiesInRange();
     }
-
 
     public void TimeEchoSideKickMahoragaAttack(Transform spawnTransform = null, float damage = 0f)
     {
         SpawnTimeEcho(spawnTransform);
+        _ownerTransform = spawnTransform;
         _isMultiAttack = true;
-        _multiAttackEndTime = Time.time + _skillTimeEchoDefinition.Duration;
-        DetectEnemiesInRange();
+        EchoDisappearEffect();
     }
 
-
+    // Single-attack only: disappears immediately if no enemies in range.
     private void DetectEnemiesInRange()
     {
         var hits = Physics2D.OverlapCircleAll(transform.position, _dectectionRange, _enemyLayer);
-        if (hits.Length == 0) 
+        if (hits.Length == 0)
         {
-             EchoDisappearEffect();
+            EchoDisappearEffect();
+            return;
+        }
+        _currentTarget = GetNearestTarget(hits);
+    }
+
+    // Mahoraga: scan for enemies; if none found, follow the player instead.
+    // Switches to pursuing as soon as an enemy enters range.
+    private void ScanAndFollow()
+    {
+        var hits = Physics2D.OverlapCircleAll(transform.position, _dectectionRange, _enemyLayer);
+        if (hits.Length > 0)
+        {
+            anim.SetBool("CanRun", false);
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+            _currentTarget = GetNearestTarget(hits);
+            FlipToFace(_currentTarget);
+
             return;
         }
 
-        _currentTarget = GetNearestTarget(hits);
-        Debug.Log($"Enemy Detected for Time Echo Side Kick Attack! {_currentTarget.name} ");
+        if (_ownerTransform == null)
+        {
+            anim.SetBool("CanRun", false);
+            return;
+        }
+
+        float distToOwner = Vector2.Distance(transform.position, _ownerTransform.position);
+        if (distToOwner > _followStopDistance)
+        {
+            FlipToFace(_ownerTransform);
+            anim.SetBool("CanRun", true);
+            float dirX = _ownerTransform.position.x > transform.position.x ? 1f : -1f;
+            rb.velocity = new Vector2(dirX * _moveSpeed, rb.velocity.y);
+        }
+        else
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+            anim.SetBool("CanRun", false);
+        }
     }
 
-
-     private Transform GetNearestTarget(Collider2D[] hits)
+    private Transform GetNearestTarget(Collider2D[] hits)
     {
         Transform nearest = null;
         float minDist = float.MaxValue;
@@ -160,7 +196,13 @@ public class SkillObjectTimeEcho : SkillObject_Base
     private void PursueTarget()
     {
         if (_currentTarget == null) return;
-        if(!IsGrounded) return;
+        if (!IsGrounded)
+        {
+            anim.SetBool("CanRun", false);
+            HandleDeath();
+            return;
+        }
+
         float dist = Vector2.Distance(transform.position, _currentTarget.position);
         if (dist <= _stoppingDistance)
         {
@@ -168,8 +210,7 @@ public class SkillObjectTimeEcho : SkillObject_Base
             anim.SetBool("CanRun", false);
             anim.SetTrigger("Attack");
             _currentTarget = null;
-            // For multi-attack, skip the fallback — duration expiry in Update() acts as the safety net
-            if (!_isMultiAttack) EchoDisappearEffect();
+            // if (!_isMultiAttack) EchoDisappearEffect();
             return;
         }
 
@@ -181,29 +222,22 @@ public class SkillObjectTimeEcho : SkillObject_Base
 
     #endregion
 
-
-
-
-
-
     #region Healing Echo Skill logic
+
     public void TimeEchoHealing(Transform spawnTransform = null)
     {
-        SpawnTimeEcho(spawnTransform, UnityEngine.Random.Range(.5f, 1f)); // Example of random horizontal offset for visual variety
-        // Implement the logic for the extra healing echo here.
-        // This could involve creating a healing area, applying healing to the player, etc.
-        Debug.Log("Extra Healing Echo Spawned!");
-        //PLay the Healing VFX and SFX  and skill object animation here.
+        SpawnTimeEcho(spawnTransform, UnityEngine.Random.Range(.5f, 1f));
         if (_healingVfxPrefab != null)
         {
             float amount = _skillTimeEchoDefinition.HealingAmount;
-            GameObject vfx = Instantiate(_healingVfxPrefab,spawnTransform.position,Quaternion.identity);
-            vfx.transform.SetParent(spawnTransform); 
-            EventBus<PlayerAddHealthAmount>.Raise(new PlayerAddHealthAmount(amount)); // Example of raising a health changed event to heal the player (adjust values as needed)
-            Destroy(vfx, 2f); // Destroy the VFX after 2 seconds (adjust as needed)
+            GameObject vfx = Instantiate(_healingVfxPrefab, spawnTransform.position, Quaternion.identity);
+            vfx.transform.SetParent(spawnTransform);
+            EventBus<PlayerAddHealthAmount>.Raise(new PlayerAddHealthAmount(amount));
+            Destroy(vfx, 2f);
         }
-        EchoDisappearEffect(); // End the skill object after applying the healing effect
+        EchoDisappearEffect();
     }
+
     public void TimeEChoHealingAndCoolDownAllSkill(Transform spawnTransform = null)
     {
         float cdPercent = _skillTimeEchoDefinition.CDAmountPercent;
@@ -212,7 +246,6 @@ public class SkillObjectTimeEcho : SkillObject_Base
         TimeEchoHealing(spawnTransform);
     }
 
-
     #endregion
 
     public override void AttackTrigger()
@@ -220,9 +253,9 @@ public class SkillObjectTimeEcho : SkillObject_Base
         base.AttackTrigger();
         DealDamage(false);
 
-        if (_isMultiAttack && Time.time < _multiAttackEndTime)
+        if (_isMultiAttack)
         {
-            DetectEnemiesInRange(); // chain to next nearest enemy while duration allows
+            _currentTarget = null; // ScanAndFollow() picks up next enemy on next Update tick
             return;
         }
 
@@ -248,26 +281,19 @@ public class SkillObjectTimeEcho : SkillObject_Base
             PoolableVfx.Spawn(_onDeathVfxPrefab, transform.position);
     }
 
-    
-
-
-      private void EchoDisappearEffect()
+    private void EchoDisappearEffect()
     {
-        // Implement the logic for the death effect here.
-        // This could involve playing a death animation, spawning particles, etc.
-        if(_deathCoroutine != null) return;
+        if (_deathCoroutine != null)
+            StopCoroutine(_deathCoroutine);
         _deathCoroutine = StartCoroutine(DeathCoroutine());
     }
 
-    IEnumerator DeathCoroutine()
+    private IEnumerator DeathCoroutine()
     {
-        // Play death animation or effect here
-        // Wait for the animation to finish (assuming 1 second here, adjust as needed)
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(_sideKickLifeTime);
         HandleDeath();
     }
 
-   
     private void FlipToFace(Transform target)
     {
         float dirX = target.position.x - transform.position.x;
@@ -275,10 +301,10 @@ public class SkillObjectTimeEcho : SkillObject_Base
         scale.x = dirX > 0f ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
         transform.localScale = scale;
     }
+
     protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
-
         if (_groundCheckPoint == null) return;
         Gizmos.color = IsGrounded ? Color.green : Color.red;
         Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
@@ -287,7 +313,4 @@ public class SkillObjectTimeEcho : SkillObject_Base
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.right * _stoppingDistance);
     }
-    
-    
-    
 }

@@ -15,13 +15,13 @@ MonoBehaviour:
   <SkillType>k__BackingField: 1
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 7
-    <UpgradeCoolDown>k__BackingField: 30
-    <UpgradeDuration>k__BackingField: 0
+    <UpgradeCoolDown>k__BackingField: 1
+    <UpgradeDuration>k__BackingField: 2
     <UpgradeDamage>k__BackingField: 100
     <UpgradeHealing>k__BackingField: 0
     <UpgradeCD>k__BackingField: 0
   <skillTreeDataName>k__BackingField: EchoTimeMahoAttack
-  <Description>k__BackingField: Spawning one echo and performe attacks.Each Attack
-    deal 20 Damage.
+  <Description>k__BackingField: Spawning Mahoraga this monster can performance attack
+    and follow owner for 15 second.
   <Icon>k__BackingField: {fileID: 21300000, guid: 430974cf5f965d940bd8a23d9e8f8e4c, type: 3}
   <Cost>k__BackingField: 5
