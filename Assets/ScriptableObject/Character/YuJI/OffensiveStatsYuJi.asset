@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OffensiveStatsYuJi
   m_EditorClassIdentifier: 
   <Damage>k__BackingField:
-    baseValue: 20
+    baseValue: 10
   <CritPower>k__BackingField:
     baseValue: 50
   <CritChance>k__BackingField:

@@ -1,3 +1,4 @@
+using Base;
 using UnityEngine;
 
 namespace player
@@ -6,13 +7,27 @@ namespace player
     public class PlayerHealth : EntityHealth
     {
         private Player _player;
+       private EventBinding<PlayerAddHealthAmount> _healBinding;
 
         protected override void Awake()
         {
             base.Awake();
             _player = GetComponent<Player>();
-            InvokeRepeating(nameof(RegenerateHealth), 0f, 1f); // Regenerate health every second
+            InvokeRepeating(nameof(RegenerateHealth), 0f, 1f);
         }
+
+        protected virtual void OnEnable()
+        {
+            _healBinding = new EventBinding<PlayerAddHealthAmount>(OnHealReceived);
+            EventBus<PlayerAddHealthAmount>.Register(_healBinding);
+        }
+
+        protected virtual void OnDisable()
+        {
+            EventBus<PlayerAddHealthAmount>.Deregister(_healBinding);
+        }
+
+        private void OnHealReceived(PlayerAddHealthAmount healEvent) => HealHP(healEvent.Amount);
 
 
 

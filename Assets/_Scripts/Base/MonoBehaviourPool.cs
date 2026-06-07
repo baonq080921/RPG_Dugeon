@@ -23,9 +23,16 @@ namespace Base
     {
       _pool = new ObjectPool<T>(
         createFunc: CreateInstance,
-        actionOnGet: item => { item.gameObject.SetActive(true); OnGet(item); },
+        actionOnGet: item =>
+        {
+          // Item may have been destroyed by Unity during scene unload while sitting in the stack.
+          // The null check uses Unity's overloaded == which returns true for destroyed objects.
+          if ((Object)(object)item == null) return;
+          item.gameObject.SetActive(true);
+          OnGet(item);
+        },
         actionOnRelease: item => { OnRelease(item); item.gameObject.SetActive(false); },
-        actionOnDestroy: item => { if (item != null) Destroy(item.gameObject); },
+        actionOnDestroy: item => { if ((Object)(object)item != null) Destroy(item.gameObject); },
         collectionCheck: CollectionCheck,
         defaultCapacity: _defaultCapacity,
         maxSize: _maxSize);
@@ -39,8 +46,21 @@ namespace Base
     /// <summary>Creates a brand-new instance when the pool has no idle objects available.</summary>
     protected abstract T CreateInstance();
 
-    /// <summary>Retrieves an instance from the pool, creating one if none are available.</summary>
-    protected T Get() => _pool.Get();
+    /// <summary>
+    /// Retrieves an instance from the pool. If the pooled item was destroyed externally
+    /// (e.g. scene unload), a fresh instance is created automatically.
+    /// </summary>
+    protected T Get()
+    {
+      var item = _pool.Get();
+      // Unity's == returns true when a MonoBehaviour's underlying GameObject was destroyed.
+      if ((Object)(object)item != null) return item;
+      // Pooled object was destroyed externally — create a replacement.
+      item = CreateInstance();
+      item.gameObject.SetActive(true);
+      OnGet(item);
+      return item;
+    }
 
     /// <summary>Returns an instance to the pool.</summary>
     protected void Release(T item) => _pool.Release(item);

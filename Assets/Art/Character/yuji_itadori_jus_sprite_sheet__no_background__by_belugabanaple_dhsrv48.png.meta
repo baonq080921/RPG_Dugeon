@@ -1483,7 +1483,7 @@ TextureImporter:
         width: 41
         height: 61
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1504,7 +1504,7 @@ TextureImporter:
         width: 42
         height: 53
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1525,7 +1525,7 @@ TextureImporter:
         width: 44
         height: 53
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1546,7 +1546,7 @@ TextureImporter:
         width: 57
         height: 58
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1567,7 +1567,7 @@ TextureImporter:
         width: 59
         height: 59
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1588,7 +1588,7 @@ TextureImporter:
         width: 55
         height: 52
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1609,7 +1609,7 @@ TextureImporter:
         width: 42
         height: 52
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1617,6 +1617,48 @@ TextureImporter:
       bones: []
       spriteID: 29b361b6a5e35cd4cb04308daa65a42a
       internalID: 1821549558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_71
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 465
+        width: 35
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15231b31d58bccf44931c48d290a5a25
+      internalID: 411477462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_72
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 465
+        width: 40
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dde6dc7e6c788e74a84aa0b09983371d
+      internalID: -657498564
       vertices: []
       indices: 
       edges: []
@@ -1702,6 +1744,8 @@ TextureImporter:
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_69: -1929613627
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_7: 572543891
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_70: 1821549558
+      yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_71: 411477462
+      yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_72: -657498564
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_8: 1966266684
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_9: 1824030979
   mipmapLimitGroupName: 

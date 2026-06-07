@@ -18,10 +18,11 @@ MonoBehaviour:
     <UpgradeCoolDown>k__BackingField: 5
     <UpgradeDuration>k__BackingField: 0
     <UpgradeDamage>k__BackingField: 0
+    <UpgradeHealing>k__BackingField: 0
   <skillTreeDataName>k__BackingField: Time Echo
-  <Description>k__BackingField: 'Create a time echo of yourself
+  <Description>k__BackingField: 'Create a time echo of your sideKick
 
-    The echo can
-    distract enemies'
+    The SideKick
+    can distract enemies'
   <Icon>k__BackingField: {fileID: 1994286936, guid: ea579985398cb78419263c314ad25d62, type: 3}
   <Cost>k__BackingField: 1

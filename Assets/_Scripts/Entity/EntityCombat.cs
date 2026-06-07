@@ -17,7 +17,7 @@ public class EntityCombat : MonoBehaviour
     protected Entity entity;
     protected EntityStat entityStat;
     private EntityVfx _entityVfx;
-    public event Action<Transform,bool> OnTargetHit;
+    // public event Action<Transform,bool> OnTargetHit;
     
     [Range(0f,2f)]
     [SerializeField] private float _scaleElementalFactor=1f;
@@ -56,7 +56,8 @@ public class EntityCombat : MonoBehaviour
             if (targetGotHit)
             {
                 _entityVfx?.UpdateHitColor(elementType);
-                OnTargetHit?.Invoke(target.transform,isCrit);
+                // OnTargetHit?.Invoke(target.transform,isCrit);
+                EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(target.transform,isCrit));
             }
 
         }

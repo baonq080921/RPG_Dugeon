@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: SkillDefinition-TimeEcho
   m_EditorClassIdentifier: 
   <Duration>k__BackingField: 0
-  <Cooldown>k__BackingField: 0
-  <Damage>k__BackingField: 10
+  <Cooldown>k__BackingField: 1
+  <Damage>k__BackingField: 100
+  <HealingAmount>k__BackingField: 0
+  <CDAmountPercent>k__BackingField: 0

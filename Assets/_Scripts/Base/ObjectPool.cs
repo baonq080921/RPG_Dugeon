@@ -93,8 +93,7 @@ namespace Base
         /// </summary>
         public void Release(T item)
         {
-            if (_isDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+            if (_isDisposed) return; // pool was disposed (scene unload) — coroutines returning late are silently discarded
 
             if (_collectionCheck && _stack.Contains(item))
             {

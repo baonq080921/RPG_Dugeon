@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Base
 {
@@ -18,6 +19,17 @@ namespace Base
       cameraFitterObject.AddComponent<CameraResolutionFitter>();
       Object.DontDestroyOnLoad(cameraFitterObject);
 
+      SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    // Clear all EventBus channels on scene unload so stale MonoBehaviour
+    // subscribers from the previous scene cannot fire into the new one.
+    private static void OnSceneUnloaded(Scene scene)
+    {
+      EventBus<TargetGotHitEvent>.Clear();
+      EventBus<PlayerAddHealthAmount>.Clear();
+      EventBus<PlayerDiedEvent>.Clear();
+      EventBus<EnemyDiedEvent>.Clear();
     }
   }
 }

@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 2278003507871542668}
   m_Layer: 6
   m_Name: EnemySkeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -945,7 +945,7 @@ MonoBehaviour:
   _wallCheckDistance: 1
   <CanKnockBackOnHit>k__BackingField: 1
   _knockBackPowerLight: {x: 2, y: 3}
-  _knockBackPowerHeavy: {x: 4, y: 6}
+  _knockBackPowerHeavy: {x: 6, y: 5}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 58074875e7c5a4e41964ce02729a9ab8, type: 2}
 --- !u!114 &5842235340083341547
 MonoBehaviour:
@@ -1028,3 +1028,4 @@ MonoBehaviour:
   _electricEffectPrefab: {fileID: 6004947700731378671, guid: 4205389ab85a13046ad637f3b40a1149, type: 3}
   _currentCharge: 0
   _maxiumCharge: 1
+  _shockDuration: 0.5

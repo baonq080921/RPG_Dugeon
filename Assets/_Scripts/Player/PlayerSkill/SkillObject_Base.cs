@@ -10,13 +10,8 @@ public class SkillObject_Base : MonoBehaviour
 {
     [SerializeField] protected Rigidbody2D rb;
     [SerializeField] protected Animator anim;
-    [SerializeField] private PoolableVfx _onDeathVfxPrefab;
+  
 
-    [Header("Ground Check")]
-    [SerializeField] private Transform _groundCheckPoint;
-    [SerializeField] private LayerMask _whatIsGround;
-    [Range(0, 1f)]
-    [SerializeField] private float _groundCheckRadius = 0.1f;
     /// <summary>True when the object is resting on ground.</summary>
     /// 
     [Header("Attack Check")]
@@ -24,7 +19,6 @@ public class SkillObject_Base : MonoBehaviour
     [SerializeField] private float _attackRadius = 0.5f;
     [SerializeField] protected LayerMask _enemyLayer;
     [SerializeField] private Transform _attackPoint;
-    public bool IsGrounded { get; private set; }
     [SerializeField] private bool _isDraw = true;
     protected virtual void Awake()
     {
@@ -34,50 +28,33 @@ public class SkillObject_Base : MonoBehaviour
             anim = GetComponentInChildren<Animator>();
     }
 
-    protected virtual void Update()
-    {
-        if(_groundCheckPoint != null)
-            IsGrounded = Physics2D.OverlapCircle(_groundCheckPoint.position, _groundCheckRadius, _whatIsGround);
-    }
+    protected virtual void Update(){}
 
 
-    public void DamageEnemiesInRadius(float damage, float radius  = 0.5f)
+    public void DamageEnemiesInRadius(float damage, bool appliesKnockback = true)
     {
-        var hits = Physics2D.OverlapCircleAll(_attackPoint.position, radius, _enemyLayer);
+        var hits = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRadius, _enemyLayer);
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent<EnemyHealth>(out var health))
             {
                 Debug.Log($"Damaging enemy {hit.name} for {damage} damage.");
-                health?.TakeDamage(damage,0, ElementType.None, transform);
+                Transform attacker = appliesKnockback ? transform : null;
+                health?.TakeDamage(damage, 0, ElementType.None, attacker);
             }
         }
     }
 
 
-    public virtual void HandleDeath()
-    {
-        SpawnDeathVfx();
-        Destroy(gameObject);
-    }
-
-    /// <summary>Spawns the death VFX via pool. Call from overrides before custom cleanup.</summary>
-    protected void SpawnDeathVfx()
-    {
-        if (_onDeathVfxPrefab != null)
-            PoolableVfx.Spawn(_onDeathVfxPrefab, transform.position);
-    }
-
+    public virtual void HandleDeath(){   }    
     protected virtual void OnDrawGizmos()
     {
         if(!_isDraw) return;
-        if (_groundCheckPoint == null) return;
         if(_attackPoint == null) return;
-        Gizmos.color = IsGrounded ? Color.green : Color.red;
-        Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(_attackPoint.position, _attackRadius);
     }
 
     public virtual void AttackTrigger(){}
+    public virtual void AttackTrigger(bool canKnock){}
 }

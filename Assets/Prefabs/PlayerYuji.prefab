@@ -231,6 +231,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1673543036087016213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 938515812841465520}
+  m_Layer: 8
+  m_Name: SkillClonePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &938515812841465520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673543036087016213}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6031478058514801146}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3923305556249276435
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,7 +422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6508565638126517868}
   - component: {fileID: 1935694926364728682}
-  - component: {fileID: 3660232992803270282}
+  - component: {fileID: 8365403486751259547}
   m_Layer: 8
   m_Name: SkillHolder
   m_TagString: Untagged
@@ -429,7 +460,7 @@ MonoBehaviour:
   <SkillBaseDefinition>k__BackingField: {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
   <skillType>k__BackingField: 0
   <skillUpgrade>k__BackingField: 0
---- !u!114 &3660232992803270282
+--- !u!114 &8365403486751259547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -438,14 +469,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5265632208087460327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f76a93b75de6e954282eee6de17524a7, type: 3}
+  m_Script: {fileID: 11500000, guid: a2d32fcfaeae5b441bf5ee7c0da50715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SkillBaseDefinition>k__BackingField: {fileID: 11400000, guid: 94800580dcf9f18459ed36b4749ba76e, type: 2}
-  <skillType>k__BackingField: 1
-  <skillUpgrade>k__BackingField: 5
-  _skillObjectTimeEchoPrefab: {fileID: 6283767578240685690, guid: c05536fcee4e9a44f8cfa59c118a5af1, type: 3}
-  _player: {fileID: 4570775543317089856}
+  <SkillBaseDefinition>k__BackingField: {fileID: 11400000, guid: c4b912516e5c994459f647c77f8510a8, type: 2}
+  <skillType>k__BackingField: 2
+  <skillUpgrade>k__BackingField: 0
 --- !u!1 &5500656302924963687
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,6 +625,7 @@ Transform:
   - {fileID: 1782024204805197317}
   - {fileID: 4772936102353786152}
   - {fileID: 6508565638126517868}
+  - {fileID: 938515812841465520}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &4794907317093849844
@@ -749,6 +779,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9a727fab2a132a946bb11cea532fe7b1, type: 2}
   - {fileID: 11400000, guid: 6ee32e20fcd39bd41805c3bb8c42535a, type: 2}
   - {fileID: 11400000, guid: 94800580dcf9f18459ed36b4749ba76e, type: 2}
+  - {fileID: 11400000, guid: c4b912516e5c994459f647c77f8510a8, type: 2}
 --- !u!114 &2595452044410493718
 MonoBehaviour:
   m_ObjectHideFlags: 0

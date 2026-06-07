@@ -13,6 +13,8 @@ namespace player
         [field:SerializeField] public SkillBaseDefinition SkillBaseDefinition {get; private set;}
         [field:SerializeField] public SkillType skillType {get; private set;}
         [field:SerializeField] public SkillUpgrade skillUpgrade {get; private set;}
+        [SerializeField] protected Player player;
+
 
         /// <summary>True once the player has unlocked this skill via the skill tree.</summary>
         public bool IsUnlocked { get; private set; }

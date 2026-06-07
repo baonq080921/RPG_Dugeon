@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2106445a6622e642b38c7ceec3ec920, type: 3}
   m_Name: SkillDefinition-Dash
   m_EditorClassIdentifier: 
-  <SkillName>k__BackingField: 1
   <Duration>k__BackingField: 0.2
-  <Cooldown>k__BackingField: 1
+  <Cooldown>k__BackingField: 100
+  <Damage>k__BackingField: 0
+  <HealingAmount>k__BackingField: 0
+  <CDAmountPercent>k__BackingField: 0

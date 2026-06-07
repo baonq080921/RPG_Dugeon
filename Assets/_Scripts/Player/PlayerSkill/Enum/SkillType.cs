@@ -1,5 +1,6 @@
 public enum SkillType
 {
     Dash,
-    TimeEcho
+    TimeEcho,
+    Dismantle
 }

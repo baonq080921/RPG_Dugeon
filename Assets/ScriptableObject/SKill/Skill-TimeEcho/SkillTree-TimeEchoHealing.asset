@@ -18,8 +18,9 @@ MonoBehaviour:
     <UpgradeCoolDown>k__BackingField: 20
     <UpgradeDuration>k__BackingField: 0
     <UpgradeDamage>k__BackingField: 0
+    <UpgradeHealing>k__BackingField: 30
   <skillTreeDataName>k__BackingField: HealingWeep
-  <Description>k__BackingField: When the echo die from enemy attack it release a
-    healing weep that move toward player and heal player on contact
+  <Description>k__BackingField: When the echo of your side kick disappear it healing
+    you with 30 HP, Cooldown 20.
   <Icon>k__BackingField: {fileID: 751563054, guid: ea579985398cb78419263c314ad25d62, type: 3}
   <Cost>k__BackingField: 2

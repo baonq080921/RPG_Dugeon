@@ -56,6 +56,7 @@ namespace player
         public PlayerKnockBackState playerKnockBackState { get; protected set; }
         public PlayerDeadState playerDeadState {get; private set;}
         public PlayerCounterState playerCounterState {get; private set;}
+        public PlayerDismantleState playerDismantleState {get; private set;}
 
         public PlayerInputSet input;
         public SkillButtonHandler SkillButtonHandler { get; private set; }
@@ -99,9 +100,12 @@ namespace player
             playerJumpAttackState = new PlayerJumpAttackState(this, stateMachine, "BasicAttack");
             playerKnockBackState = new PlayerKnockBackState(this, stateMachine, "Hit");
             playerDeadState = new PlayerDeadState(this, stateMachine,"Dead");
+            playerDismantleState = new PlayerDismantleState(this,stateMachine,"CanDismantle");
+
             playerCounterState = new PlayerCounterState(this, stateMachine, "EnterCounter");
             SkillButtonHandler.RegisterState((int)ButtonSkillName.CounterSkill, playerCounterState); 
             SkillButtonHandler.RegisterState((int)ButtonSkillName.Dash, playerDashState);  
+            SkillButtonHandler.RegisterState((int)ButtonSkillName.Dismantle,playerDismantleState);
             }
 
         void OnEnable()
@@ -112,10 +116,11 @@ namespace player
             input.Player.Movement.canceled += ctx => movementInput = Vector2.zero;
             input.Player.Jump.performed += ctx => { isJump = true; JumpJustPressed = true; };
             input.Player.Jump.canceled += ctx => isJump = false;
-            input.Player.Dash.performed += ctx => {SkillButtonHandler.PressSkill(ButtonSkillName.Dash);};
+            input.Player.Dash.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dash);
             // Keyboard fallback for skill slot 0 (Counter). Mobile uses on-screen SkillButton instead.
             input.Player.Counter.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.CounterSkill);
             input.Player.TimeEcho.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.TimeEcho);
+            input.Player.Dismantle.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dismantle);
         }
 
         void OnDisable()
@@ -130,11 +135,16 @@ namespace player
             RegisterSkillReferences();
         }
 
+        /// <summary>c
+        /// RegisterSkill that references to the UISkillTree Node .Have to register to use the skill
+        /// </summary> <summary>
+        /// 
+        /// </summary>
         private void RegisterSkillReferences()
         {
             var skillManager = ServiceLocator.Get<PlayerSkillManager>();
-            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dash, skillManager.skillDash);
-            // Add RegisterSkill calls here for each new skill that requires a skill-tree unlock.
+            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.TimeEcho, skillManager.skillTimeEcho);
+            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dismantle,skillManager.skillDismantle);
         }
 
         protected override void Update()

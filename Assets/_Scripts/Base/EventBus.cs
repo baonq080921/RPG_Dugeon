@@ -36,6 +36,9 @@ namespace Base
         /// <summary>Removes a previously registered binding.</summary>
         public static void Deregister(EventBinding<T> binding) => _bindings.Remove(binding);
 
+        /// <summary>Removes all bindings. Call on scene unload to prevent stale MonoBehaviour subscribers from firing.</summary>
+        public static void Clear() => _bindings.Clear();
+
         /// <summary>Raises the event, invoking all registered bindings.</summary>
         public static void Raise(T @event)
         {

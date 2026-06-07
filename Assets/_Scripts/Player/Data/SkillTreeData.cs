@@ -20,4 +20,7 @@ public class UpgradeData
     [field:SerializeField] public float UpgradeDuration {get; private set;}
     [Tooltip("Additional damage added to the base skill damage. Set to 0 for no change.")]
     [field:SerializeField] public float UpgradeDamage {get; private set;} = 0f;
+    [field: SerializeField] public float UpgradeHealing { get; private set; } = 0f;
+    [field: SerializeField] public float UpgradeCD { get; private set; } = 0f;
+
 }

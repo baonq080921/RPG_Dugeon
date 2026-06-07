@@ -10,6 +10,10 @@ public enum SkillUpgrade
     //Time Echo Tree
     TimeEcho,
     TimeEcho_ExtraEchoAttack,
+    TimeEcho_ExtraEchoAttackMaho,
     TimeEcho_HealOnEcho,
-    TimeEcho_HealOnEchoAndDuration
+    TimeEcho_HealOnEchoAndDuration,
+
+    Dismantle,
+    Dismantle_Upgrade
 }

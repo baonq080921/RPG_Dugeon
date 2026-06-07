@@ -25,6 +25,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
     private Color defaultHitColor;
     private EntityCombat _entityCombat;
     private Coroutine _electricStatusEffectCoroutine;
+    private EventBinding<TargetGotHitEvent> _hitEventBinding;
 
 
     protected virtual void Awake()
@@ -37,12 +38,16 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     protected virtual void OnEnable()
     {
-        _entityCombat.OnTargetHit += CreateHitEffect;
+        _hitEventBinding = new EventBinding<TargetGotHitEvent>(OnHitCreate);
+        EventBus<TargetGotHitEvent>.Register(_hitEventBinding);
+
+        // _entityCombat.OnTargetHit += CreateHitEffect;
     }
 
     protected virtual void OnDisable()
     {
-        _entityCombat.OnTargetHit -= CreateHitEffect;
+        EventBus<TargetGotHitEvent>.Deregister(_hitEventBinding);
+        // _entityCombat.OnTargetHit -= CreateHitEffect;
     }
 
     public void UpdateHitColor(ElementType elementType)
@@ -111,6 +116,11 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         SpriteRenderer.material = OriginalMaterial;
         _hitVfxCoroutine = null;
 
+    }
+
+    private void OnHitCreate(TargetGotHitEvent hit)
+    {
+        CreateHitEffect(hit.target,hit.isCrit);
     }
     private void CreateHitEffect(Transform target, bool isCrit)
     {

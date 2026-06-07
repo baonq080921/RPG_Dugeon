@@ -13,7 +13,7 @@ namespace player
         public override void Enter()
         {
             base.Enter();
-            DebugCustom.Log("Enter Jump State");
+            // DebugCustom.Log("Enter Jump State");
             player.JumpCount++;
             player.ConsumeJump();
             player.SetVelocity(new Vector2(rb.velocity.x, player.jumpForce));

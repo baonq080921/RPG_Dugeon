@@ -8,6 +8,7 @@ namespace player
         public SkillDash skillDash {get; private set;}
         public SkillCounter skillCounter {get; private set;}
         public SkillTimeEcho skillTimeEcho {get; private set;}
+        public SkillDismantle skillDismantle {get; private set;}
 
         void Awake()
         {
@@ -16,6 +17,7 @@ namespace player
             skillDash = GetComponentInChildren<SkillDash>();
             skillCounter = GetComponentInChildren<SkillCounter>();
             skillTimeEcho = GetComponentInChildren<SkillTimeEcho>();
+            skillDismantle = GetComponentInChildren<SkillDismantle>();
             ServiceLocator.Register(this);
         }
 
@@ -25,8 +27,7 @@ namespace player
             {
                 case SkillType.Dash: return skillDash;
                 case SkillType.TimeEcho: return skillTimeEcho;
-
-
+                case SkillType.Dismantle: return skillDismantle;
                 default: return null;
             }
         }

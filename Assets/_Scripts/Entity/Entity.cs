@@ -46,7 +46,7 @@ public abstract class Entity : MonoBehaviour
     public event Action OnFlip;
     private Coroutine _knockBackCoroutine;
     public bool IsKnocked { get; private set; }
-    public bool IsShocked { get; private set; }
+    public bool IsShocked { get; private set; } 
     [SerializeField] private Vector2 _knockBackPowerLight;
     [SerializeField] private Vector2 _knockBackPowerHeavy;
     private Coroutine _shockCoroutine;

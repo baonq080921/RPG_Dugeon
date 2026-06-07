@@ -18,8 +18,10 @@ MonoBehaviour:
     <UpgradeCoolDown>k__BackingField: 25
     <UpgradeDuration>k__BackingField: 0
     <UpgradeDamage>k__BackingField: 0
+    <UpgradeHealing>k__BackingField: 35
+    <UpgradeCD>k__BackingField: 0.3
   <skillTreeDataName>k__BackingField: TimeEchoHealingCD
-  <Description>k__BackingField: The Healing  weep cooldown 1s for other skill you
-    have
+  <Description>k__BackingField: Its not only increase your health +35 hp and it cooldown
+    30% of all your skill that in CD.
   <Icon>k__BackingField: {fileID: -1179292804, guid: ea579985398cb78419263c314ad25d62, type: 3}
   <Cost>k__BackingField: 3

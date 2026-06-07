@@ -1,40 +1,57 @@
-using System;
 using Base;
 using UnityEngine;
 
 /// <summary>
-/// Object pool for <see cref="SkillObjectTimeEcho"/> clones.
-/// Attach this component alongside <see cref="SkillTimeEcho"/> on the same GameObject.
+/// Manages two <see cref="ObjectPool{T}"/> instances — one for the default echo prefab
+/// and one for the Mahoraga variant — so callers never allocate via Instantiate at runtime.
 /// </summary>
-public class SkillObjectTimeEchoPool : MonoBehaviourPool<SkillObjectTimeEcho>
+public class SkillObjectTimeEchoPool : MonoBehaviour
 {
-    [SerializeField] private SkillObjectTimeEcho _prefab;
+    [SerializeField] private SkillObjectTimeEcho _defaultPrefab;
+    [SerializeField] private SkillObjectTimeEcho _mahoragaPrefab;
 
-    private static Transform s_container;
+    private ObjectPool<SkillObjectTimeEcho> _defaultPool;
+    private ObjectPool<SkillObjectTimeEcho> _mahoragaPool;
 
-    /// <inheritdoc/>
-    protected override SkillObjectTimeEcho CreateInstance()
+    private void Awake()
     {
-        if (s_container == null)
-        {
-            s_container = new GameObject("[SkillObjectTimeEchoPool]").transform;
-            DontDestroyOnLoad(s_container.gameObject);
-        }
-        var instance = Instantiate(_prefab, s_container);
+        _defaultPool = BuildPool(_defaultPrefab);
+        _mahoragaPool = BuildPool(_mahoragaPrefab);
+    }
+
+    /// <summary>Returns an active default-variant echo instance from its pool.</summary>
+    public SkillObjectTimeEcho GetDefault() => Rent(_defaultPool);
+
+    /// <summary>Returns an active Mahoraga-variant echo instance from its pool.</summary>
+    public SkillObjectTimeEcho GetMahoraga() => Rent(_mahoragaPool);
+
+    private SkillObjectTimeEcho Rent(ObjectPool<SkillObjectTimeEcho> pool)
+    {
+        var instance = pool.Get();
+        instance.Init(() => pool.Release(instance));
+        return instance;
+    }
+
+    private ObjectPool<SkillObjectTimeEcho> BuildPool(SkillObjectTimeEcho prefab)
+    {
+        return new ObjectPool<SkillObjectTimeEcho>(
+            createFunc: () => Create(prefab),
+            actionOnGet: obj => obj.gameObject.SetActive(true),
+            actionOnRelease: obj => { obj.ResetObject(); obj.gameObject.SetActive(false); },
+            actionOnDestroy: obj => { if (obj != null) Destroy(obj.gameObject); }
+        );
+    }
+
+    private SkillObjectTimeEcho Create(SkillObjectTimeEcho prefab)
+    {
+        var instance = Instantiate(prefab, transform);
         instance.gameObject.SetActive(false);
         return instance;
     }
 
-    /// <inheritdoc/>
-    protected override void OnRelease(SkillObjectTimeEcho instance) => instance.ResetObject();
-
-    /// <summary>
-    /// Gets an active clone from the pool with its release callback wired up.
-    /// </summary>
-    public SkillObjectTimeEcho GetInstance()
+    private void OnDestroy()
     {
-        var instance = Get();
-        instance.Init(() => Release(instance));
-        return instance;
+        _defaultPool?.Dispose();
+        _mahoragaPool?.Dispose();
     }
 }

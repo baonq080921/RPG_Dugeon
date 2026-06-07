@@ -69,7 +69,13 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     {
         CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
         GetComponent<IHitVFX>()?.PlayHitVFX();
-        // Debug.Log($"{gameObject.name} took {damage} damage. Current Health: {CurrentHealth}/{MaxHealth}");
+        UpdateHealthBar();
+    }
+
+    /// <summary>Restores <paramref name="amount"/> HP, capped at max health.</summary>
+    public void HealHP(float amount)
+    {
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
         UpdateHealthBar();
     }
 

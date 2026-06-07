@@ -86,7 +86,7 @@ namespace scene
             {
                 if (sp.PortalId != _pendingDestinationPortalId) continue;
                 player.input.Disable();
-                player.transform.DOMove(sp.transform.position, 0.25f).SetUpdate(true).OnComplete(() =>
+                player.transform.DOMove(sp.transform.position, 0.5f).SetUpdate(true).OnComplete(() =>
                 {
                     player.input.Enable();
                 });

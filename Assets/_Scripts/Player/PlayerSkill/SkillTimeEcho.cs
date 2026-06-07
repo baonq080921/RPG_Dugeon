@@ -4,34 +4,33 @@ using UnityEngine;
 public class SkillTimeEcho : SkillBase
 {
     [SerializeField] private SkillObjectTimeEchoPool _pool;
-    [SerializeField] private Player _player;
-
     protected override void Awake()
     {
         base.Awake();
         if (_pool == null) Debug.LogError("Time Echo skill missing reference to its object pool.");
-        if (_player == null) Debug.LogError("Time Echo skill missing reference to player.");
-        _player = GetComponentInParent<Player>();
     }
 
     public override void ExecuteSkillEffect()
     {
-        if (!_player.isGrounded) return;
+        if (!player.isGrounded) return;
         base.ExecuteSkillEffect();
-        SkillObjectTimeEcho instance = _pool.GetInstance();
+
         switch (skillUpgrade)
         {
             case SkillUpgrade.TimeEcho:
-                instance.TimeEchoBase(_player.transform);
+                _pool.GetDefault().TimeEchoBase(player.transform);
                 break;
             case SkillUpgrade.TimeEcho_ExtraEchoAttack:
-                instance.TimeEchoSideKickAttack(_player.transform);
+                _pool.GetDefault().TimeEchoSideKickAttack(player.transform);
+                break;
+            case SkillUpgrade.TimeEcho_ExtraEchoAttackMaho:
+                _pool.GetMahoraga().TimeEchoSideKickMahoragaAttack(player.transform);
                 break;
             case SkillUpgrade.TimeEcho_HealOnEcho:
-                instance.TimeEchoHealing(_player.transform);
+                _pool.GetDefault().TimeEchoHealing(player.transform);
                 break;
             case SkillUpgrade.TimeEcho_HealOnEchoAndDuration:
-                instance.TimeEChoHealingCoolDown(_player.transform);
+                _pool.GetDefault().TimeEChoHealingAndCoolDownAllSkill(player.transform);
                 break;
         }
     }
@@ -40,5 +39,7 @@ public class SkillTimeEcho : SkillBase
     {
         base.SetUpgradeForSkill(upgrade);
         SkillBaseDefinition.SetToUpgradeDamage(upgrade.UpgradeDamage);
+        SkillBaseDefinition.SetToUpgradeHealing(upgrade.UpgradeHealing);
+        SkillBaseDefinition.SetToUpgradeCD(upgrade.UpgradeCD);
     }
 }

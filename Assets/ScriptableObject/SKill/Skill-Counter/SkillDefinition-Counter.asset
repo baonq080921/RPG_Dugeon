@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Duration>k__BackingField: 0.5
   <Cooldown>k__BackingField: 1
+  <Damage>k__BackingField: 0
+  <HealingAmount>k__BackingField: 0
+  <CDAmountPercent>k__BackingField: 0

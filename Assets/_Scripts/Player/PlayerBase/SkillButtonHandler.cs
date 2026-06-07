@@ -17,10 +17,11 @@ namespace player
         private float[] _cooldownTimers;
         private bool[] _pending;
 
-        /// <summary>
-        /// Fired when a skill enters cooldown. Arguments: slot index, cooldown duration in seconds.
-        /// </summary>
+        /// <summary>Fired when a skill enters cooldown. Arguments: slot index, full cooldown duration.</summary>
         public event Action<int, float> SkillCooldownStarted;
+
+        /// <summary>Fired when a cooldown is externally shortened. Arguments: slot index, new remaining seconds.</summary>
+        public event Action<int, float> SkillCooldownUpdated;
 
         /// <summary>Number of configured skill slots.</summary>
         public int SlotCount => _skillDefinition?.Length ?? 0;
@@ -86,9 +87,9 @@ namespace player
             if (!_pending[index] || _states[index] == null) return false;
 
             _pending[index] = false;
-            float duration = _skillDefinition[index].Cooldown;
-            _cooldownTimers[index] = duration;
-            SkillCooldownStarted?.Invoke(index, duration);
+            float cooldown = _skillDefinition[index].Cooldown;
+            _cooldownTimers[index] = cooldown;
+            SkillCooldownStarted?.Invoke(index, cooldown);
             state = _states[index];
             return true;
         }
@@ -114,6 +115,23 @@ namespace player
         /// <returns>The <see cref="SkillDefinition"/> for the given slot, or null if out of range.</returns>
         public SkillBaseDefinition GetSkill(int index) =>
             (index >= 0 && index < SlotCount) ? _skillDefinition[index] : null;
+
+        /// <summary>
+        /// Reduces the remaining cooldown of every skill that is currently on cooldown
+        /// by <paramref name="reductionPercent"/> of its remaining time.
+        /// Example: 0.5 halves all active cooldowns.
+        /// </summary>
+        public void ReduceAllCooldowns(float reductionPercent)
+        {
+            if (_cooldownTimers == null) return;
+            float multiplier = 1f - Mathf.Clamp01(reductionPercent);
+            for (int i = 0; i < _cooldownTimers.Length; i++)
+            {
+                if (_cooldownTimers[i] <= 0f) continue;
+                _cooldownTimers[i] *= multiplier;
+                SkillCooldownUpdated?.Invoke(i, _cooldownTimers[i]);
+            }
+        }
 
         /// <returns>True if the skill at <paramref name="index"/> has no active cooldown.</returns>
         public bool IsReady(int index)

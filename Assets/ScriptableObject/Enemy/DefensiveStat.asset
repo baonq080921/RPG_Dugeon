@@ -15,7 +15,7 @@ MonoBehaviour:
   <KnockBackThreshHold>k__BackingField:
     baseValue: 0.3
   <MaxHealth>k__BackingField:
-    baseValue: 500
+    baseValue: 300
   <Envasion>k__BackingField:
     baseValue: 0
   <Amor>k__BackingField:

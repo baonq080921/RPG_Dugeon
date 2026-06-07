@@ -45,18 +45,26 @@ namespace UI
             UnsubscribeFromPlayer(_currentPlayer);
             _currentPlayer = newPlayer;
             _currentPlayer.SkillButtonHandler.SkillCooldownStarted += OnSkillCooldownStarted;
+            _currentPlayer.SkillButtonHandler.SkillCooldownUpdated += OnSkillCooldownUpdated;
         }
 
         private void UnsubscribeFromPlayer(Player player)
         {
-            if (player != null)
-                player.SkillButtonHandler.SkillCooldownStarted -= OnSkillCooldownStarted;
+            if (player == null) return;
+            player.SkillButtonHandler.SkillCooldownStarted -= OnSkillCooldownStarted;
+            player.SkillButtonHandler.SkillCooldownUpdated -= OnSkillCooldownUpdated;
         }
 
         private void OnSkillCooldownStarted(int index, float duration)
         {
             if (index == (int)_skillName)
                 _cooldownUI.StartCooldown(duration);
+        }
+
+        private void OnSkillCooldownUpdated(int index, float remaining)
+        {
+            if (index == (int)_skillName)
+                _cooldownUI.StartCooldown(remaining);
         }
     }
 }

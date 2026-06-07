@@ -19,8 +19,8 @@ namespace enemy
         {
             bool canDamage = base.TakeDamage(damage,elementalDamage,elementType,target);
             if (!canDamage) return false;
-            
-            _enemy.ApplyKnockBack(damage);
+            if(target != null) // if side kick attack enemy not knockback enemy
+                _enemy.ApplyKnockBack(damage);
             _enemy.stateMachine.ChangeState(_enemy.enemyStunState);
             return true;
         }
