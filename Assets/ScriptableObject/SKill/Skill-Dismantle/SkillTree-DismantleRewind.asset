@@ -15,12 +15,15 @@ MonoBehaviour:
   <SkillType>k__BackingField: 2
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 11
-    <UpgradeCoolDown>k__BackingField: 6
+    <UpgradeCoolDown>k__BackingField: 12
     <UpgradeDuration>k__BackingField: 0.5
-    <UpgradeDamage>k__BackingField: 15
+    <UpgradeDamage>k__BackingField: 20
     <UpgradeHealing>k__BackingField: 0
-    <UpgradeCD>k__BackingField: 0
+    <UpgradeCD>k__BackingField: 0.5
   <skillTreeDataName>k__BackingField: DismantleRewind
-  <Description>k__BackingField: 
+  <Description>k__BackingField: Launching two knife at the enemy.If it hit enemy
+    it will bounch back to the player and deal damage to any enemies stand on the
+    way back. If it Hit enemy the first time and bounch back reduce half of cd for
+    this skill
   <Icon>k__BackingField: {fileID: 21300000, guid: 3c095978daf44244fa29033e003c9831, type: 3}
-  <Cost>k__BackingField: 5
+  <Cost>k__BackingField: 6

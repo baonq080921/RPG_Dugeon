@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2106445a6622e642b38c7ceec3ec920, type: 3}
   m_Name: SkillDefinition-Dismatle
   m_EditorClassIdentifier: 
-  <Duration>k__BackingField: 2
-  <Cooldown>k__BackingField: 3
-  <Damage>k__BackingField: 40
+  <Duration>k__BackingField: 0.5
+  <Cooldown>k__BackingField: 12
+  <Damage>k__BackingField: 30
   <HealingAmount>k__BackingField: 0
-  <CDAmountPercent>k__BackingField: 0
+  <CDAmountPercent>k__BackingField: 0.5
   <moveSpeed>k__BackingField: 15

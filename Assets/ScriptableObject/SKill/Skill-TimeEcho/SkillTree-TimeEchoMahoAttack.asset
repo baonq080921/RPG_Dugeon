@@ -15,8 +15,8 @@ MonoBehaviour:
   <SkillType>k__BackingField: 1
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 7
-    <UpgradeCoolDown>k__BackingField: 1
-    <UpgradeDuration>k__BackingField: 2
+    <UpgradeCoolDown>k__BackingField: 60
+    <UpgradeDuration>k__BackingField: 15
     <UpgradeDamage>k__BackingField: 100
     <UpgradeHealing>k__BackingField: 0
     <UpgradeCD>k__BackingField: 0
@@ -24,4 +24,4 @@ MonoBehaviour:
   <Description>k__BackingField: Spawning Mahoraga this monster can performance attack
     and follow owner for 15 second.
   <Icon>k__BackingField: {fileID: 21300000, guid: 430974cf5f965d940bd8a23d9e8f8e4c, type: 3}
-  <Cost>k__BackingField: 5
+  <Cost>k__BackingField: 8

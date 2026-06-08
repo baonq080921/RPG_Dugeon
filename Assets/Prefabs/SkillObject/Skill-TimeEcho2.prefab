@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8171682613425685472}
   - component: {fileID: 8867568068101681599}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: AttackCheck (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,7 +240,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 40248554cf5b9e4459b84fff275c4a24, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -329,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6001878616611482188}
   - component: {fileID: 2606061603844186124}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GroundCheck (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +345,7 @@ Transform:
   m_GameObject: {fileID: 7728475896009873451}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.64, y: -1.69, z: 0}
+  m_LocalPosition: {x: 1.8, y: -1.69, z: 0}
   m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []

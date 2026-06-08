@@ -17,10 +17,10 @@ MonoBehaviour:
     <SkillUpgrade>k__BackingField: 10
     <UpgradeCoolDown>k__BackingField: 3.5
     <UpgradeDuration>k__BackingField: 0.5
-    <UpgradeDamage>k__BackingField: 10
+    <UpgradeDamage>k__BackingField: 15
     <UpgradeHealing>k__BackingField: 0
     <UpgradeCD>k__BackingField: 0
   <skillTreeDataName>k__BackingField: Dismantle
-  <Description>k__BackingField: Launch knife at enemy and deal damage
+  <Description>k__BackingField: Launch knifes at enemy and deal damage
   <Icon>k__BackingField: {fileID: 21300000, guid: 8978bf3d774e7234fb125156ab40da0c, type: 3}
-  <Cost>k__BackingField: 0
+  <Cost>k__BackingField: 3

@@ -252,13 +252,6 @@ public class SkillObjectTimeEcho : SkillObject_Base
     {
         base.AttackTrigger();
         DealDamage(false);
-
-        if (_isMultiAttack)
-        {
-            _currentTarget = null; // ScanAndFollow() picks up next enemy on next Update tick
-            return;
-        }
-
         EchoDisappearEffect();
     }
 
@@ -266,6 +259,12 @@ public class SkillObjectTimeEcho : SkillObject_Base
     {
         base.AttackTrigger(canKnock);
         DealDamage(canKnock);
+        if (_isMultiAttack)
+        {
+            _currentTarget = null; // ScanAndFollow() picks up next enemy on next Update tick
+            return;
+        }
+
         EchoDisappearEffect();
     }
 

@@ -17,3 +17,4 @@ MonoBehaviour:
   <Damage>k__BackingField: 0
   <HealingAmount>k__BackingField: 0
   <CDAmountPercent>k__BackingField: 0
+  <moveSpeed>k__BackingField: 0

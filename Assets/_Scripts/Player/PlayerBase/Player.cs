@@ -143,6 +143,7 @@ namespace player
         private void RegisterSkillReferences()
         {
             var skillManager = ServiceLocator.Get<PlayerSkillManager>();
+            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dash, skillManager.skillDash);
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.TimeEcho, skillManager.skillTimeEcho);
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dismantle,skillManager.skillDismantle);
         }

@@ -133,6 +133,15 @@ namespace player
             }
         }
 
+        public void ReduceSkillCoolDown(float reductionPercent, int skillIndex)
+        {
+            if (_cooldownTimers == null) return;
+            if (skillIndex < 0 || skillIndex >= _cooldownTimers.Length) return;
+            if (_cooldownTimers[skillIndex] <= 0f) return;
+            _cooldownTimers[skillIndex] *= 1f - Mathf.Clamp01(reductionPercent);
+            SkillCooldownUpdated?.Invoke(skillIndex, _cooldownTimers[skillIndex]);
+        }
+
         /// <returns>True if the skill at <paramref name="index"/> has no active cooldown.</returns>
         public bool IsReady(int index)
         {

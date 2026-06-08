@@ -34,6 +34,8 @@ namespace player
         public override void SetUpgradeForSkill(UpgradeData upgrade)
         {
             base.SetUpgradeForSkill(upgrade);
+            SkillBaseDefinition.SetToUpgradeDamage(upgrade.UpgradeDamage);
+            SkillBaseDefinition.SetToUpgradeCD(upgrade.UpgradeCD);
         }
     }
 }

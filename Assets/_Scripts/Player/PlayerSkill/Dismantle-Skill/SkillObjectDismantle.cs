@@ -10,6 +10,7 @@ public class SkillObjectDismantle : SkillProjectileBase
     private bool _willReturnOnHit;
     private bool _isReturning;
     private Transform _ownerTransform;
+    private Player _player;
 
     protected override bool DestroyOnHit => false;
 
@@ -18,6 +19,7 @@ public class SkillObjectDismantle : SkillProjectileBase
     {
         ResetState();
         _ownerTransform = tf;
+        _player = _ownerTransform.GetComponent<Player>();
         Launch(tf, _skillBaseDefinition.moveSpeed, _skillBaseDefinition.Cooldown);
     }
 
@@ -27,6 +29,7 @@ public class SkillObjectDismantle : SkillProjectileBase
         ResetState();
         _willReturnOnHit = true;
         _ownerTransform = tf;
+        _player = _ownerTransform.GetComponent<Player>();
         Launch(tf, _skillBaseDefinition.moveSpeed, _skillBaseDefinition.Cooldown);
     }
 
@@ -39,7 +42,12 @@ public class SkillObjectDismantle : SkillProjectileBase
         EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(other.transform, false));
 
         if (_willReturnOnHit && !_isReturning)
+        {
+            Debug.Log("Hit enemy return");
             FlipDirection();
+            _player.SkillButtonHandler.ReduceSkillCoolDown(_skillBaseDefinition.CDAmountPercent,(int)ButtonSkillName.Dismantle);
+            // ServiceLocator.Get<SkillButtonHandler>().ReduceSkillCoolDown(_skillBaseDefinition.CDAmountPercent,(int)ButtonSkillName.Dismantle);
+        }
     }
 
     protected override void OnFixedUpdate()
@@ -67,5 +75,6 @@ public class SkillObjectDismantle : SkillProjectileBase
         _willReturnOnHit = false;
         _isReturning = false;
         _ownerTransform = null;
+        _player = null;
     }
 }
