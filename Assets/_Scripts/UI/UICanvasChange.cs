@@ -43,7 +43,7 @@ namespace UI
         void Start()
         {
             // Place skill tree off-screen immediately so it doesn't flash.
-            _skillTreeRect.anchoredPosition = _skillTreeOriginalPosition + new Vector2(_slideDistance, 0f);
+            _skillTreeRect.anchoredPosition = _skillTreeOriginalPosition + new Vector2(_slideDistance*10f, 0f);
 
             _activeCanvas = _inventoryCanvas;
             _btnToSkillTree.image.color = _normalColor;
@@ -69,10 +69,10 @@ namespace UI
 
             // Snap incoming to the right edge, then slide it in.
             incoming.anchoredPosition = incomingTarget + new Vector2(_slideDistance, 0f);
-            incoming.DOAnchorPos(incomingTarget, _tweenDuration).SetEase(Ease.OutCubic);
+            incoming.DOAnchorPos(incomingTarget, _tweenDuration).SetUpdate(true).SetEase(Ease.OutCubic);
 
             // Slide outgoing to the left edge.
-            outgoing.DOAnchorPos(outgoingTarget + new Vector2(-_slideDistance*10f, 0f), _tweenDuration)
+            outgoing.DOAnchorPos(outgoingTarget + new Vector2(-_slideDistance*10f, 0f), _tweenDuration).SetUpdate(true)
                     .SetEase(Ease.InCubic);
 
             _btnToSkillTree.image.color = showSkill ? _selectedColor : _normalColor;

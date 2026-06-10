@@ -2,13 +2,14 @@
 public enum ItemTypes:byte
 {
     Helmet,
-    Material,
+    Material, // use for crafting
     Amor,
     Sword,
     Glove,
     Pant,
     Hammer,
-    Belt
+    Belt,
+    FeetAmor
 
 }
     

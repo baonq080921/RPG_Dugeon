@@ -57,9 +57,7 @@ public class PlayerInventory : InventoryBase {
             slot.equipItem = item;
             ClearFromInventory(item);
         }
-
         slot.equipItem.AddModifiers(_playerStats);
     }
-
     
 }

@@ -6,23 +6,31 @@ using UnityEngine.EventSystems;
 using System;
 using Base;
 
-public class UIItemSlot : MonoBehaviour, IPointerDownHandler
+public class UIItemSlot : UiItemSlotBase
     {
     [field:SerializeField] public ItemInventory itemInSlot{get; private set;}
-    [SerializeField] private Sprite _deafultSpriteSlot;
-    [SerializeField] private Image _image;
+   
     [SerializeField] private TextMeshProUGUI _tmp;
-    public void UpdateUISlot(ItemInventory item)
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _tmp = GetComponentInChildren<TextMeshProUGUI>();
+
+    }
+   
+    public virtual void UpdateUISlot(ItemInventory item)
     {
         itemInSlot = item;
         if(item == null)
         {
-            _image.sprite = _deafultSpriteSlot; 
+            image.sprite = deafultSpriteSlot; 
             _tmp.text = " ";
         }
         else
         {
-            _image.sprite = item.itemData.Sprite;
+            image.sprite = item.itemData.Sprite;
             _tmp.text = item.stackSize >=1 ? $"{item.stackSize}": "1";
         }
     }
@@ -34,7 +42,7 @@ public class UIItemSlot : MonoBehaviour, IPointerDownHandler
     /// <summary>Called by <see cref="UI_Inventory"/> during setup to bind the shared action panel.</summary>
     public void SetActionPanel(UIItemActionPanel panel) => _actionPanel = panel;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public override void OnPointerDown(PointerEventData eventData)
     {
         if (itemInSlot == null || itemInSlot.itemData == null) return;
         _actionPanel?.Show(this);

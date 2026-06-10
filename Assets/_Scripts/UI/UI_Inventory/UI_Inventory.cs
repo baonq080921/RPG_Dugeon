@@ -6,19 +6,21 @@ using UnityEngine.EventSystems;
 public class UI_Inventory : MonoBehaviour
 {
 
-    [SerializeField] private InventoryBase _inventory;
+    [SerializeField] private PlayerInventory _inventory;
     [SerializeField] private UIItemActionPanel _actionPanel;
-    private UIItemSlot[] uISlots;
-
-    private List<ItemInventory> items;
-    private EventBinding<OnInventoryChangedEvent> eventBindingChanged;
+    private UIItemSlot[] _uISlots;
+    private UIEquipmentSlot[] _uIEquipmentSlots;
+    private List<ItemInventory> _items;
+    private List<ItemInventoryEquipment> _itemInventoryEquipments;
+    private EventBinding<OnInventoryChangedEvent> _eventBindingChanged;
     
 
     void Awake()
     {
-        uISlots = GetComponentsInChildren<UIItemSlot>();
+        _uISlots = GetComponentsInChildren<UIItemSlot>();
+        _uIEquipmentSlots = GetComponentsInChildren<UIEquipmentSlot>();
         _actionPanel.Setup(_inventory);
-        foreach (var slot in uISlots)
+        foreach (var slot in _uISlots)
             slot.SetActionPanel(_actionPanel);
     }
 
@@ -28,23 +30,31 @@ public class UI_Inventory : MonoBehaviour
     }
     void OnEnable()
     {
-        eventBindingChanged = new EventBinding<OnInventoryChangedEvent>(UpdateUIInventory);
-        EventBus<OnInventoryChangedEvent>.Register(eventBindingChanged);
+        _eventBindingChanged = new EventBinding<OnInventoryChangedEvent>(UpdateUIInventory);
+        EventBus<OnInventoryChangedEvent>.Register(_eventBindingChanged);
     }
 
     void OnDisable()
     {
-        EventBus<OnInventoryChangedEvent>.Deregister(eventBindingChanged);
+        EventBus<OnInventoryChangedEvent>.Deregister(_eventBindingChanged);
     }
 
 
     void UpdateUIInventory()
     {
-        items = _inventory.itemInventoriesList;
-        for(int i = 0 ; i< uISlots.Length; i++)
+        _items = _inventory.itemInventoriesList;
+        _itemInventoryEquipments = _inventory.equipList;
+
+        for (int i = 0; i < _uISlots.Length; i++)
         {
-            if(i < items.Count) uISlots[i].UpdateUISlot(items[i]);
-            else uISlots[i].UpdateUISlot(null);
+            if (i < _items.Count) _uISlots[i].UpdateUISlot(_items[i]);
+            else _uISlots[i].UpdateUISlot(null);
+        }
+
+        foreach (var slot in _uIEquipmentSlots)
+        {
+            ItemInventoryEquipment match = _itemInventoryEquipments.Find(e => e.slotType == slot.SlotType);
+            slot.UpdateUISlot(match);
         }
     }
 }
