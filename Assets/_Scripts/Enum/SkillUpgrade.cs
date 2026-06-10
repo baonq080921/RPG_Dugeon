@@ -1,4 +1,4 @@
-public enum SkillUpgrade
+public enum SkillUpgrade:byte
 {
     //Dash Tree
     Dash,

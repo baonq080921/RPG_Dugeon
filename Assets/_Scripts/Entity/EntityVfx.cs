@@ -132,7 +132,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         float randomX = Random.Range(-0.3f, 0.3f);
         float randomY = Random.Range(-0.7f, 0.7f);
         Vector2 randomHitOffSet = new Vector2(randomX, randomY);
-        ServiceLocator.Get<HitEffectPool>().SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
+        ServiceLocator.Get<HitEffectPool>()?.SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
     }
 
 

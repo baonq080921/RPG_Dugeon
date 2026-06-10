@@ -57,7 +57,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         isUnlocked = true;
         UpdateIconColor(Color.white);
-        ServiceLocator.Get<UIManager>().uISkillTree.ReduceSkillPoint(skillTreeData.Cost);
+        ServiceLocator.Get<UIManager>()?.uISkillTree.ReduceSkillPoint(skillTreeData.Cost);
         LockOtherSkillPath();
         RefreshParentLineColors();
 
@@ -76,7 +76,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private bool CanBeUnlocked()
     {
-        bool isEnoughSkillPoint = ServiceLocator.Get<UIManager>().uISkillTree.EnoughSkillPoint(skillTreeData.Cost);
+        bool isEnoughSkillPoint = ServiceLocator.Get<UIManager>()?.uISkillTree.EnoughSkillPoint(skillTreeData.Cost) ?? false;
         if (isLocked || isUnlocked)
             return false;
         if(!isEnoughSkillPoint) return false;

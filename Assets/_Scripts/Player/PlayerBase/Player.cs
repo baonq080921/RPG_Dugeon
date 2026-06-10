@@ -147,9 +147,10 @@ namespace player
         private void RegisterSkillReferences()
         {
             var skillManager = ServiceLocator.Get<PlayerSkillManager>();
+            if (skillManager == null) return;
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dash, skillManager.skillDash);
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.TimeEcho, skillManager.skillTimeEcho);
-            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dismantle,skillManager.skillDismantle);
+            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dismantle, skillManager.skillDismantle);
         }
 
         private void OnPauseChanged(GamePauseChangedEvent e)
@@ -160,7 +161,7 @@ namespace player
 
         protected override void Update()
         {
-            if (ServiceLocator.Get<GameManager>().IsPause) return;
+            if (ServiceLocator.Get<GameManager>()?.IsPause ?? false) return;
             base.Update();
             TickAttackCooldown();
             TickAirAttackCooldown();
@@ -170,7 +171,7 @@ namespace player
         private void TickTimeEchoSkill()
         {
             if (!SkillButtonHandler.TryConsumeEffect((int)ButtonSkillName.TimeEcho)) return;
-            ServiceLocator.Get<PlayerSkillManager>().skillTimeEcho.ExecuteSkillEffect();
+            ServiceLocator.Get<PlayerSkillManager>()?.skillTimeEcho.ExecuteSkillEffect();
         }
 
         public override void ApplyKnockBack(float damage)

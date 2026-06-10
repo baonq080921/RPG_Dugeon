@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Base;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,7 +16,11 @@ public class UI_Inventory : MonoBehaviour
     private List<ItemInventory> _items;
     private List<ItemInventoryEquipment> _itemInventoryEquipments;
     private EventBinding<OnInventoryChangedEvent> _eventBindingChanged;
+    private EventBinding<AlertNotiEvent> _eventBindingAlert;
+    private Sequence _alertSequence;
+    [SerializeField] private TextMeshProUGUI _alertNotiTmp;
     
+
 
     void Awake()
     {
@@ -36,15 +42,29 @@ public class UI_Inventory : MonoBehaviour
     {
         _eventBindingChanged = new EventBinding<OnInventoryChangedEvent>(UpdateUIInventory);
         EventBus<OnInventoryChangedEvent>.Register(_eventBindingChanged);
+        _eventBindingAlert = new EventBinding<AlertNotiEvent>(AlertNotificationUI);
+        EventBus<AlertNotiEvent>.Register(_eventBindingAlert);
     }
 
     void OnDisable()
     {
         EventBus<OnInventoryChangedEvent>.Deregister(_eventBindingChanged);
+        EventBus<AlertNotiEvent>.Deregister(_eventBindingAlert);
     }
 
 
-    void UpdateUIInventory()
+    void AlertNotificationUI(AlertNotiEvent alertNotiEvent)
+    {
+        _alertNotiTmp.text = alertNotiEvent.alertMessage;
+        _alertNotiTmp.DOKill();
+        _alertSequence?.Kill();
+        _alertSequence = DOTween.Sequence();
+        _alertSequence.Append(_alertNotiTmp.DOFade(1, 0.25f).SetUpdate(true).SetEase(Ease.InBack));
+        _alertSequence.AppendInterval(0.5f).SetUpdate(true);
+        _alertSequence.Append(_alertNotiTmp.DOFade(0, 0.25f).SetUpdate(true).SetEase(Ease.OutBack));
+    }
+
+    void UpdateUIInventory()    
     {
         _items = _inventory.itemInventoriesList;
         _itemInventoryEquipments = _inventory.equipList;
@@ -59,6 +79,6 @@ public class UI_Inventory : MonoBehaviour
         {
             ItemInventoryEquipment match = _itemInventoryEquipments.Find(e => e.slotType == slot.SlotType);
             slot.UpdateUISlot(match);
-        }
+        }        
     }
 }

@@ -1,4 +1,4 @@
-public enum SkillType
+public enum SkillType:byte
 {
     Dash,
     TimeEcho,

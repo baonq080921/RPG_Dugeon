@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Base;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 public class PlayerInventory : InventoryBase {
@@ -37,7 +40,11 @@ public class PlayerInventory : InventoryBase {
         if (itemInventory == null) return;
 
         ItemInventoryEquipment targetSlot = equipList.Find(slot => slot.slotType == item.itemData.ItemType);
-        if (targetSlot == null || targetSlot.HasItem()) return;
+        if (targetSlot == null || targetSlot.HasItem())
+        {
+           EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot")));
+            return;
+        }
 
         EquipItem(itemInventory, targetSlot);
     }
@@ -49,7 +56,6 @@ public class PlayerInventory : InventoryBase {
         {
             item.RemoveStackSize();
             slot.equipItem = new ItemInventory(item.itemData);
-            EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
         }
         else
         {
@@ -57,6 +63,7 @@ public class PlayerInventory : InventoryBase {
             ClearFromInventory(item);
         }
         slot.equipItem.AddModifiers(_playerStats);
+        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
     }
 
     /// <summary>
@@ -71,7 +78,6 @@ public class PlayerInventory : InventoryBase {
         ItemInventory item = slot.equipItem;
         item.RemoveModifiers(_playerStats);
         slot.equipItem = null;
-
         ItemInventory stackable = FindItem(item);
         bool canStack = stackable != null && stackable.CanAddToStack();
         if (CanAddToIventory() || canStack)

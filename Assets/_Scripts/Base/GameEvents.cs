@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 namespace Base
 {
@@ -7,7 +8,19 @@ namespace Base
     /// <summary>Raised when an enemy's health reaches zero.</summary>
     public struct EnemyDiedEvent : IEvent { }
     public struct ResetStats :IEvent {}
-
+    /// <summary>
+    /// Raised when we want to Alert some Message
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    public struct AlertNotiEvent : IEvent
+    {
+        public string alertMessage{get; private set;}
+        public AlertNotiEvent(String message)
+        {
+            alertMessage = message;
+        }
+    } 
 
     public struct PlayerAddHealthAmount : IEvent
     {

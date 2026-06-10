@@ -28,7 +28,7 @@ public class ItemInventory
          foreach(var mod in modifiers)
         {
             Stat statModifier = playerStats.GetStatByType(mod.statType);
-            statModifier.AddModifier(mod.value,itemData.name);
+            statModifier.RemoveModifier(mod.value,itemData.name);
         }
     }
 

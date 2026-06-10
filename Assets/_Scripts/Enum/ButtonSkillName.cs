@@ -1,4 +1,4 @@
-public enum ButtonSkillName
+public enum ButtonSkillName:byte
 {
     CounterSkill,
     Dash,

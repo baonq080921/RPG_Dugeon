@@ -20,7 +20,7 @@ namespace player
             rb.gravityScale = 0f;
             _dashDirection = player.movementInput.x != 0 ? (int)Mathf.Sign(player.movementInput.x) : (int)player.direction;
             ApplyDashVelocity();
-            ServiceLocator.Get<PlayerSkillManager>().skillDash.ExecuteSkillEffect();
+            ServiceLocator.Get<PlayerSkillManager>()?.skillDash.ExecuteSkillEffect();
             player.AfterImageEffect?.StartEffect();
         }
 

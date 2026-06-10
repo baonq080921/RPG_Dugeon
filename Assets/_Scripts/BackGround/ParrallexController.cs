@@ -12,8 +12,7 @@ namespace BackGround
 
         void Start()
         {
-            var service = ServiceLocator.Get<Helper>();
-            _camera = service.mainCam;
+            _camera = ServiceLocator.Get<Helper>()?.mainCam;
 
             _cameraHalfWidth = _camera.orthographicSize * _camera.aspect;
         }

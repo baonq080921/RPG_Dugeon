@@ -13,8 +13,10 @@ namespace player
         public override void Enter()
         {
             base.Enter();
-            stateTimer = ServiceLocator.Get<PlayerSkillManager>().skillDismantle.SkillBaseDefinition.Duration;
-            ServiceLocator.Get<PlayerSkillManager>().skillDismantle.ExecuteSkillEffect();
+            var dismantleSkill = ServiceLocator.Get<PlayerSkillManager>()?.skillDismantle;
+            if (dismantleSkill == null) return;
+            stateTimer = dismantleSkill.SkillBaseDefinition.Duration;
+            dismantleSkill.ExecuteSkillEffect();
             player.SetVelocity(new Vector2(0, rb.velocity.y));
             input.Disable();
         }

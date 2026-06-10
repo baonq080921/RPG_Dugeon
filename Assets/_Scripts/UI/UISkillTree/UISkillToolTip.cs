@@ -36,7 +36,7 @@ public class UISkillToolTip : UIToolTip
     {
         StringBuilder sb = new StringBuilder();
         sb.AppendLine("Requirements: ");
-        string costStringColorHex = ServiceLocator.Get<UIManager>().uISkillTree.EnoughSkillPoint(cost)? _metConditionColorHex : _unMetConditionColorHex;
+        string costStringColorHex = (ServiceLocator.Get<UIManager>()?.uISkillTree.EnoughSkillPoint(cost) ?? false) ? _metConditionColorHex : _unMetConditionColorHex;
         sb.AppendLine($"<color={costStringColorHex}>- {cost} skillPoint(s)</color>");
         foreach(var node in requireNode)
         {

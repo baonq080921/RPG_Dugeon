@@ -141,6 +141,20 @@ public class EntityStat : MonoBehaviour
 
 
 
+    #region Display Values (deterministic, no randomization — caps match combat methods)
+    public float GetDamageDisplayValue() => _offensiveStats.Damage.GetValue() + _majorStats.Strength.GetValue();
+    public float GetCritChanceDisplayValue()
+    {
+        float total = _offensiveStats.CritChance.GetValue() + _majorStats.Agility.GetValue() * 0.3f;
+        return total > 100f ? 100f : total;
+    }
+    public float GetCritPowerDisplayValue() => _offensiveStats.CritPower.GetValue() + _majorStats.Strength.GetValue() * 0.5f;
+    public float GetArmorDisplayValue() => _defensiveStats.Amor.GetValue() + _majorStats.Vitality.GetValue();
+    public float GetFireDamageDisplayValue() => _offensiveStats.fireDamage.GetValue() + _majorStats.Intelligence.GetValue();
+    public float GetLightDamageDisplayValue() => _offensiveStats.lightDamage.GetValue() + _majorStats.Intelligence.GetValue();
+    public float GetElementalResistanceDisplayValue() => (1f - GetElementalResitanceValue()) * 100f;
+    #endregion
+
     [ContextMenu("Reset all the stats to default")]
 
     /// <summary>
