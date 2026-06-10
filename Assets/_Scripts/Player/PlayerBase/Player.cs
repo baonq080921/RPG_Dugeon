@@ -61,6 +61,7 @@ namespace player
         public PlayerInputSet input;
         public SkillButtonHandler SkillButtonHandler { get; private set; }
         public AfterImageEffect AfterImageEffect { get; private set; }
+        private EventBinding<GamePauseChangedEvent> _pauseBinding;
 
         public Vector2 movementInput { get; private set; }
         public bool isJump { get; private set; }
@@ -76,7 +77,6 @@ namespace player
         protected override void Awake()
         {
             base.Awake();
-            Application.targetFrameRate = 60;
             AfterImageEffect = GetComponent<AfterImageEffect>();
             SkillButtonHandler = GetComponent<SkillButtonHandler>();
             input = new PlayerInputSet();
@@ -121,11 +121,15 @@ namespace player
             input.Player.Counter.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.CounterSkill);
             input.Player.TimeEcho.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.TimeEcho);
             input.Player.Dismantle.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dismantle);
+
+            _pauseBinding = new EventBinding<GamePauseChangedEvent>(OnPauseChanged);
+            EventBus<GamePauseChangedEvent>.Register(_pauseBinding);
         }
 
         void OnDisable()
         {
             input.Disable();
+            EventBus<GamePauseChangedEvent>.Deregister(_pauseBinding);
         }
 
         protected override void Start()
@@ -148,8 +152,15 @@ namespace player
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dismantle,skillManager.skillDismantle);
         }
 
+        private void OnPauseChanged(GamePauseChangedEvent e)
+        {
+            if (e.IsPause) input.Disable();
+            else input.Enable();
+        }
+
         protected override void Update()
         {
+            if (ServiceLocator.Get<GameManager>().IsPause) return;
             base.Update();
             TickAttackCooldown();
             TickAirAttackCooldown();

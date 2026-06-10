@@ -17,9 +17,8 @@ public class UIItemSlot : UiItemSlotBase
     {
         base.Awake();
         _tmp = GetComponentInChildren<TextMeshProUGUI>();
-
     }
-   
+
     public virtual void UpdateUISlot(ItemInventory item)
     {
         itemInSlot = item;

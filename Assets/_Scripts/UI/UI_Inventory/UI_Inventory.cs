@@ -8,6 +8,7 @@ public class UI_Inventory : MonoBehaviour
 
     [SerializeField] private PlayerInventory _inventory;
     [SerializeField] private UIItemActionPanel _actionPanel;
+    [SerializeField] private UIEquipmentActionPanel _equipmentActionPanel;
     private UIItemSlot[] _uISlots;
     private UIEquipmentSlot[] _uIEquipmentSlots;
     private List<ItemInventory> _items;
@@ -20,8 +21,11 @@ public class UI_Inventory : MonoBehaviour
         _uISlots = GetComponentsInChildren<UIItemSlot>();
         _uIEquipmentSlots = GetComponentsInChildren<UIEquipmentSlot>();
         _actionPanel.Setup(_inventory);
+        _equipmentActionPanel.Setup(_inventory);
         foreach (var slot in _uISlots)
             slot.SetActionPanel(_actionPanel);
+        foreach (var slot in _uIEquipmentSlots)
+            slot.SetActionPanel(_equipmentActionPanel);
     }
 
     void Start()

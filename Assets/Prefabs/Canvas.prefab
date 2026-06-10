@@ -6841,6 +6841,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uISkillToolTip: {fileID: 4851811925897189826}
   uISkillTree: {fileID: 3507107400939512909}
+  uIInventory: {fileID: 0}
+  uICanvasChange: {fileID: 0}
 --- !u!114 &1314509668442994660
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -49,8 +49,7 @@ public class PlayerInventory : InventoryBase {
         {
             item.RemoveStackSize();
             slot.equipItem = new ItemInventory(item.itemData);
-        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
-
+            EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
         }
         else
         {
@@ -59,5 +58,38 @@ public class PlayerInventory : InventoryBase {
         }
         slot.equipItem.AddModifiers(_playerStats);
     }
-    
+
+    /// <summary>
+    /// Removes the item from the equipment slot and returns it to the inventory.
+    /// If the inventory is full and cannot stack, the item is discarded.
+    /// </summary>
+    /// <param name="slot">The equipment slot to unequip.</param>
+    public void UnequipItem(ItemInventoryEquipment slot)
+    {
+        if (!slot.HasItem()) return;
+
+        ItemInventory item = slot.equipItem;
+        item.RemoveModifiers(_playerStats);
+        slot.equipItem = null;
+
+        ItemInventory stackable = FindItem(item);
+        bool canStack = stackable != null && stackable.CanAddToStack();
+        if (CanAddToIventory() || canStack)
+            AddToInventory(item);
+        else
+            EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
+    }
+
+    /// <summary>
+    /// Removes the item from the equipment slot and discards it without returning it to inventory.
+    /// </summary>
+    /// <param name="slot">The equipment slot to clear.</param>
+    public void DropEquippedItem(ItemInventoryEquipment slot)
+    {
+        if (!slot.HasItem()) return;
+
+        slot.equipItem.RemoveModifiers(_playerStats);
+        slot.equipItem = null;
+        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
+    }
 }

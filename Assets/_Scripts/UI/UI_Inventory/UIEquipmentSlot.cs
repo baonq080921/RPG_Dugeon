@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -8,7 +9,7 @@ public class UIEquipmentSlot : UiItemSlotBase
 {
     [field: SerializeField] public ItemTypes SlotType { get; private set; }
     public ItemInventoryEquipment ItemEquip { get; private set; }
-
+    private UIEquipmentActionPanel _actionPanel;
     protected override void Awake()
     {
         base.Awake();
@@ -25,4 +26,14 @@ public class UIEquipmentSlot : UiItemSlotBase
             ? equipment.equipItem.itemData.Sprite
             : deafultSpriteSlot;
     }
+
+    /// <summary>Called by <see cref="UI_Inventory"/> during setup to bind the shared equipment action panel.</summary>
+    public void SetActionPanel(UIEquipmentActionPanel panel) => _actionPanel = panel;
+
+    /// <inheritdoc/>                                                                                                                            
+      public override void OnPointerDown(PointerEventData eventData)                                                                               
+      {                                                                                                                                            
+            if (ItemEquip == null || !ItemEquip.HasItem()) return;                                                                                   
+         _actionPanel?.Show(this);                                                                                                                
+      }
 }

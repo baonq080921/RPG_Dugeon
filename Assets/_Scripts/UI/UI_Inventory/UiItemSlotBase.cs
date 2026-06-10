@@ -15,6 +15,8 @@ public class UiItemSlotBase : MonoBehaviour, IPointerDownHandler
         image = GetComponentInChildren<Image>();
     }
 
+    protected virtual void Start(){}
+
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {

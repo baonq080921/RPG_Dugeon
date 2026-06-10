@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Base;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,9 +30,9 @@ public class UIMenu_Toggle : MonoBehaviour, IPointerDownHandler
     }
     private void ToggleUIMenu(bool open)
     {
-        
-        _uiRectTf.anchoredPosition = open? _originalPosition:_hiddenPosiiton;
+        _uiRectTf.anchoredPosition = open ? _originalPosition : _hiddenPosiiton;
         Time.timeScale = open ? 0 : 1;
+        ServiceLocator.Get<GameManager>()?.SetPause(open);
         ToggleButtonsCanvas(open);
     }
 

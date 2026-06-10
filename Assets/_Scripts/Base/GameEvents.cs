@@ -41,4 +41,11 @@ namespace Base
     }
 
     public struct OnInventoryChangedEvent:IEvent{}
+
+    /// <summary>Raised when the game pause state changes.</summary>
+    public struct GamePauseChangedEvent : IEvent
+    {
+        public bool IsPause;
+        public GamePauseChangedEvent(bool isPause) => IsPause = isPause;
+    }
 }
