@@ -6,6 +6,7 @@ namespace Base
 
     /// <summary>Raised when an enemy's health reaches zero.</summary>
     public struct EnemyDiedEvent : IEvent { }
+    public struct ResetStats :IEvent {}
 
 
     public struct PlayerAddHealthAmount : IEvent
@@ -28,4 +29,16 @@ namespace Base
             this.isCrit = isCrit;
         }
     }
+
+
+    public struct EquipEvent : IEvent
+    {
+        public ItemInventory itemInventory;
+        public EquipEvent(ItemInventory itemInventory)
+        {
+            this.itemInventory = itemInventory;
+        }
+    }
+
+    public struct OnInventoryChangedEvent:IEvent{}
 }

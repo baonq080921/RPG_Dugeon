@@ -13,14 +13,26 @@ MonoBehaviour:
   m_Name: OffensiveStatsYuJi
   m_EditorClassIdentifier: 
   <Damage>k__BackingField:
+    statType: 0
     baseValue: 10
+    value: 10
   <CritPower>k__BackingField:
+    statType: 14
     baseValue: 50
+    value: 50
   <CritChance>k__BackingField:
+    statType: 1
     baseValue: 10
+    value: 110
   <AttackMultiplier>k__BackingField:
+    statType: 13
     baseValue: 1
+    value: 1
   <fireDamage>k__BackingField:
+    statType: 2
     baseValue: 50
+    value: 50
   <lightDamage>k__BackingField:
+    statType: 2
     baseValue: 30
+    value: 30

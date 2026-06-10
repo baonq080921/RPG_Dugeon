@@ -13,14 +13,26 @@ MonoBehaviour:
   m_Name: DefensiveStat
   m_EditorClassIdentifier: 
   <KnockBackThreshHold>k__BackingField:
+    statType: 0
     baseValue: 0.3
+    value: 0.3
   <MaxHealth>k__BackingField:
+    statType: 0
     baseValue: 300
+    value: 300
   <Envasion>k__BackingField:
+    statType: 0
     baseValue: 0
+    value: 0
   <Amor>k__BackingField:
+    statType: 0
     baseValue: 20
+    value: 20
   <ElementalResitance>k__BackingField:
+    statType: 0
     baseValue: 50
+    value: 50
   <HealthRegen>k__BackingField:
+    statType: 0
     baseValue: 0
+    value: 0

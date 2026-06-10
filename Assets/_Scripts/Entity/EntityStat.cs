@@ -137,4 +137,68 @@ public class EntityStat : MonoBehaviour
         float regenCap = maxHealth * 0.05f;
         return baseRegen > regenCap ? regenCap : baseRegen;
     }
+
+
+
+
+    [ContextMenu("Reset all the stats to default")]
+
+    /// <summary>
+    /// Stats for Player Only
+    /// </summary>
+    /// <param name="statType"></param>
+    /// <returns></returns>
+    public void ResetAllStats()
+    {
+        _majorStats.Strength.Reset();
+        _majorStats.Agility.Reset();
+        _majorStats.Intelligence.Reset();
+        _majorStats.Vitality.Reset();
+
+        _offensiveStats.Damage.Reset();
+        _offensiveStats.CritChance.Reset();
+        _offensiveStats.CritPower.Reset();
+        _offensiveStats.AttackMultiplier.Reset();
+        _offensiveStats.fireDamage.Reset();
+        _offensiveStats.lightDamage.Reset();
+
+        _defensiveStats.MaxHealth.Reset();
+        _defensiveStats.Amor.Reset();
+        _defensiveStats.Envasion.Reset();
+        _defensiveStats.ElementalResitance.Reset();
+        _defensiveStats.KnockBackThreshHold.Reset();
+        _defensiveStats.HealthRegen.Reset();
+    }
+
+    public Stat GetStatByType(StatType statType)
+    {
+        switch (statType)
+        {
+            case StatType.Strength: 
+                return _majorStats.Strength;
+            case StatType.Agility: 
+                return _majorStats.Agility;
+            case StatType.Intelligence: 
+                return _majorStats.Intelligence;
+            case StatType.Vitality: 
+                return _majorStats.Vitality;
+            case StatType.Damage: 
+                return  _offensiveStats.Damage;
+             case StatType.CritChance: 
+                return  _offensiveStats.CritChance;
+            case StatType.CritPower: 
+                return  _offensiveStats.CritPower;
+            case StatType.ElementalDamage: 
+                return  _offensiveStats.lightDamage;
+            case StatType.AttackMultiplier:
+                return _offensiveStats.AttackMultiplier;
+            case StatType.HealthRegen:
+                return _defensiveStats.HealthRegen;
+            case StatType.Envasion:
+                return _defensiveStats.Envasion;
+            case StatType.Armor:
+                return _defensiveStats.Amor;
+        }
+        return null ;
+    }
 }

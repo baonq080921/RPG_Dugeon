@@ -1,10 +1,13 @@
 using Base;
+using UI;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {   
     public UISkillToolTip uISkillToolTip;
     public UISkillTree uISkillTree;
+    public UI_Inventory uIInventory;
+    public UICanvasChange uICanvasChange;
     
     private void Awake()
     {
@@ -14,7 +17,10 @@ public class UIManager : MonoBehaviour
             uISkillToolTip = GetComponentInChildren<UISkillToolTip>();
         if (uISkillTree == null)
             uISkillTree = GetComponentInChildren<UISkillTree>();
-
+        if(uIInventory == null)
+            uIInventory = GetComponentInChildren<UI_Inventory>();
         ServiceLocator.Register(this);
+        if(uICanvasChange == null)
+            uICanvasChange = GetComponentInChildren<UICanvasChange>();
     }
 }

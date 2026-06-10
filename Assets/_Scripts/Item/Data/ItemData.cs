@@ -1,0 +1,10 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "Item-", menuName = "RPG/ItemData")]
+public class ItemData : ScriptableObject 
+{
+    [field:SerializeField] public string ItemName {get; private set;}
+    [field:SerializeField] public ItemTypes ItemType{get; private set;}
+    [field:SerializeField] public Sprite Sprite {get; private set;}
+    
+}

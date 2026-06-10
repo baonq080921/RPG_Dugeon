@@ -60,9 +60,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: SyneMono-Regular SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 2070555908
   material: {fileID: 4710019573797909498}
-  materialHashCode: 0
+  materialHashCode: -1749178076
   m_Version: 1.1.0
   m_SourceFontFileGUID: 3bb04e3c974bad54da4940f33471915c
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 3bb04e3c974bad54da4940f33471915c, type: 3}
@@ -2717,7 +2717,7 @@ Material:
     - _ColorMask: 15
     - _CullMode: 0
     - _Diffuse: 0.5
-    - _FaceDilate: 0
+    - _FaceDilate: 0.37
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
     - _GlowInner: 0.05
@@ -2731,12 +2731,12 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.319
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.36875
+    - _ScaleRatioC: 0.36875
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

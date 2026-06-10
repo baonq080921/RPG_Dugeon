@@ -21,7 +21,8 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     {
         _entity = GetComponent<Entity>();
         _entityStat = GetComponent<EntityStat>();
-        _slider = GetComponentInChildren<Slider>();
+        if(_slider == null)
+            _slider = GetComponentInChildren<Slider>();
     }
     
     protected virtual void Start()
