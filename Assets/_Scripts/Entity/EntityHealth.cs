@@ -1,4 +1,5 @@
 
+using DG.Tweening;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +14,10 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     protected float MaxHealth => _entityStat.GetHealthValue();
 
     [SerializeField] private Slider _slider;
+    [SerializeField] private float _healthTweenDuration = 0.3f;
+    private Tween _healthTween;
 
-  
+
 
 
     protected virtual void Awake()
@@ -28,7 +31,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     protected virtual void Start()
     {
         CurrentHealth = _entityStat.GetHealthValue();
-        UpdateHealthBar();
+        SnapHealthBar();
     }
     
   
@@ -76,12 +79,22 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     /// <summary>Restores <paramref name="amount"/> HP, capped at max health.</summary>
     public void HealHP(float amount)
     {
+        Debug.Log("kadkadjkajdkajd");
         CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
-        UpdateHealthBar();
+        SnapHealthBar();
     }
 
     protected void UpdateHealthBar()
     {
+        _healthTween?.Kill();
+        float target = CurrentHealth / MaxHealth;
+        _healthTween = DOTween.To(() => _slider.value, x => _slider.value = x, target, _healthTweenDuration)
+            .SetEase(Ease.OutCubic);
+    }
+
+    private void SnapHealthBar()
+    {
+        _healthTween?.Kill();
         _slider.value = CurrentHealth / MaxHealth;
     }
 
@@ -102,7 +115,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     public void ResetHealth()
     {
         CurrentHealth = MaxHealth;
-        UpdateHealthBar();
+        SnapHealthBar();
     }
 
     /// <summary>Stops the health regeneration loop. Call this on death.</summary>

@@ -15,7 +15,7 @@ MonoBehaviour:
   <SkillType>k__BackingField: 1
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 8
-    <UpgradeCoolDown>k__BackingField: 20
+    <UpgradeCoolDown>k__BackingField: 1
     <UpgradeDuration>k__BackingField: 2
     <UpgradeDamage>k__BackingField: 0
     <UpgradeHealing>k__BackingField: 30

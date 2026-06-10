@@ -2080,11 +2080,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 432502616783356288, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 432502616783356288, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8975891193087548782, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_Name
@@ -2092,7 +2092,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8975891193087548782, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9114463176584513380, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22306,11 +22306,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 432502616783356288, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 432502616783356288, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7286080118433396499, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: _knockBackPowerHeavy.x
@@ -22326,7 +22326,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8975891193087548782, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8975891193087548782, guid: 2646b16465420ef46b08b24a40878324, type: 3}
       propertyPath: m_TagString
@@ -26923,6 +26923,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CurrentHealth>k__BackingField: 0
   _slider: {fileID: 623580692768049809}
+  _healthTweenDuration: 0.3
 --- !u!114 &3819073843043261780
 MonoBehaviour:
   m_ObjectHideFlags: 0

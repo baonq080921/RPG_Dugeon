@@ -7,7 +7,7 @@ namespace player
     public class PlayerHealth : EntityHealth
     {
         private Player _player;
-       private EventBinding<PlayerAddHealthAmount> _healBinding;
+        private EventBinding<PlayerAddHealthAmount> _healBinding;
 
         protected override void Awake()
         {
