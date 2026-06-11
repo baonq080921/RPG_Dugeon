@@ -3,7 +3,6 @@ using Base;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class UI_Inventory : MonoBehaviour
 {
@@ -56,6 +55,8 @@ public class UI_Inventory : MonoBehaviour
     void AlertNotificationUI(AlertNotiEvent alertNotiEvent)
     {
         _alertNotiTmp.text = alertNotiEvent.alertMessage;
+        Vector3 mousePos = Input.mousePosition;
+        _alertNotiTmp.rectTransform.position = mousePos;
         _alertNotiTmp.DOKill();
         _alertSequence?.Kill();
         _alertSequence = DOTween.Sequence();

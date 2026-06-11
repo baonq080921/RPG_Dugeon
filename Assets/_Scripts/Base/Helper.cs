@@ -9,10 +9,7 @@ namespace Base
         void Awake()
         {
             ServiceLocator.Register<Helper>(this);
-        }
-        void Start()
-        {
-                mainCam = FindObjectOfType<Camera>();
+            mainCam = FindObjectOfType<Camera>();
         }
     }
 }

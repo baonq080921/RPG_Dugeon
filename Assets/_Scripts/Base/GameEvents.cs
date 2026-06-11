@@ -8,6 +8,9 @@ namespace Base
     /// <summary>Raised when an enemy's health reaches zero.</summary>
     public struct EnemyDiedEvent : IEvent { }
     public struct ResetStats :IEvent {}
+
+    //Call to Open the store
+    public struct StoreCallEvent:IEvent{}
     /// <summary>
     /// Raised when we want to Alert some Message
     /// </summary> <summary>
@@ -40,6 +43,15 @@ namespace Base
         {
             this.target = target;
             this.isCrit = isCrit;
+        }
+    }
+
+    public struct CraftGetInfoEvent: IEvent
+    {
+        public ItemCraftData itemCraftData;
+        public CraftGetInfoEvent(ItemCraftData itemCraftData)
+        {
+            this.itemCraftData = itemCraftData;
         }
     }
 

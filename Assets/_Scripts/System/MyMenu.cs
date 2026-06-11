@@ -7,8 +7,9 @@ namespace System
     public static class MyMenu
     {
         [MenuItem("Tools/MyTools/Reset All Player Stats")]
-        private static void ResetStats()
+        public static void ResetStats()
         {
+            DebugCustom.Log("All Stats Restart to base Value");
             EventBus<ResetStats>.Raise(new ResetStats());
         }
     }
