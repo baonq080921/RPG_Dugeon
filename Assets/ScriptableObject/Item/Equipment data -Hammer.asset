@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ItemName>k__BackingField: Axe Hamer
   <ItemType>k__BackingField: 6
+  <EquipSlot>k__BackingField: 5
   <Sprite>k__BackingField: {fileID: -160538566, guid: ea579985398cb78419263c314ad25d62, type: 3}
   modifiers:
   - statType: 0

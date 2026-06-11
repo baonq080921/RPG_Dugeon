@@ -17,7 +17,6 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _itemStatsTmp;
         [SerializeField] private TextMeshProUGUI _itemRequiredTmp;
         [SerializeField] private PlayerInventory _playerInventory;
-
         void OnEnable()
         {
             _eventGetCraftInfoBinding = new EventBinding<CraftGetInfoEvent>(UpdateItemDetailsInfo);
@@ -35,7 +34,6 @@ namespace UI
         public void UpdateItemDetailsInfo(CraftGetInfoEvent craftGetInfoEvent)
         {
             ItemCraftData data = craftGetInfoEvent.itemCraftData;
-
             _itemImage.sprite = data.Sprite;
             _itemNameTmp.text = data.ItemName;
 

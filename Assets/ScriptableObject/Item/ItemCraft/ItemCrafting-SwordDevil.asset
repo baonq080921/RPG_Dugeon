@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: ItemCrafting-SwordDevil
   m_EditorClassIdentifier: 
   <ItemName>k__BackingField: Sword Devil
-  <ItemType>k__BackingField: 3
-  <Sprite>k__BackingField: {fileID: -995090135, guid: 2a3e56d39bcd14e4fbf0e0559638a784, type: 3}
+  <ItemType>k__BackingField: 9
+  <EquipSlot>k__BackingField: 1
+  <Sprite>k__BackingField: {fileID: -1905116383, guid: ea579985398cb78419263c314ad25d62, type: 3}
   modifiers:
   - statType: 0
     value: 5

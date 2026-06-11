@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: ItemCrafting-Generic Demon Axe
   m_EditorClassIdentifier: 
   <ItemName>k__BackingField: Generic Demon Axe
-  <ItemType>k__BackingField: 6
+  <ItemType>k__BackingField: 10
+  <EquipSlot>k__BackingField: 5
   <Sprite>k__BackingField: {fileID: 21300000, guid: e5e85c7e9da5b7e4491200e925001011, type: 3}
   modifiers:
   - statType: 0

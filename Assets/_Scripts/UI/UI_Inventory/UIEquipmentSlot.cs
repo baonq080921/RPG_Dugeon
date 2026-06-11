@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UIEquipmentSlot : UiItemSlotBase
 {
-    [field: SerializeField] public ItemTypes SlotType { get; private set; }
+    [field: SerializeField] public EquipSlotType SlotType { get; private set; }
     public ItemInventoryEquipment ItemEquip { get; private set; }
     private UIEquipmentActionPanel _actionPanel;
     protected override void Awake()

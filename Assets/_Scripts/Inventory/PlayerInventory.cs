@@ -36,13 +36,20 @@ public class PlayerInventory : InventoryBase {
     {
         if (item == null || item.itemData == null) return;
 
+        if (item.itemData.EquipSlot == EquipSlotType.None)
+        {
+            EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Item Cannot Be Equipped")));
+            return;
+        }
+
         ItemInventory itemInventory = FindItem(item);
         if (itemInventory == null) return;
 
-        ItemInventoryEquipment targetSlot = equipList.Find(slot => slot.slotType == item.itemData.ItemType);
+        ItemInventoryEquipment targetSlot = equipList.Find(slot => slot.slotType == item.itemData.EquipSlot);
+        Debug.Log(targetSlot);
         if (targetSlot == null || targetSlot.HasItem())
         {
-           EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot")));
+            EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot")));
             return;
         }
 

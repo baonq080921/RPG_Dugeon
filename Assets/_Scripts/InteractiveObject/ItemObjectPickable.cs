@@ -15,6 +15,17 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
     {
         _itemInventory = new ItemInventory(itemData);
     }
+    /// <summary>
+    /// Sets item data at runtime for dynamically spawned pickables (e.g. crafted items).
+    /// </summary>
+    public void Initialize(ItemData data)
+    {
+        itemData = data;
+        _sr.sprite = data.Sprite;
+        gameObject.name = $"Item -{data.ItemName}";
+        _itemInventory = new ItemInventory(data);
+    }
+
     protected virtual void OnValidate()
     {
         if(itemData == null) return;

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ItemName>k__BackingField: Sword
   <ItemType>k__BackingField: 3
+  <EquipSlot>k__BackingField: 1
   <Sprite>k__BackingField: {fileID: 1620092268, guid: ea579985398cb78419263c314ad25d62, type: 3}
   modifiers:
   - statType: 0
