@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f7e0bf4bb391024194229c504877fde, type: 3}
-  m_Name: ItemCrafting-SwordDevil
+  m_Name: ItemCrafting-LightHelmet
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: Sword Devil
-  <ItemType>k__BackingField: 13
-  <EquipSlot>k__BackingField: 1
-  <Sprite>k__BackingField: {fileID: -1905116383, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  <ItemName>k__BackingField: Light Helmet
+  <ItemType>k__BackingField: 16
+  <EquipSlot>k__BackingField: 2
+  <Sprite>k__BackingField: {fileID: 1598107082, guid: ea579985398cb78419263c314ad25d62, type: 3}
   modifiers:
-  - statType: 0
-    value: 8
-  - statType: 1
-    value: 10
   - statType: 6
     value: 1
+  - statType: 7
+    value: 1
   requirementItems:
-  - itemTypes: 4
-    amount: 2
-  - itemTypes: 5
+  - itemTypes: 0
+    amount: 1
+  - itemTypes: 2
+    amount: 1
+  - itemTypes: 1
     amount: 1

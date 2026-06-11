@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 364737a662f1c3946bb281cba4611fe3, type: 3}
-  m_Name: Item-Glove
+  m_Name: Item-Leather
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: Glove
-  <ItemType>k__BackingField: 4
-  <EquipSlot>k__BackingField: 4
-  <Sprite>k__BackingField: {fileID: 1200382949, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  <ItemName>k__BackingField: Bear Leather
+  <ItemType>k__BackingField: 2
+  <EquipSlot>k__BackingField: 0
+  <Sprite>k__BackingField: {fileID: 1309138316, guid: ea579985398cb78419263c314ad25d62, type: 3}

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Item-Rope
   m_EditorClassIdentifier: 
   <ItemName>k__BackingField: Rope
-  <ItemType>k__BackingField: 1
+  <ItemType>k__BackingField: 10
+  <EquipSlot>k__BackingField: 0
   <Sprite>k__BackingField: {fileID: -1169576556, guid: ea579985398cb78419263c314ad25d62, type: 3}

@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7da20e0844687df4ea6c8fec54c6c939, type: 3}
-  m_Name: Equipment data -Hammer
+  m_Name: Equipment data -Glove
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: Axe Hamer
-  <ItemType>k__BackingField: 6
-  <EquipSlot>k__BackingField: 5
-  <Sprite>k__BackingField: {fileID: -160538566, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  <ItemName>k__BackingField: Glove
+  <ItemType>k__BackingField: 5
+  <EquipSlot>k__BackingField: 4
+  <Sprite>k__BackingField: {fileID: 1200382949, guid: ea579985398cb78419263c314ad25d62, type: 3}
   modifiers:
-  - statType: 0
-    value: 30
-  - statType: 5
-    value: 1
-  - statType: 14
-    value: 20
+  - statType: 13
+    value: 0.01
+  - statType: 11
+    value: 5

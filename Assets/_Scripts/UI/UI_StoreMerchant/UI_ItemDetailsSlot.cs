@@ -12,20 +12,28 @@ namespace UI
     public class UI_ItemDetailsSlot : MonoBehaviour
     {
         private EventBinding<CraftGetInfoEvent> _eventGetCraftInfoBinding;
+        private EventBinding<OnInventoryChangedEvent> _inventoryChangedBinding;
         [SerializeField] private Image _itemImage;
         [SerializeField] private TextMeshProUGUI _itemNameTmp;
         [SerializeField] private TextMeshProUGUI _itemStatsTmp;
         [SerializeField] private TextMeshProUGUI _itemRequiredTmp;
         [SerializeField] private PlayerInventory _playerInventory;
+
+        private ItemCraftData _currentData;
+
         void OnEnable()
         {
             _eventGetCraftInfoBinding = new EventBinding<CraftGetInfoEvent>(UpdateItemDetailsInfo);
             EventBus<CraftGetInfoEvent>.Register(_eventGetCraftInfoBinding);
+
+            _inventoryChangedBinding = new EventBinding<OnInventoryChangedEvent>(RefreshRequirements);
+            EventBus<OnInventoryChangedEvent>.Register(_inventoryChangedBinding);
         }
 
         void OnDisable()
         {
             EventBus<CraftGetInfoEvent>.Deregister(_eventGetCraftInfoBinding);
+            EventBus<OnInventoryChangedEvent>.Deregister(_inventoryChangedBinding);
         }
 
         /// <summary>
@@ -33,12 +41,17 @@ namespace UI
         /// </summary>
         public void UpdateItemDetailsInfo(CraftGetInfoEvent craftGetInfoEvent)
         {
-            ItemCraftData data = craftGetInfoEvent.itemCraftData;
-            _itemImage.sprite = data.Sprite;
-            _itemNameTmp.text = data.ItemName;
+            _currentData = craftGetInfoEvent.itemCraftData;
+            _itemImage.sprite = _currentData.Sprite;
+            _itemNameTmp.text = _currentData.ItemName;
+            _itemStatsTmp.text = BuildStatsText(_currentData.modifiers);
+            _itemRequiredTmp.text = BuildRequirementsText(_currentData.requirementItems);
+        }
 
-            _itemStatsTmp.text = BuildStatsText(data.modifiers);
-            _itemRequiredTmp.text = BuildRequirementsText(data.requirementItems);
+        private void RefreshRequirements()
+        {
+            if (_currentData == null) return;
+            _itemRequiredTmp.text = BuildRequirementsText(_currentData.requirementItems);
         }
 
         private string BuildStatsText(ItemModifier[] modifiers)

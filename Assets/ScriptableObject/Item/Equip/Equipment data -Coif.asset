@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7da20e0844687df4ea6c8fec54c6c939, type: 3}
-  m_Name: Equipment data -Sword
+  m_Name: Equipment data -Coif
   m_EditorClassIdentifier: 
-  <ItemName>k__BackingField: Sword
-  <ItemType>k__BackingField: 3
-  <EquipSlot>k__BackingField: 1
-  <Sprite>k__BackingField: {fileID: 1620092268, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  <ItemName>k__BackingField: Coif
+  <ItemType>k__BackingField: 0
+  <EquipSlot>k__BackingField: 2
+  <Sprite>k__BackingField: {fileID: 1983879511, guid: ea579985398cb78419263c314ad25d62, type: 3}
   modifiers:
-  - statType: 0
-    value: 20
-  - statType: 1
-    value: 100
+  - statType: 6
+    value: 0.5

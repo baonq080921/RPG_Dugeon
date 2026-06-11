@@ -93,6 +93,7 @@ namespace UI
             ItemObjectPickable spawned = Instantiate(_itemPickablePrefab, spawnPos, Quaternion.identity);
             spawned.Initialize(_currentCraftData);
             EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
+
         }
 
         private void UpdateInventoryDisplay()
