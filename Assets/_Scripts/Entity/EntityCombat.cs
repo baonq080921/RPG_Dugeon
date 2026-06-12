@@ -43,13 +43,10 @@ public class EntityCombat : MonoBehaviour
         foreach (var target in targetColliders)
         {
             IHit hit = target.GetComponent<IHit>();
-            EntityStat targetStat = target.GetComponent<EntityStat>();
             if(hit == null) continue;
-            if(targetStat == null) continue;
             Transform damageDealer = target.GetComponent<Transform>();
             float physicalDamage = entityStat.GetPhysicalDamageValue(out bool isCrit);
             float elementalDamage = entityStat.GetElementalDamageValue(out ElementType elementType);
-           
             bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, damageDealer);
             if(elementType != ElementType.None)
                 ApplyStatusEffect(elementType, damageDealer,_scaleElementalFactor);
@@ -64,7 +61,7 @@ public class EntityCombat : MonoBehaviour
     }
     
 
-    public void ApplyStatusEffect(ElementType elementType, Transform target, float scaleFactor = 1f)
+    public virtual void ApplyStatusEffect(ElementType elementType, Transform target, float scaleFactor = 1f)
     {
         EntityStatusHandler statusHandler = target.GetComponent<EntityStatusHandler>();
         if (statusHandler == null) return;
@@ -75,7 +72,11 @@ public class EntityCombat : MonoBehaviour
             statusHandler.ApplyElectricEffect(_electricStatusDuration,electricDamage,_electricBuildUpCharge); // Example duration
         } 
 
-       
+        if(elementType == ElementType.Ice && statusHandler.CanElementalStatusApply(elementType))
+        {
+            statusHandler.ApplyIceEffect(elementType,scaleFactor);
+        } 
+        
     }
 
 

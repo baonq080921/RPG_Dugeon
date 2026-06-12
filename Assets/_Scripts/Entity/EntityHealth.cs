@@ -1,5 +1,4 @@
 
-using DG.Tweening;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,15 +10,9 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     private Entity _entity;
     private EntityStat _entityStat;
     /// <summary>Maximum health sourced from the entity's ScriptableObject data.</summary>
-    protected float MaxHealth => _entityStat.GetHealthValue();
+    public float MaxHealth => _entityStat.GetHealthValue();
 
     [SerializeField] private Slider _slider;
-    [SerializeField] private float _healthTweenDuration = 0.3f;
-    private Tween _healthTween;
-
-
-
-
     protected virtual void Awake()
     {
         _entity = GetComponent<Entity>();
@@ -31,7 +24,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     protected virtual void Start()
     {
         CurrentHealth = _entityStat.GetHealthValue();
-        SnapHealthBar();
+        UpdateHealthBar();
     }
     
   
@@ -60,41 +53,31 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         }
         ReduceHP(finalDamge + finalElementalDamage);
 
-        if (CurrentHealth <= 0)
-            _entity.Die();
-
         return true;
     }
 
 
     private bool AttackEnvaded() => Random.Range(0f, 100f) < _entityStat.GetEnvasionValue();
 
-    public void ReduceHP(float damage)
+    public virtual void ReduceHP(float damage)
     {
+        if (CurrentHealth <= 0)
+            _entity.Die();
         CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
         GetComponent<IHitVFX>()?.PlayHitVFX();
         UpdateHealthBar();
+        
     }
 
     /// <summary>Restores <paramref name="amount"/> HP, capped at max health.</summary>
     public void HealHP(float amount)
     {
-        Debug.Log("kadkadjkajdkajd");
         CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
-        SnapHealthBar();
+        UpdateHealthBar();
     }
 
     protected void UpdateHealthBar()
     {
-        _healthTween?.Kill();
-        float target = CurrentHealth / MaxHealth;
-        _healthTween = DOTween.To(() => _slider.value, x => _slider.value = x, target, _healthTweenDuration)
-            .SetEase(Ease.OutCubic);
-    }
-
-    private void SnapHealthBar()
-    {
-        _healthTween?.Kill();
         _slider.value = CurrentHealth / MaxHealth;
     }
 
@@ -115,7 +98,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     public void ResetHealth()
     {
         CurrentHealth = MaxHealth;
-        SnapHealthBar();
+        UpdateHealthBar();
     }
 
     /// <summary>Stops the health regeneration loop. Call this on death.</summary>

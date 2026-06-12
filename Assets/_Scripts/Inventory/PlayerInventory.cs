@@ -2,30 +2,38 @@ using System;
 using System.Collections.Generic;
 using Base;
 using DG.Tweening;
+using player;
 using TMPro;
 using UnityEngine;
 
 public class PlayerInventory : InventoryBase {
-    
+
     private EntityStat _playerStats;
+    private Player _player;
     [field:SerializeField] public List<ItemInventoryEquipment> equipList {get; private set;}
-    private EventBinding<EquipEvent> eventEquipBinding;
+    private EventBinding<EquipEvent> _eventEquipBinding;
+    private EventBinding<PlayerDiedEvent> _eventDiedBinding;
 
     protected override void Awake()
     {
         base.Awake();
         _playerStats = GetComponent<EntityStat>();
+        _player = GetComponent<Player>();
     }
 
     void OnEnable()
     {
-        eventEquipBinding = new EventBinding<EquipEvent>(TryToEquipEvent);
-        EventBus<EquipEvent>.Register(eventEquipBinding);
+        _eventEquipBinding = new EventBinding<EquipEvent>(TryToEquipEvent);
+        EventBus<EquipEvent>.Register(_eventEquipBinding);
+        _eventDiedBinding = new EventBinding<PlayerDiedEvent>(DropAllItem);
+        EventBus<PlayerDiedEvent>.Register(_eventDiedBinding);
+
     }
 
     void OnDisable()
     {
-        EventBus<EquipEvent>.Deregister(eventEquipBinding);
+        EventBus<EquipEvent>.Deregister(_eventEquipBinding);
+        EventBus<PlayerDiedEvent>.Deregister(_eventDiedBinding);
     }
 
 
@@ -46,13 +54,11 @@ public class PlayerInventory : InventoryBase {
         if (itemInventory == null) return;
 
         ItemInventoryEquipment targetSlot = equipList.Find(slot => slot.slotType == item.itemData.EquipSlot);
-        Debug.Log(targetSlot);
         if (targetSlot == null || targetSlot.HasItem())
         {
             EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot")));
             return;
         }
-
         EquipItem(itemInventory, targetSlot);
     }
 
@@ -70,6 +76,7 @@ public class PlayerInventory : InventoryBase {
             ClearFromInventory(item);
         }
         slot.equipItem.AddModifiers(_playerStats);
+        slot.equipItem.AddItemEffect(_player);
         EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
     }
 
@@ -83,7 +90,8 @@ public class PlayerInventory : InventoryBase {
         if (!slot.HasItem()) return;
 
         ItemInventory item = slot.equipItem;
-        item.RemoveModifiers(_playerStats);
+        slot.equipItem.RemoveModifiers(_playerStats);
+        item.RemoveItemEffect(_player);
         slot.equipItem = null;
         ItemInventory stackable = FindItem(item);
         bool canStack = stackable != null && stackable.CanAddToStack();
@@ -100,9 +108,31 @@ public class PlayerInventory : InventoryBase {
     public void DropEquippedItem(ItemInventoryEquipment slot)
     {
         if (!slot.HasItem()) return;
-
         slot.equipItem.RemoveModifiers(_playerStats);
+        slot.equipItem.RemoveItemEffect(_player);
         slot.equipItem = null;
         EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
     }
+
+    public void DropAllItem()
+    {
+        foreach (var item in itemInventoriesList)
+            for (int i = 0; i < item.stackSize; i++)
+                SpawnDroppedItem(item.itemData);
+        itemInventoriesList.Clear();
+
+        foreach (var slot in equipList)
+        {
+            if (!slot.HasItem()) continue;
+            SpawnDroppedItem(slot.equipItem.itemData);
+            slot.equipItem.RemoveModifiers(_playerStats);
+            slot.equipItem.RemoveItemEffect(_player);
+            slot.equipItem = null;
+        }
+
+        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
+    }
+
+    private void SpawnDroppedItem(ItemData itemData) =>
+        ServiceLocator.Get<ItemPickablePool>()?.Spawn(itemData, transform.position);
 }

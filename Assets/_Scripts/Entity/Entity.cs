@@ -53,7 +53,10 @@ public abstract class Entity : MonoBehaviour
 
 
     public EntityStat entityStat { get; private set; }
-    private EntityHealth _entityHealth;
+    public EntityHealth entityHealth{get; private set;}
+    public EntityVfx entityVfx{get; private set;}
+    public EntityCombat entityCombat {get; private set;}
+    
 
     protected virtual void Awake()
     {
@@ -63,7 +66,9 @@ public abstract class Entity : MonoBehaviour
         _originalScale = transform.localScale;
         col = GetComponent<Collider2D>();
         entityStat = GetComponent<EntityStat>();
-        _entityHealth = GetComponent<EntityHealth>();
+        entityHealth = GetComponent<EntityHealth>();
+        entityVfx = GetComponent<EntityVfx>();
+        entityCombat = GetComponent<EntityCombat>();
     }
 
     protected virtual void Start()
@@ -128,11 +133,16 @@ public abstract class Entity : MonoBehaviour
         isDead = true;
     }
 
+    public virtual void ApplyEffect(float scaleFactor, ElementType elementType)
+    {
+    }
+    public virtual void ResetEffect(){}
+
 
 
     public virtual void ApplyKnockBack(float damage)
         {
-            float ratio = damage / _entityHealth.CurrentHealth;
+            float ratio = damage / entityHealth.CurrentHealth;
             // Heavy when hit is a  bigger fraction of max health, light otherwise
             Vector2 power = ratio < entityStat.GetKnockBackThreshHold()
                 ?  _knockBackPowerLight

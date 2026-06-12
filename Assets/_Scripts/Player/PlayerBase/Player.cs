@@ -74,11 +74,21 @@ namespace player
 
         [field:SerializeField]public float attackElapsedTime { get; set; }
 
+        //PLayer References
+        public PlayerHealth playerHealth {get; private set;}
+        public PlayerCombat playerCombat {get; private set;}
+        public PlayerVfx playerVfx {get; private set;}
+
         protected override void Awake()
         {
             base.Awake();
             AfterImageEffect = GetComponent<AfterImageEffect>();
             SkillButtonHandler = GetComponent<SkillButtonHandler>();
+            playerHealth = GetComponent<PlayerHealth>();
+            playerCombat = GetComponent<PlayerCombat>();
+            playerVfx = GetComponent<PlayerVfx>();
+
+
             input = new PlayerInputSet();
             CreateStates();
         }

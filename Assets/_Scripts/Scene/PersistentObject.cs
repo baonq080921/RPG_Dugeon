@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace scene
@@ -10,24 +9,14 @@ namespace scene
     /// </summary>
     public class PersistentObject : MonoBehaviour
     {
-        private static readonly Dictionary<string, GameObject> s_persistedObjects = new();
+        public static PersistentObject instance;
 
         private void Awake()
         {
-            string key = gameObject.name;
-            if (s_persistedObjects.TryGetValue(key, out var existing) && existing != null)
-            {
-                // Disable all behaviours before OnEnable fires so components like
-                // EventSystem don't log warnings during the one frame before Destroy takes effect.
-                foreach (var behaviour in GetComponents<Behaviour>())
-                {
-                    if (behaviour != this) behaviour.enabled = false;
-                }
-                Destroy(gameObject);
-                return;
-            }
-            s_persistedObjects[key] = gameObject;
-            DontDestroyOnLoad(gameObject);
+            if(instance == null)
+                instance = this;
+            else
+                DontDestroyOnLoad(gameObject);
         }
     }
 }

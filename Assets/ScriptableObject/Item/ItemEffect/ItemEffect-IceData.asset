@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f9f05391d882ec4a97ee06d4b4cc6e1, type: 3}
+  m_Name: ItemEffect-IceData
+  m_EditorClassIdentifier: 
+  <effectInfo>k__BackingField: Slow down enemy to 40% and create an explosive damage
+    any enemy near by.
+  <effectCoolDown>k__BackingField: 6
+  _iceEffectPrefab: {fileID: 6014221418798435439, guid: 8663d00b5560ed545aa53c185e6734ae, type: 3}
+  <hitLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+  <iceElementalDamage>k__BackingField: 10
+  <damageRadius>k__BackingField: 4

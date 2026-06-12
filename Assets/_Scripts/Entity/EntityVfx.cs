@@ -21,11 +21,14 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     [Header("Elemental Hit VFX")]
     [SerializeField] private Color _electricHitColor;
-    [SerializeField] private float _electricBlinkInterval = 0.15f;
+    [SerializeField]private Color _iceHitColor;
+    [SerializeField] private float _statusBlinkInterval = 0.15f;
     private Color defaultHitColor;
     private EntityCombat _entityCombat;
-    private Coroutine _electricStatusEffectCoroutine;
+    private Entity _entity;
+    private Coroutine _statusEffectCoroutine;
     private EventBinding<TargetGotHitEvent> _hitEventBinding;
+    public bool isEffectDone {get; private set;}
 
 
     protected virtual void Awake()
@@ -34,6 +37,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         OriginalMaterial = SpriteRenderer.material;
         defaultHitColor = _hitColor;
         _entityCombat = GetComponent<EntityCombat>();
+        _entity = GetComponent<Entity>();
     }
 
     protected virtual void OnEnable()
@@ -48,6 +52,13 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
     {
         EventBus<TargetGotHitEvent>.Deregister(_hitEventBinding);
         // _entityCombat.OnTargetHit -= CreateHitEffect;
+    }
+
+    public void CreateEffectVFX(GameObject effect, Transform target)
+    {
+        Instantiate(effect,target.position,Quaternion.identity);
+
+        Destroy(effect,2f);
     }
 
     public void UpdateHitColor(ElementType elementType)
@@ -66,35 +77,42 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
     //Status effect vfx can be implemented here as well, for example we can change the color of the entity when it is under electric status effect, and change it back when the status effect ends. We can also spawn some particle effects to indicate the status effect.
     public void UpdateStatusEffectVFX(ElementType elementType,float duration)
     {
+        Color statusColor;
         if(elementType == ElementType.Electric)
         {
-            PlayElectricCoroutine(duration);
+            statusColor = _electricHitColor;
+            PlayEffectStatusCoroutine(duration,statusColor);
+        }
+        if(elementType == ElementType.Ice)
+        {
+            statusColor =_iceHitColor;
+            PlayEffectStatusCoroutine(duration,statusColor);
         }
     }
 
-    private void PlayElectricCoroutine(float duration)
+    private void PlayEffectStatusCoroutine(float duration, Color statusColor)
     {
-        if (_electricStatusEffectCoroutine != null)
-            StopCoroutine(_electricStatusEffectCoroutine);
-        _electricStatusEffectCoroutine = StartCoroutine(ElectricStatusEffectVFX(duration));
+        if (_statusEffectCoroutine != null)
+            StopCoroutine(_statusEffectCoroutine);
+        _statusEffectCoroutine = StartCoroutine(StatusEffectVFX(duration,statusColor));
     }
 
-    private IEnumerator ElectricStatusEffectVFX(float duration)
+    private IEnumerator StatusEffectVFX(float duration,Color statusColor)
     {
         float elapsed = 0f;
         bool useBright = true;
-        Color darkColor = new Color(_electricHitColor.r * 0.5f, _electricHitColor.g * 0.5f, _electricHitColor.b * 0.5f, _electricHitColor.a);
-
+        Color darkColor = new Color(statusColor.r * 0.5f, _electricHitColor.g * 0.5f, _electricHitColor.b * 0.5f, _electricHitColor.a);
+        isEffectDone = false;
         while (elapsed < duration)
         {
-            SpriteRenderer.color = useBright ? _electricHitColor : darkColor;
+            SpriteRenderer.color = useBright ? statusColor : darkColor;
             useBright = !useBright;
-            yield return new WaitForSeconds(_electricBlinkInterval);
-            elapsed += _electricBlinkInterval;
+            yield return new WaitForSeconds(_statusBlinkInterval);
+            elapsed += _statusBlinkInterval;
         }
-
         SpriteRenderer.color = Color.white;
-        _electricStatusEffectCoroutine = null;
+        isEffectDone = true;
+        _statusEffectCoroutine = null;
     }
 
 

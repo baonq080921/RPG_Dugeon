@@ -34,5 +34,5 @@ MonoBehaviour:
   <AirAttackCooldown>k__BackingField: 0.25
   WhatisTarget:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 2112
   <Material>k__BackingField: {fileID: 2100000, guid: b3f1139abae8ade42a6b46a18dddf8f5, type: 2}

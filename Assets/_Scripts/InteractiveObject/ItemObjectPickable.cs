@@ -1,4 +1,5 @@
 
+using Base;
 using Interfaces;
 using UnityEngine;
 
@@ -9,6 +10,10 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
     [SerializeField] private SpriteRenderer _sr;
     private InventoryBase _playerInventory;
     private ItemInventory _itemInventory;
+    [SerializeField] private Collider2D _collider2D;
+    [SerializeField] private Rigidbody2D _rigidbody2D;
+    [SerializeField] private float _shootPower = 1.5f;
+    [SerializeField] private LayerMask _groundLayer;
 
 
     void Awake()
@@ -33,6 +38,31 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
         gameObject.name = $"Item -{itemData.ItemName}";
     }
 
+    public void ShootItem()
+    {
+        _collider2D.isTrigger = false;
+        _collider2D.excludeLayers = _hitLayer; // ignore player while airborne
+        float randomX = Random.Range(-_shootPower, _shootPower);
+        _rigidbody2D.velocity = new Vector2(randomX, _shootPower);
+    }
+
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & _groundLayer) != 0)
+        {
+            _collider2D.excludeLayers = 0;
+            _collider2D.isTrigger = true;
+            _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+    }
+
+
+
+
+
+
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -44,8 +74,16 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
     public void CollectableObject()
     {
         if(!_playerInventory.CanAddToIventory()) return;
-        Debug.Log("Collect this item");
         _playerInventory.AddToInventory(_itemInventory);
-        gameObject.SetActive(false);
+        ServiceLocator.Get<ItemPickablePool>()?.Return(this);
+    }
+
+    public void ResetState()
+    {
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.constraints = RigidbodyConstraints2D.None;
+        _collider2D.isTrigger = false;
+        _collider2D.excludeLayers = 0;
+        _playerInventory = null;
     }
 }

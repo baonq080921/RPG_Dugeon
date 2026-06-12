@@ -16,7 +16,7 @@ public class EntityStatusHandler : MonoBehaviour
 
 
     [Header("Electric Strike")]
-    [SerializeField] private float _shockDuration = 0.5f;
+    [SerializeField] private float _shockDuration = 2f;
 
     [Header("Coroutine")]
     private Coroutine _electricEffectCoroutine;
@@ -28,7 +28,7 @@ public class EntityStatusHandler : MonoBehaviour
         _entity = GetComponent<Entity>();
     }
 
-
+    #region  Electric Effect
     public void ApplyElectricEffect(float duration,float damage, float charge)
     {
         _currentCharge =_currentCharge + charge;
@@ -71,6 +71,17 @@ public class EntityStatusHandler : MonoBehaviour
         _entityHealth.ReduceHP(damage);
         _entity.Shock(_shockDuration);
         _entityVfx.UpdateStatusEffectVFX(ElementType.Electric, _shockDuration);
+    }
+    #endregion
+
+
+    public void ApplyIceEffect(ElementType elementType,float _slowPercent)
+    {
+        _entityVfx.UpdateStatusEffectVFX(elementType,_shockDuration);
+        if(_entityVfx.isEffectDone)
+            _entity.ResetEffect();
+
+        _entity.ApplyEffect(_slowPercent,elementType);
     }
 
     public bool CanElementalStatusApply(ElementType newStatus)

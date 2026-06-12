@@ -1,3 +1,4 @@
+using player;
 using Stats;
 using UnityEngine;
 [System.Serializable]
@@ -6,16 +7,19 @@ public class ItemInventory
     [field:SerializeField]public ItemData itemData {get; private set;}
     [field:SerializeField] public int stackSize{get;private set;} = 1 ;
     public ItemModifier[] modifiers {get;private set;}
+    private ItemEffectData itemEffect;
     private int MaxStackize = 99;
 
     public ItemInventory(ItemData itemData)
     {
         this.itemData = itemData;
         modifiers = EquipmentData()?.modifiers;
+        itemEffect = itemData?.itemEffectData;
     }
 
     public void AddModifiers(EntityStat playerStats)
     {
+        if (modifiers == null) return;
         foreach(var mod in modifiers)
         {
             Stat statModifier = playerStats.GetStatByType(mod.statType);
@@ -25,12 +29,16 @@ public class ItemInventory
 
     public void RemoveModifiers(EntityStat playerStats)
     {
-         foreach(var mod in modifiers)
+        if (modifiers == null) return;
+        foreach(var mod in modifiers)
         {
             Stat statModifier = playerStats.GetStatByType(mod.statType);
             statModifier.RemoveModifier(mod.value,itemData.name);
         }
     }
+
+    public void AddItemEffect(Player player) => itemEffect?.Subscribe(player);
+    public void RemoveItemEffect(Player player) => itemEffect?.Unsubscribe(player);
 
     private EquipmentData EquipmentData()
     {

@@ -20,5 +20,6 @@ namespace enemy
         {
             base.Update();
         }
+
     }
 }

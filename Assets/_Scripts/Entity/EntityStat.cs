@@ -212,7 +212,13 @@ public class EntityStat : MonoBehaviour
                 return _defensiveStats.Envasion;
             case StatType.Armor:
                 return _defensiveStats.Amor;
+            case StatType.MaxHealth:
+                return _defensiveStats.MaxHealth;
+            case StatType.ElementalResitance:
+                return _defensiveStats.ElementalResitance;
+            case StatType.KnockBackThreshHold:
+                return _defensiveStats.KnockBackThreshHold;
         }
-        return null ;
+        return null;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Base;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace player
     /// <inheritdoc/>
     public class PlayerHealth : EntityHealth
     {
+        public event Action OnPlayerTalkingDamage;
         private Player _player;
         private EventBinding<PlayerAddHealthAmount> _healBinding;
 
@@ -37,8 +39,8 @@ namespace player
             bool canDamage = base.TakeDamage(damage,elementalDamage,elementType,target);
             if (!canDamage) return false;   
             if(_player.isDead) return false;
-
             _player.ApplyKnockBack(damage);
+            OnPlayerTalkingDamage?.Invoke();
             _player.stateMachine.ChangeState(_player.playerKnockBackState);
             return true;
         }

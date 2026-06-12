@@ -22,7 +22,13 @@ public enum ItemTypes:byte
     SwordDevil,
     DemonAxe,
     HeavyAmor,
-    LightHelmet
+    LightHelmet,
+    IceAmor,
+    BlueJade,
+    RedJade,
+    BrownJade,
+    Diamond,
+    GreenScepter
 
 }
     

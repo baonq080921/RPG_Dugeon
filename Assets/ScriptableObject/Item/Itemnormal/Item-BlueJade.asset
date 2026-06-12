@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 364737a662f1c3946bb281cba4611fe3, type: 3}
+  m_Name: Item-BlueJade
+  m_EditorClassIdentifier: 
+  <ItemName>k__BackingField: Blue Jade
+  <ItemType>k__BackingField: 18
+  <EquipSlot>k__BackingField: 0
+  <Sprite>k__BackingField: {fileID: -622386729, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  <itemEffectData>k__BackingField: {fileID: 0}
+  <itemRare>k__BackingField: 366
+  <rareCap>k__BackingField: 65
+  <dropChance>k__BackingField: 63.5

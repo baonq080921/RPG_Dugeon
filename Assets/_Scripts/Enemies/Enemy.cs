@@ -26,6 +26,11 @@ namespace enemy
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
         public bool CanCounter { get ; set ; }
+
+        public float moveSpeed{get; private set;}      
+        public float attackSpeed {get; private set;}  
+
+        private EntityDrop _entityDrop;
         protected override void Awake()
         {
             base.Awake();
@@ -35,12 +40,15 @@ namespace enemy
             enemyAttackState = new EnemyAttackState(this, stateMachine, "Attack");
             enemyStunState = new EnemyStunState(this, stateMachine, "Hit");
             enemyDeathState = new EnemyDeathState(this, stateMachine,"Died");
+            _entityDrop = GetComponent<EntityDrop>();
         }
 
         protected override void Start()
         {
             base.Start();
             stateMachine.Initialize(enemyIdleState);
+            moveSpeed = enemyData.MoveSpeed;
+            attackSpeed = entityStat.GetAttackMultiplier();
         }
 
         protected override void Update()
@@ -116,7 +124,27 @@ namespace enemy
         public override void Die()
         {
             isDead = true;
+            _entityDrop.DropItems();
             EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent());
+        }
+
+
+        public override void ApplyEffect(float scaleFactor, ElementType elementType)
+        {
+            if(elementType == ElementType.Electric)
+            {
+                
+            }
+            if(elementType == ElementType.Ice)
+            {
+                moveSpeed = moveSpeed - moveSpeed*scaleFactor;
+            }
+        }
+
+        public override void ResetEffect()
+        {
+            base.ResetEffect();
+            moveSpeed = enemyData.MoveSpeed;
         }
 
 

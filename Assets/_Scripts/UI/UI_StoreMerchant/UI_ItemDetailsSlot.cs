@@ -16,6 +16,7 @@ namespace UI
         [SerializeField] private Image _itemImage;
         [SerializeField] private TextMeshProUGUI _itemNameTmp;
         [SerializeField] private TextMeshProUGUI _itemStatsTmp;
+        [SerializeField] private TextMeshProUGUI _itemSpecialTmp;
         [SerializeField] private TextMeshProUGUI _itemRequiredTmp;
         [SerializeField] private PlayerInventory _playerInventory;
 
@@ -46,6 +47,7 @@ namespace UI
             _itemNameTmp.text = _currentData.ItemName;
             _itemStatsTmp.text = BuildStatsText(_currentData.modifiers);
             _itemRequiredTmp.text = BuildRequirementsText(_currentData.requirementItems);
+            _itemSpecialTmp.text = craftGetInfoEvent.itemCraftData.itemEffectData?.effectInfo ?? string.Empty;
         }
 
         private void RefreshRequirements()

@@ -34,7 +34,7 @@ namespace enemy
                 return;
             }
 
-            enemy.SetVelocity(new Vector2(enemy.direction * enemy.enemyData.MoveSpeed, rb.velocity.y));
+            enemy.SetVelocity(new Vector2(enemy.direction * enemy.moveSpeed, rb.velocity.y));
         }
 
 

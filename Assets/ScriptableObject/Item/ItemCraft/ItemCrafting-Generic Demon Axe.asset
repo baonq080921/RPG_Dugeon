@@ -16,6 +16,10 @@ MonoBehaviour:
   <ItemType>k__BackingField: 14
   <EquipSlot>k__BackingField: 5
   <Sprite>k__BackingField: {fileID: 21300000, guid: e5e85c7e9da5b7e4491200e925001011, type: 3}
+  <itemEffectData>k__BackingField: {fileID: 0}
+  <itemRare>k__BackingField: 939
+  <rareCap>k__BackingField: 65
+  <dropChance>k__BackingField: 6.2
   modifiers:
   - statType: 0
     value: 5
