@@ -104,6 +104,13 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     /// <summary>Stops the health regeneration loop. Call this on death.</summary>
     public void StopRegen() => CancelInvoke(nameof(RegenerateHealth));
 
+    /// <summary>Directly sets health to <paramref name="amount"/> without triggering damage events. Used by the save system on load.</summary>
+    public void RestoreHealth(float amount)
+    {
+        CurrentHealth = Mathf.Clamp(amount, 0f, MaxHealth);
+        UpdateHealthBar();
+    }
+
 
     
 

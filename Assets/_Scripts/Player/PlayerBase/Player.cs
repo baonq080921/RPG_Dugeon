@@ -78,6 +78,7 @@ namespace player
         public PlayerHealth playerHealth {get; private set;}
         public PlayerCombat playerCombat {get; private set;}
         public PlayerVfx playerVfx {get; private set;}
+        public PlayerLevel playerLevel {get ; private set;}
 
         protected override void Awake()
         {
@@ -87,6 +88,7 @@ namespace player
             playerHealth = GetComponent<PlayerHealth>();
             playerCombat = GetComponent<PlayerCombat>();
             playerVfx = GetComponent<PlayerVfx>();
+            playerLevel = GetComponent<PlayerLevel>();
 
 
             input = new PlayerInputSet();

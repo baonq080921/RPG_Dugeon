@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
@@ -6,6 +7,9 @@ namespace player
 {
     public class PlayerCombat : EntityCombat
     {
+        public event Action OnPlayerAttacking;
+        /// <summary>Fired for each enemy the player's attack lands on.</summary>
+        public event Action<Transform> OnPlayerHitEnemy;
         private Player _player;
         protected override void Awake()
         {
@@ -13,11 +17,23 @@ namespace player
             _player = GetComponent<Player>();
         }
 
+        public override void PerformedAttack()
+        {
+            base.PerformedAttack();
+            if (!IsdetectTargetColliders()) return;
+
+            OnPlayerAttacking?.Invoke();
+            foreach (var target in targetColliders)
+            {
+                if (target.GetComponent<IHit>() != null)
+                    OnPlayerHitEnemy?.Invoke(target.transform);
+            }
+        }
+
     
         public bool IsPerformedCounter()
         {
-            DetectTargetColliders();
-
+            if(!IsdetectTargetColliders()) return false;
             bool isCounter = false;
             foreach(var target in targetColliders)
             {

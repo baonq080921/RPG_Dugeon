@@ -125,6 +125,24 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UpdateIconColor(_lockedColor);
     }
 
+    /// <summary>
+    /// Restores this node as unlocked without deducting skill points.
+    /// Used by the save system — skill points are restored separately from the save file.
+    /// </summary>
+    public void RestoreUnlocked()
+    {
+        isUnlocked = true;
+        UpdateIconColor(Color.white);
+        LockOtherSkillPath();
+        RefreshParentLineColors();
+
+        var skill = ServiceLocator.Get<PlayerSkillManager>()?.GetSkillByType(skillTreeData.SkillType);
+        if (skill == null) return;
+        skill.Unlock();
+        skill.SetSkillUpgradeType(skillTreeData.UpgradeData.SkillUpgrade);
+        skill.SetUpgradeForSkill(skillTreeData.UpgradeData);
+    }
+
     private void UpdateIconColor(Color color)
     {
         if (_iconImage == null)

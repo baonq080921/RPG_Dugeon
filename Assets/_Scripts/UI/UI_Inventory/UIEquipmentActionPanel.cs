@@ -40,6 +40,7 @@ public class UIEquipmentActionPanel : MonoBehaviour
 
         _currentSlot = slot;
         gameObject.SetActive(true);
+        transform.SetAsLastSibling();
 
         _unequipButton.onClick.RemoveAllListeners();
         _dropButton.onClick.RemoveAllListeners();

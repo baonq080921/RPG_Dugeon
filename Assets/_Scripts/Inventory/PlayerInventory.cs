@@ -134,5 +134,5 @@ public class PlayerInventory : InventoryBase {
     }
 
     private void SpawnDroppedItem(ItemData itemData) =>
-        ServiceLocator.Get<ItemPickablePool>()?.Spawn(itemData, transform.position);
+        ServiceLocator.Get<PoolManager>()?.itemObjectPool.Spawn(itemData, transform.position);
 }

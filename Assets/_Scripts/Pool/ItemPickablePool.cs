@@ -1,16 +1,13 @@
 using Base;
 using UnityEngine;
 
-/// <summary>Pool for <see cref="ItemObjectPickable"/> world drops. Register via ServiceLocator.</summary>
+/// <summary>
+/// Pool for <see cref="ItemObjectPickable"/> world drops.
+/// Assigned to <see cref="PoolManager"/> in the Inspector — do not register with ServiceLocator directly.
+/// </summary>
 public class ItemPickablePool : MonoBehaviourPool<ItemObjectPickable>
 {
     [SerializeField] private ItemObjectPickable _prefab;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        ServiceLocator.Register<ItemPickablePool>(this);
-    }
 
     protected override ItemObjectPickable CreateInstance()
     {
@@ -21,7 +18,7 @@ public class ItemPickablePool : MonoBehaviourPool<ItemObjectPickable>
 
     protected override void OnGet(ItemObjectPickable item) => item.ResetState();
 
-    /// <summary>Gets a pooled pickup, places it at <paramref name="position"/>, and shoots it.</summary>
+    /// <summary>Gets a pooled pickup, places it at <paramref name="position"/>, and shoots it out.</summary>
     public void Spawn(ItemData itemData, Vector3 position)
     {
         var item = Get();

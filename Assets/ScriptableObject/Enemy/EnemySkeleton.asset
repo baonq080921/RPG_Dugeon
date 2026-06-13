@@ -17,6 +17,8 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 5
   <MoveMultiplier>k__BackingField: 2
   <JumpForce>k__BackingField: 10
+  <Level>k__BackingField: 2
+  <BaseExp>k__BackingField: 100
   <minDistanceRetreat>k__BackingField: 1.5
   <DetectionRange>k__BackingField: 9
   <AttackRange>k__BackingField: 2.5

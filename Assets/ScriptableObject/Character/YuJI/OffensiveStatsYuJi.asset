@@ -28,11 +28,7 @@ MonoBehaviour:
     statType: 13
     baseValue: 1
     value: 1
-  <fireDamage>k__BackingField:
+  <ElementalDamage>k__BackingField:
     statType: 2
-    baseValue: 50
-    value: 50
-  <lightDamage>k__BackingField:
-    statType: 2
-    baseValue: 30
-    value: 30
+    baseValue: 0
+    value: 0

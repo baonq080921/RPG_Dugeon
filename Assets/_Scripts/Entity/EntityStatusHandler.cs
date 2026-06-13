@@ -20,6 +20,7 @@ public class EntityStatusHandler : MonoBehaviour
 
     [Header("Coroutine")]
     private Coroutine _electricEffectCoroutine;
+    private Coroutine _draculaDoTCoroutine;
 
     void Awake()
     {
@@ -83,6 +84,29 @@ public class EntityStatusHandler : MonoBehaviour
 
         _entity.ApplyEffect(_slowPercent,elementType);
     }
+
+    #region Dracula DoT
+    /// <summary>Starts a damage-over-time bleed effect. Re-applying resets the duration.</summary>
+    public void ApplyDraculaDoT(float damagePerTick, float duration, float tickInterval,ElementType elementType)
+    {
+        if (_draculaDoTCoroutine != null)
+            StopCoroutine(_draculaDoTCoroutine);
+        _entityVfx.UpdateStatusEffectVFX(elementType,duration);
+        _draculaDoTCoroutine = StartCoroutine(DraculaDoTCoroutine(damagePerTick, duration, tickInterval));
+    }
+
+    private IEnumerator DraculaDoTCoroutine(float damagePerTick, float duration, float tickInterval)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            yield return new WaitForSeconds(tickInterval);
+            elapsed += tickInterval;
+            _entityHealth.ReduceHP(damagePerTick);
+        }
+        _draculaDoTCoroutine = null;
+    }
+    #endregion
 
     public bool CanElementalStatusApply(ElementType newStatus)
     {

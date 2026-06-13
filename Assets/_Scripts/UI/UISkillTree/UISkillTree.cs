@@ -4,8 +4,9 @@ using UnityEngine;
 public class UISkillTree : MonoBehaviour
 {
     [SerializeField] private float _skillPoint;
-        public static event Action OnReset;
+    public static event Action OnReset;
 
+    public float SkillPoints => _skillPoint;
 
     public bool EnoughSkillPoint(float cost) => _skillPoint >= cost;
 
@@ -16,6 +17,9 @@ public class UISkillTree : MonoBehaviour
     }
 
     public void RefundSkillPoint(float cost) => _skillPoint += cost;
+
+    /// <summary>Directly sets the skill point balance. Used only by the save system on load.</summary>
+    public void RestoreSkillPoints(float amount) => _skillPoint = amount;
 
 
 

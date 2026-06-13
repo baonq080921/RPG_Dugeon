@@ -22,6 +22,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
     [Header("Elemental Hit VFX")]
     [SerializeField] private Color _electricHitColor;
     [SerializeField]private Color _iceHitColor;
+    [SerializeField]private Color _fireColor;
     [SerializeField] private float _statusBlinkInterval = 0.15f;
     private Color defaultHitColor;
     private EntityCombat _entityCombat;
@@ -61,6 +62,11 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         Destroy(effect,2f);
     }
 
+    public void CreateEffectLevelVFx()
+    {
+        ServiceLocator.Get<PoolManager>()?.levelupPool.Spawn(transform.position);
+    }
+
     public void UpdateHitColor(ElementType elementType)
     {
         // Debug.Log(_electricHitColor);
@@ -86,6 +92,11 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         if(elementType == ElementType.Ice)
         {
             statusColor =_iceHitColor;
+            PlayEffectStatusCoroutine(duration,statusColor);
+        }
+        if(elementType == ElementType.Fire)
+        {
+            statusColor = _fireColor;
             PlayEffectStatusCoroutine(duration,statusColor);
         }
     }
@@ -150,7 +161,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         float randomX = Random.Range(-0.3f, 0.3f);
         float randomY = Random.Range(-0.7f, 0.7f);
         Vector2 randomHitOffSet = new Vector2(randomX, randomY);
-        ServiceLocator.Get<HitEffectPool>()?.SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
+        ServiceLocator.Get<PoolManager>()?.hitEffectPool.SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
     }
 
 

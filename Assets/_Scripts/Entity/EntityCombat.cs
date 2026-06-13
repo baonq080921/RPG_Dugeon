@@ -37,9 +37,9 @@ public class EntityCombat : MonoBehaviour
     /// <summary>
     /// Detects all targets in range and applies damage to each one that implements <see cref="IHit"/>.
     /// </summary>
-    public void PerformedAttack()
+    public virtual void PerformedAttack()
     {
-        DetectTargetColliders();
+        IsdetectTargetColliders();
         foreach (var target in targetColliders)
         {
             IHit hit = target.GetComponent<IHit>();
@@ -82,10 +82,11 @@ public class EntityCombat : MonoBehaviour
 
    
 
-    protected void DetectTargetColliders()
+    protected bool IsdetectTargetColliders()
     {
         if (targetColliders != null) targetColliders.Clear();
         targetColliders = Physics2D.OverlapCircleAll(_targetCheck.position, _targetRadius, entity.LayerMask).ToList();
+        return targetColliders != null;
     }
 
     private void OnDrawGizmos()

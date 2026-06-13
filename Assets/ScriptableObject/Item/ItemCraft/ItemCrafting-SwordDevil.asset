@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f7e0bf4bb391024194229c504877fde, type: 3}
   m_Name: ItemCrafting-SwordDevil
   m_EditorClassIdentifier: 
+  <ItemId>k__BackingField: 97abe632-f937-4c86-bd40-3fea711a0f28
   <ItemName>k__BackingField: Sword Devil
   <ItemType>k__BackingField: 13
   <EquipSlot>k__BackingField: 1
   <Sprite>k__BackingField: {fileID: -1905116383, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  <itemEffectData>k__BackingField: {fileID: 0}
+  <itemEffectData>k__BackingField: {fileID: 11400000, guid: ed8d64c9313731548bec18e88cfd3804, type: 2}
   <itemRare>k__BackingField: 929
   <rareCap>k__BackingField: 65
   <dropChance>k__BackingField: 7.2
@@ -30,5 +31,7 @@ MonoBehaviour:
   requirementItems:
   - itemTypes: 4
     amount: 2
+    sprite: {fileID: 1620092268, guid: ea579985398cb78419263c314ad25d62, type: 3}
   - itemTypes: 5
     amount: 1
+    sprite: {fileID: 1200382949, guid: ea579985398cb78419263c314ad25d62, type: 3}

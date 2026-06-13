@@ -1,0 +1,21 @@
+using System;
+using System.Collections.Generic;
+
+namespace Save
+{
+    /// <summary>All player state that gets written to / read from the save file.</summary>
+    [Serializable]
+    public class PlayerSaveData
+    {
+        public string sceneName;
+        public float  posX;
+        public float  posY;
+        public float  currentHealth;
+        public float currentExp;
+        public int currentLevel;
+        public float expToNextLevel;
+        public List<ItemSaveEntry>  inventory  = new List<ItemSaveEntry>();
+        public List<EquipSaveEntry> equipment  = new List<EquipSaveEntry>();
+        public SkillTreeSaveData    skillTree  = new SkillTreeSaveData();
+    }
+}

@@ -39,6 +39,7 @@ public class UIItemActionPanel : MonoBehaviour
     {
         _currentSlot = slot;
         gameObject.SetActive(true);
+        transform.SetAsLastSibling();
 
         bool isEquippable = slot.itemInSlot?.itemData is EquipmentData;
         _equipButton.gameObject.SetActive(isEquippable);

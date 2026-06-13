@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 364737a662f1c3946bb281cba4611fe3, type: 3}
   m_Name: Item-Diamond
   m_EditorClassIdentifier: 
+  <ItemId>k__BackingField: 4fa048e3-351e-43e8-b6c1-2e50bb481126
   <ItemName>k__BackingField: White Diamond
   <ItemType>k__BackingField: 21
   <EquipSlot>k__BackingField: 0
   <Sprite>k__BackingField: {fileID: -191828619, guid: ea579985398cb78419263c314ad25d62, type: 3}
   <itemEffectData>k__BackingField: {fileID: 0}
-  <itemRare>k__BackingField: 500
+  <itemRare>k__BackingField: 780
   <rareCap>k__BackingField: 65
-  <dropChance>k__BackingField: 50.1
+  <dropChance>k__BackingField: 22.1

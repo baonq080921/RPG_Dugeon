@@ -52,18 +52,6 @@ public class SkillObjectTimeEcho : SkillObject_Base
             anim.Update(0f);
         }
     }
-
-    // public bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform attacker)
-    // {
-    //     _currentHealth -= damage;
-    //     if (_currentHealth <= 0f)
-    //     {
-    //         HandleDeath();
-    //         return false;
-    //     }
-    //     return true;
-    // }
-
     public override void HandleDeath()
     {
         if (_onRelease == null) return; // already released — second concurrent call (timer + TakeDamage race)
@@ -270,8 +258,8 @@ public class SkillObjectTimeEcho : SkillObject_Base
 
     private void DealDamage(bool appliesKnockback)
     {
-        float damage = _skillTimeEchoDefinition.Damage;
-        DamageEnemiesInRadius(damage, appliesKnockback);
+        float skilldamage = _skillTimeEchoDefinition.Damage;
+        DamageEnemiesInRadius(skilldamage, appliesKnockback);
     }
 
     private void SpawnSmokeEffect()

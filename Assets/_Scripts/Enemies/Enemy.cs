@@ -125,7 +125,7 @@ namespace enemy
         {
             isDead = true;
             _entityDrop.DropItems();
-            EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent());
+            EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent(enemyData.Level, enemyData.BaseExp));
         }
 
 

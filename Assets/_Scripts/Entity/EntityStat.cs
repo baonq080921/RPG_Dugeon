@@ -68,22 +68,14 @@ public class EntityStat : MonoBehaviour
 
     public float GetElementalDamageValue(out ElementType elementType)
     {
-        float fireDamage = _offensiveStats.fireDamage.GetValue();
-        float lightDamage = _offensiveStats.lightDamage.GetValue();
+        float lightDamage = _offensiveStats.ElementalDamage.GetValue();
         float bonusElementalDamage = _majorStats.Intelligence.GetValue(); // with each intelligence point increase they will bonus 0.5 % elemental damage
-        float totalFireDamage = fireDamage + bonusElementalDamage;
         float totalLightDamage = lightDamage + bonusElementalDamage;
 
         if(_entityType == EntityType.PlayerNormal)
         {
             elementType = ElementType.Electric;
             return totalLightDamage; // Player normal attack will only deal light damage
-        }
-
-        else if(_entityType == EntityType.PlayerSpecial)
-        {
-            elementType = ElementType.Fire;
-            return totalFireDamage + totalLightDamage * 0.5f; //player special attack will deal both fire and light damage but light damage will be reduced by 50%
         }
 
         else 
@@ -150,8 +142,7 @@ public class EntityStat : MonoBehaviour
     }
     public float GetCritPowerDisplayValue() => _offensiveStats.CritPower.GetValue() + _majorStats.Strength.GetValue() * 0.5f;
     public float GetArmorDisplayValue() => _defensiveStats.Amor.GetValue() + _majorStats.Vitality.GetValue();
-    public float GetFireDamageDisplayValue() => _offensiveStats.fireDamage.GetValue() + _majorStats.Intelligence.GetValue();
-    public float GetLightDamageDisplayValue() => _offensiveStats.lightDamage.GetValue() + _majorStats.Intelligence.GetValue();
+    public float GetElementalDamage() => _offensiveStats.ElementalDamage.GetValue() + _majorStats.Intelligence.GetValue();
     public float GetElementalResistanceDisplayValue() => (1f - GetElementalResitanceValue()) * 100f;
     #endregion
 
@@ -173,8 +164,7 @@ public class EntityStat : MonoBehaviour
         _offensiveStats.CritChance.Reset();
         _offensiveStats.CritPower.Reset();
         _offensiveStats.AttackMultiplier.Reset();
-        _offensiveStats.fireDamage.Reset();
-        _offensiveStats.lightDamage.Reset();
+        _offensiveStats.ElementalDamage.Reset();
 
         _defensiveStats.MaxHealth.Reset();
         _defensiveStats.Amor.Reset();
@@ -183,6 +173,47 @@ public class EntityStat : MonoBehaviour
         _defensiveStats.KnockBackThreshHold.Reset();
         _defensiveStats.HealthRegen.Reset();
     }
+
+    /// <summary>Permanently adds 1 point to the chosen major stat. Called by the level-up UI.</summary>
+    public void AddMajorStatPoint(StatType statType)
+    {
+        switch (statType)
+        {
+            case StatType.Strength: StrenghLevelUp();
+            return;
+            case StatType.Agility: AgilityLevelUp();
+            return;
+            case StatType.Intelligence: IntelegenceLevelUp();
+            return;
+            case StatType.Vitality: VitalityLevelUp();
+            return;
+        }
+    }
+
+
+    private void StrenghLevelUp()
+    {
+        _offensiveStats.Damage.AddModifier(1,"damage");
+        _offensiveStats.CritPower.AddModifier(0.5f,"critPower");
+    }
+    private void AgilityLevelUp()
+    {
+        _defensiveStats.Envasion.AddModifier(0.5f,"envasion");
+        _offensiveStats.CritChance.AddModifier(0.3f,"critChance");
+    }
+    private void IntelegenceLevelUp()
+    {
+        _offensiveStats.ElementalDamage.AddModifier(1,"magicPoint");
+        _defensiveStats.ElementalResitance.AddModifier(0.5f,"MagicResitance");
+    }
+
+
+    private void VitalityLevelUp()
+    {
+        _defensiveStats.MaxHealth.AddModifier(5,"healPoint");
+        _defensiveStats.Amor.AddModifier(1f,"Amor");
+    }
+
 
     public Stat GetStatByType(StatType statType)
     {
@@ -203,7 +234,7 @@ public class EntityStat : MonoBehaviour
             case StatType.CritPower: 
                 return  _offensiveStats.CritPower;
             case StatType.ElementalDamage: 
-                return  _offensiveStats.lightDamage;
+                return  _offensiveStats.ElementalDamage;
             case StatType.AttackMultiplier:
                 return _offensiveStats.AttackMultiplier;
             case StatType.HealthRegen:

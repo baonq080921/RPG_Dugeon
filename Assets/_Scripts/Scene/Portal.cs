@@ -1,3 +1,5 @@
+using Base;
+using Save;
 using UnityEngine;
 
 namespace scene
@@ -23,6 +25,7 @@ namespace scene
             if (SceneTransitionManager.Instance == null) return;
             if (SceneTransitionManager.Instance.IsTransitioning) return;
             if (!other.TryGetComponent<player.Player>(out _)) return;
+            ServiceLocator.Get<SaveManager>()?.Save();
             SceneTransitionManager.Instance.TransitionToScene(_targetScene, _destinationPortalId);
         }
 

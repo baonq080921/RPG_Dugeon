@@ -34,7 +34,7 @@ namespace Stats
         {
             value += addValue;
         }
-         public void RemoveModifier(float decreaseVal, String name)
+        public void RemoveModifier(float decreaseVal, String name)
         {
             value -= decreaseVal;
         }

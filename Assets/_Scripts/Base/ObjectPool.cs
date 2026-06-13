@@ -74,16 +74,22 @@ namespace Base
                 throw new ObjectDisposedException(GetType().Name);
 
             T item;
-            if (_stack.Count > 0)
+            while (_stack.Count > 0)
             {
                 item = _stack.Pop();
-            }
-            else
-            {
-                item = _createFunc();
-                _countAll++;
+                // Pooled Unity objects are scene-owned and can be destroyed by a scene unload
+                // while the pool (which is DontDestroyOnLoad) still holds the reference.
+                if (item is UnityEngine.Object unityObj && unityObj == null)
+                {
+                    _countAll--;
+                    continue;
+                }
+                _actionOnGet?.Invoke(item);
+                return item;
             }
 
+            item = _createFunc();
+            _countAll++;
             _actionOnGet?.Invoke(item);
             return item;
         }

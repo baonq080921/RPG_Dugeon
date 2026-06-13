@@ -35,8 +35,13 @@ public class SkillObjectDismantle : SkillProjectileBase
 
     protected override void OnHit(Collider2D other)
     {
+        float damgeBase = _player.entityStat.GetPhysicalDamageValue(out _);
         if (other.TryGetComponent<IHit>(out var target))
-            target.TakeDamage(_skillBaseDefinition.Damage, 0, ElementType.None, transform);
+        {
+            float skillDamge = _skillBaseDefinition.Damage;
+            float finalDamage = skillDamge + damgeBase * 0.5f;
+            target.TakeDamage(finalDamage, 0, ElementType.None, transform);
+        }
 
         other.GetComponent<IHitVFX>()?.PlayHitVFX();
         EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(other.transform, false));

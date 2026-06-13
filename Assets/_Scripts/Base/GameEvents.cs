@@ -5,8 +5,24 @@ namespace Base
     /// <summary>Raised when the player's health reaches zero and the death state is entered.</summary>
     public struct PlayerDiedEvent : IEvent { }
 
-    /// <summary>Raised when an enemy's health reaches zero.</summary>
-    public struct EnemyDiedEvent : IEvent { }
+    /// <summary>Raised when an enemy's health reaches zero. Carries the enemy's level and base XP for the reward formula.</summary>
+    public struct EnemyDiedEvent : IEvent
+    {
+        public int EnemyLevel { get; }
+        public float BaseExp   { get; }
+        public EnemyDiedEvent(int enemyLevel, float baseExp)
+        {
+            EnemyLevel = enemyLevel;
+            BaseExp    = baseExp;
+        }
+    }
+
+    /// <summary>Raised when the player gains enough XP to level up. Carries the stat sheet so the UI can apply the chosen bonus.</summary>
+    public struct PlayerLevelUpEvent : IEvent
+    {
+        public EntityStat PlayerStat { get; }
+        public PlayerLevelUpEvent(EntityStat playerStat) => PlayerStat = playerStat;
+    }
     public struct ResetStats :IEvent {}
 
     //Call to Open the store

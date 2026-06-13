@@ -18,6 +18,10 @@ namespace enemy
         [field: SerializeField] public float MoveMultiplier { get; private set; } = 1.5f;
         [field: SerializeField] public float JumpForce { get; private set; } = 10f;
 
+        [field: Header("Level & Experience")]
+        [field: SerializeField] public int Level { get; private set; } = 1;
+        [field: SerializeField] public float BaseExp { get; private set; } = 50f;
+
         [field: Header("Detection")]
         [field: SerializeField] public float minDistanceRetreat { get; private set; } = 1f;
 

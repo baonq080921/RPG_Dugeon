@@ -4,7 +4,7 @@ using player;
 using UnityEngine;
 
 /// <summary>Ice item effect that triggers when the player takes damage while below 40% health.</summary>
-[CreateAssetMenu(fileName = "ItemEffect-IceData", menuName = "RPG/ItemEffectIceData")]
+[CreateAssetMenu(fileName = "ItemEffect-IceData", menuName = "RPG/ItemEffectIceData" ,order = 0)]
 public class ItemEffectIceData : ItemEffectData
 {
     private const float HealthThreshold = 0.4f;
@@ -54,7 +54,7 @@ public class ItemEffectIceData : ItemEffectData
     {
          player= character;
         player.playerHealth.OnPlayerTalkingDamage += ExecuteEffect;
-        _lastTriggerTime = -float.MaxValue;
+        _lastTriggerTime = float.NegativeInfinity;
         
     }
 

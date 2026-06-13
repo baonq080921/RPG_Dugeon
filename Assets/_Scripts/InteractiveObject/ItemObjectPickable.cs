@@ -56,14 +56,6 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
             _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
         }
     }
-
-
-
-
-
-
-
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if((_hitLayer.value &(1 << other.gameObject.layer)) == 0) return;
@@ -75,7 +67,7 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
     {
         if(!_playerInventory.CanAddToIventory()) return;
         _playerInventory.AddToInventory(_itemInventory);
-        ServiceLocator.Get<ItemPickablePool>()?.Return(this);
+        ServiceLocator.Get<PoolManager>()?.itemObjectPool.Return(this);
     }
 
     public void ResetState()

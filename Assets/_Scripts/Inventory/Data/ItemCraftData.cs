@@ -13,4 +13,5 @@ public class RequirementItem
 {
     public ItemTypes itemTypes;
     public float amount;
+    public Sprite sprite;
 }

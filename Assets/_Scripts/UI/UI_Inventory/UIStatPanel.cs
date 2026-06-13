@@ -23,7 +23,6 @@ public class UIStatPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _evasionTmp;
 
     [Header("Elemental Damage")]
-    [SerializeField] private TextMeshProUGUI _fireDamageTmp;
     [SerializeField] private TextMeshProUGUI _lightDamageTmp;
 
     [Header("Elemental Resistance")]
@@ -57,8 +56,7 @@ private void Refresh()
         SetText(_armorTmp,               _entityStat.GetArmorDisplayValue(),               "0");
         SetText(_evasionTmp,             _entityStat.GetEnvasionValue(),                   "0.0'%'");
 
-        SetText(_fireDamageTmp,          _entityStat.GetFireDamageDisplayValue(),          "0");
-        SetText(_lightDamageTmp,         _entityStat.GetLightDamageDisplayValue(),         "0");
+        SetText(_lightDamageTmp,         _entityStat.GetElementalDamage(),         "0");
 
         SetText(_elementalResistanceTmp, _entityStat.GetElementalResistanceDisplayValue(), "0.00'%'");
     }

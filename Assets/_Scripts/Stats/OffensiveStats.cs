@@ -15,8 +15,7 @@ namespace Stats
         [field:Space(3)]
         
         [field:Header("Elemental Damage")]
-        [field:SerializeField] public Stat fireDamage { get; private set; }
-        [field: SerializeField] public Stat lightDamage { get; private set; }
+        [field: SerializeField] public Stat ElementalDamage { get; private set; }
 
     }
 }

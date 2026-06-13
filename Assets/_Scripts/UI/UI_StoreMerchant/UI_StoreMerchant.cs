@@ -24,6 +24,7 @@ namespace UI
 
         [Header("Crafting")]
         [SerializeField] private ItemObjectPickable _itemPickablePrefab;
+        [SerializeField] private UI_CarftIngerdientSlot[] _carftIngerdientSlots;
 
         [Header("Player Inventory")]
         [SerializeField] private Transform _inventoryGrid;
@@ -31,7 +32,6 @@ namespace UI
 
         private UIItemSlot[] _inventorySlots;
         private ItemCraftData _currentCraftData;
-
         private EventBinding<OnInventoryChangedEvent> _inventoryChangedBinding;
         private EventBinding<StoreCallEvent> _storeOpenBinding;
         private EventBinding<CraftGetInfoEvent> _craftInfoBinding;
@@ -42,6 +42,7 @@ namespace UI
         private void Awake()
         {
             _inventorySlots = _inventoryGrid.GetComponentsInChildren<UIItemSlot>();
+            _carftIngerdientSlots = GetComponentsInChildren<UI_CarftIngerdientSlot>();
             _storeRectTf.anchoredPosition = _hiddentPosition;
             _craftButton.onClick.AddListener(TryCraft);
         }
@@ -74,6 +75,7 @@ namespace UI
         private void OnCraftInfoReceived(CraftGetInfoEvent e)
         {
             _currentCraftData = e.itemCraftData;
+            UpdateCraftIngerdientSlotDisplay();
         }
 
         private void TryCraft()
@@ -92,6 +94,7 @@ namespace UI
             Vector3 spawnPos = _playerInventory.transform.position +new Vector3(5f,0f,0f); 
             ItemObjectPickable spawned = Instantiate(_itemPickablePrefab, spawnPos, Quaternion.identity);
             spawned.Initialize(_currentCraftData);
+            spawned.ShootItem();
             EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
 
         }
@@ -102,6 +105,22 @@ namespace UI
             for (int i = 0; i < _inventorySlots.Length; i++)
             {
                 _inventorySlots[i].UpdateUISlot(i < items.Count ? items[i] : null);
+            }
+        }
+
+        private void UpdateCraftIngerdientSlotDisplay()
+        {
+            for(int i = 0 ; i< _carftIngerdientSlots.Length; i++)
+            {
+                if(i < _currentCraftData.requirementItems.Length)
+                {
+                    var item = _currentCraftData.requirementItems[i];
+                    
+                    _carftIngerdientSlots[i].UpdateUiSlot(item,item.amount);
+                }
+                else 
+                    _carftIngerdientSlots[i].UpdateUiSlot(null);
+
             }
         }
 

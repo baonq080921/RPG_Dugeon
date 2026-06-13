@@ -1,3 +1,4 @@
+using Save;
 using UnityEngine;
 
 namespace Base
@@ -23,6 +24,9 @@ namespace Base
       cameraFitterObject.AddComponent<CameraResolutionFitter>();
       Object.DontDestroyOnLoad(cameraFitterObject);
 
+      var saveManagerObject = new GameObject(nameof(SaveManager));
+      saveManagerObject.AddComponent<SaveManager>();
+      Object.DontDestroyOnLoad(saveManagerObject);
     }
   }
 }
