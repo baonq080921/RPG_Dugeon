@@ -12,7 +12,7 @@ namespace player
             EventBus<ResetStats>.Register(eventResetBinding);
         }
 
-        void ODisable()
+        void OnDisable()
         {
             EventBus<ResetStats>.Deregister(eventResetBinding);
         }

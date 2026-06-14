@@ -14,6 +14,8 @@ namespace scene
     {
         [SerializeField] private string _targetScene;
         [SerializeField] private string _destinationPortalId;
+        [Tooltip("If true, the player must complete this scene's quest before passing through.")]
+        [SerializeField] private bool _requireQuestCompletion = false;
 
         private void Awake()
         {
@@ -25,6 +27,17 @@ namespace scene
             if (SceneTransitionManager.Instance == null) return;
             if (SceneTransitionManager.Instance.IsTransitioning) return;
             if (!other.TryGetComponent<player.Player>(out _)) return;
+
+            if (_requireQuestCompletion)
+            {
+                var questController = FindObjectOfType<Quest.SceneQuestController>();
+                if (questController != null && !questController.IsQuestComplete)
+                {
+                    EventBus<Base.AlertNotiEvent>.Raise(new Base.AlertNotiEvent($"Finish the quest first!\n{questController.Quest.QuestName}"));
+                    return;
+                }
+            }
+
             ServiceLocator.Get<SaveManager>()?.Save();
             SceneTransitionManager.Instance.TransitionToScene(_targetScene, _destinationPortalId);
         }

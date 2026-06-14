@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
   m_Name: SkillTree-TimeEchoHealing
   m_EditorClassIdentifier: 
+  <SkillTreeId>k__BackingField: 870f12e3-3afd-4029-8266-63e3f6455c58
   <SkillType>k__BackingField: 1
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 8
     <UpgradeCoolDown>k__BackingField: 15
     <UpgradeDuration>k__BackingField: 2
     <UpgradeDamage>k__BackingField: 0
-    <UpgradeHealing>k__BackingField: 30
+    <UpgradeHealing>k__BackingField: 250
     <UpgradeCD>k__BackingField: 0
   <skillTreeDataName>k__BackingField: HealingWeep
   <Description>k__BackingField: When the echo of your side kick disappear it healing

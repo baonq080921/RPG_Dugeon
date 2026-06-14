@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
   m_Name: SkillTree-TimeEchoAttack
   m_EditorClassIdentifier: 
+  <SkillTreeId>k__BackingField: 12319181-735a-43d3-bbe2-f48b54a0d0ff
   <SkillType>k__BackingField: 1
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 6
     <UpgradeCoolDown>k__BackingField: 15
     <UpgradeDuration>k__BackingField: 3
-    <UpgradeDamage>k__BackingField: 20
+    <UpgradeDamage>k__BackingField: 100
     <UpgradeHealing>k__BackingField: 0
     <UpgradeCD>k__BackingField: 0
   <skillTreeDataName>k__BackingField: EchoTimeLessAttack

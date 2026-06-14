@@ -5,80 +5,109 @@ using UnityEngine.UI;
 namespace UI
 {
     /// <summary>
-    /// Switches between the Skill Tree and Inventory canvases using DOTween slide animations
+    /// Switches between the Skill Tree, Inventory, and Quest canvases using DOTween slide animations
     /// and highlights the active tab button.
     /// </summary>
     public class UICanvasChange : MonoBehaviour
     {
         [SerializeField] private Button _btnToSkillTree;
         [SerializeField] private Button _btnToInventory;
+        [SerializeField] private Button _btnToQuest;
 
         [SerializeField] private Canvas _skillTreeCanvas;
         [SerializeField] private Canvas _inventoryCanvas;
+        [SerializeField] private Canvas _questCanvas;
 
         [SerializeField] private RectTransform _skillTreeRect;
         [SerializeField] private RectTransform _inventoryRect;
+        [SerializeField] private RectTransform _questRect;
 
         [SerializeField] private Color _selectedColor = Color.white;
         [SerializeField] private Color _normalColor = Color.grey;
 
         [SerializeField] private float _tweenDuration = 0.3f;
-        // Horizontal distance to slide off-screen; set to match your canvas/panel width.
         [SerializeField] private float _slideDistance = 1080f;
 
-        private Vector2 _skillTreeOriginalPosition;
-        private Vector2 _inventoryOriginalPosition;
+        private Vector2 _skillTreeOriginalPos;
+        private Vector2 _inventoryOriginalPos;
+        private Vector2 _questOriginalPos;
 
         private Canvas _activeCanvas;
 
         void Awake()
         {
-            _skillTreeOriginalPosition = _skillTreeRect.anchoredPosition;
-            _inventoryOriginalPosition = _inventoryRect.anchoredPosition;
+            _skillTreeOriginalPos = _skillTreeRect.anchoredPosition;
+            _inventoryOriginalPos = _inventoryRect.anchoredPosition;
+            if (_questRect != null)
+                _questOriginalPos = _questRect.anchoredPosition;
 
             _btnToSkillTree.onClick.AddListener(() => ShowCanvas(_skillTreeCanvas));
             _btnToInventory.onClick.AddListener(() => ShowCanvas(_inventoryCanvas));
+            if (_btnToQuest != null)
+                _btnToQuest.onClick.AddListener(() => ShowCanvas(_questCanvas));
         }
 
         void Start()
         {
-            // Place skill tree off-screen immediately so it doesn't flash.
-            _skillTreeRect.anchoredPosition = _skillTreeOriginalPosition + new Vector2(_slideDistance*10f, 0f);
+            SlideOffScreen(_skillTreeRect, _skillTreeOriginalPos);
+            if (_questRect != null)
+                SlideOffScreen(_questRect, _questOriginalPos);
 
             _activeCanvas = _inventoryCanvas;
-            _btnToSkillTree.image.color = _normalColor;
-            _btnToInventory.image.color = _selectedColor;
+            RefreshButtonColors(_inventoryCanvas);
         }
 
-        /// <summary>
-        /// Slides in the requested canvas from the right and slides the current one out to the left.
-        /// </summary>
-        public void ShowCanvas(Canvas canvasShow)
+        /// <summary>Slides in the requested canvas and slides out the current one.</summary>
+        public void ShowCanvas(Canvas canvasToShow)
         {
-            if (canvasShow == _activeCanvas) return;
+            if (canvasToShow == _activeCanvas) return;
 
-            bool showSkill = canvasShow == _skillTreeCanvas;
+            SlideOut(_activeCanvas);
+            SlideIn(canvasToShow);
 
-            RectTransform incoming = showSkill ? _skillTreeRect : _inventoryRect;
-            RectTransform outgoing = showSkill ? _inventoryRect : _skillTreeRect;
-            Vector2 incomingTarget = showSkill ? _skillTreeOriginalPosition : _inventoryOriginalPosition;
-            Vector2 outgoingTarget = showSkill ? _inventoryOriginalPosition : _skillTreeOriginalPosition;
+            _activeCanvas = canvasToShow;
+            RefreshButtonColors(canvasToShow);
+        }
 
-            incoming.DOKill();
-            outgoing.DOKill();
+        private void SlideIn(Canvas canvas)
+        {
+            var (rect, originalPos) = GetRectAndPos(canvas);
+            if (rect == null) return;
+            rect.DOKill();
+            rect.anchoredPosition = originalPos + new Vector2(_slideDistance, 0f);
+            rect.DOAnchorPos(originalPos, _tweenDuration).SetUpdate(true).SetEase(Ease.OutCubic);
+        }
 
-            // Snap incoming to the right edge, then slide it in.
-            incoming.anchoredPosition = incomingTarget + new Vector2(_slideDistance, 0f);
-            incoming.DOAnchorPos(incomingTarget, _tweenDuration).SetUpdate(true).SetEase(Ease.OutCubic);
+        private void SlideOut(Canvas canvas)
+        {
+            var (rect, originalPos) = GetRectAndPos(canvas);
+            if (rect == null) return;
+            rect.DOKill();
+            rect.DOAnchorPos(originalPos + new Vector2(-_slideDistance * 10f, 0f), _tweenDuration)
+                .SetUpdate(true).SetEase(Ease.InCubic);
+        }
 
-            // Slide outgoing to the left edge.
-            outgoing.DOAnchorPos(outgoingTarget + new Vector2(-_slideDistance*10f, 0f), _tweenDuration).SetUpdate(true)
-                    .SetEase(Ease.InCubic);
+        private void SlideOffScreen(RectTransform rect, Vector2 originalPos)
+        {
+            rect.anchoredPosition = originalPos + new Vector2(_slideDistance * 10f, 0f);
+        }
 
-            _btnToSkillTree.image.color = showSkill ? _selectedColor : _normalColor;
-            _btnToInventory.image.color = showSkill ? _normalColor : _selectedColor;
+        private (RectTransform rect, Vector2 pos) GetRectAndPos(Canvas canvas)
+        {
+            if (canvas == _skillTreeCanvas) return (_skillTreeRect, _skillTreeOriginalPos);
+            if (canvas == _inventoryCanvas)  return (_inventoryRect, _inventoryOriginalPos);
+            if (canvas == _questCanvas)      return (_questRect, _questOriginalPos);
+            return (null, Vector2.zero);
+        }
 
-            _activeCanvas = canvasShow;
+        private void RefreshButtonColors(Canvas active)
+        {
+            if (_btnToSkillTree != null)
+                _btnToSkillTree.image.color = active == _skillTreeCanvas ? _selectedColor : _normalColor;
+            if (_btnToInventory != null)
+                _btnToInventory.image.color = active == _inventoryCanvas  ? _selectedColor : _normalColor;
+            if (_btnToQuest != null)
+                _btnToQuest.image.color     = active == _questCanvas      ? _selectedColor : _normalColor;
         }
     }
 }

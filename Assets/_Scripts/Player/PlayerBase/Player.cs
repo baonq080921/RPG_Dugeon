@@ -89,10 +89,10 @@ namespace player
             playerCombat = GetComponent<PlayerCombat>();
             playerVfx = GetComponent<PlayerVfx>();
             playerLevel = GetComponent<PlayerLevel>();
-
-
             input = new PlayerInputSet();
             CreateStates();
+
+            ServiceLocator.Register<Player>(this);
         }
 
         /// <summary>

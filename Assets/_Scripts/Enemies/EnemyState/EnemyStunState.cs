@@ -20,7 +20,7 @@ namespace enemy
         {
             base.Enter();
             if(enemy.isDead)
-                stateMachine.ChangeState(enemy.enemyDeathState);
+                enemy.ChangeToDiedState();
 
                 
             stateTimer = enemy.entityStat.StunDuration;

@@ -18,7 +18,7 @@ MonoBehaviour:
     value: 0.5
   <MaxHealth>k__BackingField:
     statType: 10
-    baseValue: 300
+    baseValue: 1000
     value: 300
   <Envasion>k__BackingField:
     statType: 11
@@ -30,7 +30,7 @@ MonoBehaviour:
     value: 90
   <ElementalResitance>k__BackingField:
     statType: 4
-    baseValue: 0
+    baseValue: 90
     value: 0
   <HealthRegen>k__BackingField:
     statType: 12

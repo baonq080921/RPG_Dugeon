@@ -14,8 +14,9 @@ namespace Save
         public float currentExp;
         public int currentLevel;
         public float expToNextLevel;
-        public List<ItemSaveEntry>  inventory  = new List<ItemSaveEntry>();
-        public List<EquipSaveEntry> equipment  = new List<EquipSaveEntry>();
-        public SkillTreeSaveData    skillTree  = new SkillTreeSaveData();
+        public List<ItemSaveEntry>  inventory           = new List<ItemSaveEntry>();
+        public List<EquipSaveEntry> equipment           = new List<EquipSaveEntry>();
+        public SkillTreeSaveData    skillTree           = new SkillTreeSaveData();
+        public List<string>         completedQuestScenes = new List<string>();
     }
 }

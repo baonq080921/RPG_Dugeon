@@ -21,6 +21,8 @@ public class EntityStat : MonoBehaviour
     private const float K = 100f; //Scaling factor for diminishing returns on armor
     [field: SerializeField] public float StunDuration {get; private set;} = 0.3f;
 
+    private void Awake() => ResetAllStats();
+
     public float GetHealthValue()
     {
         float baseHealth = _defensiveStats.MaxHealth.GetValue();

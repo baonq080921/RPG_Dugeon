@@ -21,6 +21,7 @@ namespace Save
 
         private ItemDataRegistry _registry;
         private PlayerSaveData   _pendingLoad;
+        private readonly System.Collections.Generic.HashSet<string> _completedQuestScenes = new();
 
         private void Awake()
         {
@@ -97,6 +98,9 @@ namespace Save
                 }
             }
 
+            foreach (var sceneName in _completedQuestScenes)
+                data.completedQuestScenes.Add(sceneName);
+
             File.WriteAllText(SavePath, JsonUtility.ToJson(data, prettyPrint: true));
             Debug.Log($"[SaveManager] Saved to {SavePath}");
         }
@@ -104,6 +108,12 @@ namespace Save
         // -------------------------------------------------------------------------
         // Load
         // -------------------------------------------------------------------------
+
+        /// <summary>Marks a scene's quest as completed in the in-memory set. Call <see cref="Save"/> afterward to persist.</summary>
+        public void MarkQuestComplete(string sceneName) => _completedQuestScenes.Add(sceneName);
+
+        /// <summary>Returns true if the quest for <paramref name="sceneName"/> was already completed.</summary>
+        public bool IsQuestComplete(string sceneName) => _completedQuestScenes.Contains(sceneName);
 
         /// <summary>Returns true if a save file exists on disk.</summary>
         public bool HasSave() => File.Exists(SavePath);
@@ -170,6 +180,7 @@ namespace Save
 
             // Restore equipment slots
             var playerStat = player.GetComponent<EntityStat>();
+            playerStat.ResetAllStats();
             foreach (var entry in data.equipment)
             {
                 if (string.IsNullOrEmpty(entry.itemId)) continue;
@@ -219,6 +230,11 @@ namespace Save
                 foreach (var handler in uiSkillTree.GetComponentsInChildren<UIConnectedHandler>())
                     handler.RefreshLineColors();
             }
+
+            // Restore completed quests
+            _completedQuestScenes.Clear();
+            foreach (var sceneName in data.completedQuestScenes)
+                _completedQuestScenes.Add(sceneName);
 
             Debug.Log("[SaveManager] Load complete.");
         }

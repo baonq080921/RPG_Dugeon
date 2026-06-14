@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
   m_Name: SkillTree-TimeEchoHealingCD
   m_EditorClassIdentifier: 
+  <SkillTreeId>k__BackingField: 0eacd534-e3bc-4b4d-84ae-6f92501e9741
   <SkillType>k__BackingField: 1
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 9
     <UpgradeCoolDown>k__BackingField: 20
     <UpgradeDuration>k__BackingField: 2
     <UpgradeDamage>k__BackingField: 0
-    <UpgradeHealing>k__BackingField: 40
+    <UpgradeHealing>k__BackingField: 300
     <UpgradeCD>k__BackingField: 0.3
   <skillTreeDataName>k__BackingField: TimeEchoHealingCD
   <Description>k__BackingField: Its not only increase your health +35 hp and it cooldown

@@ -42,7 +42,10 @@ namespace Base
         /// <summary>Raises the event, invoking all registered bindings.</summary>
         public static void Raise(T @event)
         {
-            foreach (var binding in _bindings)
+            // Snapshot prevents InvalidOperationException when a handler deregisters
+            // its own binding during dispatch (e.g. quest completing and calling StopTracking).
+            var snapshot = new List<IEventBinding<T>>(_bindings);
+            foreach (var binding in snapshot)
             {
                 binding.OnEvent.Invoke(@event);
                 binding.OnEventNoArgs.Invoke();

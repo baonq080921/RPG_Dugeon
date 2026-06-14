@@ -26,7 +26,7 @@ namespace Stats
     {
         public StatType statType;
         [SerializeField]private float baseValue;
-        [SerializeField]private float value;
+        [System.NonSerialized] private float value;
 
         public float GetValue() => value;
         public float GetBaseValue() => baseValue;

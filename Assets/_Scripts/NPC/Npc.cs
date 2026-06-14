@@ -7,6 +7,9 @@ namespace NPC
     public  class Npc : MonoBehaviour, IInteractable
     {
 
+        [field:TextArea]
+        [field:SerializeField] protected string _dialougeStr; 
+
         // [SerializeField] protected UIFloating_Panel _uIFloating_Panel;
         public virtual void OnInteract()
         {

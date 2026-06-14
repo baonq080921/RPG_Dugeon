@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
   m_Name: SkillTree-DismantleRewind
   m_EditorClassIdentifier: 
+  <SkillTreeId>k__BackingField: 1b47032b-520e-4e10-a0a3-846935fa34f8
   <SkillType>k__BackingField: 2
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 11
     <UpgradeCoolDown>k__BackingField: 12
     <UpgradeDuration>k__BackingField: 0.5
-    <UpgradeDamage>k__BackingField: 20
+    <UpgradeDamage>k__BackingField: 90
     <UpgradeHealing>k__BackingField: 0
     <UpgradeCD>k__BackingField: 0.5
   <skillTreeDataName>k__BackingField: DismantleRewind

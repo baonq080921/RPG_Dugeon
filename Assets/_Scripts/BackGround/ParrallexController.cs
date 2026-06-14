@@ -17,7 +17,7 @@ namespace BackGround
             _cameraHalfWidth = _camera.orthographicSize * _camera.aspect;
         }
 
-        void FixedUpdate()
+        void LateUpdate()
         {
             float currentCamPositionX = _camera.transform.position.x;
             float distanceToMove = currentCamPositionX - _lastCamPositionX;

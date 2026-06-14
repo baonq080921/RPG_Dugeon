@@ -21,7 +21,6 @@ namespace enemy
         public EnemyChaseState enemyChaseState { get; protected set; }
         public EnemyAttackState enemyAttackState { get; protected set; }
         public EnemyStunState enemyStunState { get; protected set; }
-        public EnemyDeathState enemyDeathState { get; protected set; }
 
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
@@ -39,7 +38,6 @@ namespace enemy
             enemyChaseState = new EnemyChaseState(this, stateMachine, "Move");
             enemyAttackState = new EnemyAttackState(this, stateMachine, "Attack");
             enemyStunState = new EnemyStunState(this, stateMachine, "Hit");
-            enemyDeathState = new EnemyDeathState(this, stateMachine,"Died");
             _entityDrop = GetComponent<EntityDrop>();
         }
 
@@ -128,6 +126,8 @@ namespace enemy
             EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent(enemyData.Level, enemyData.BaseExp));
         }
 
+        public virtual void ChangeToDiedState(){}
+
 
         public override void ApplyEffect(float scaleFactor, ElementType elementType)
         {
@@ -154,13 +154,13 @@ namespace enemy
         {
             base.OnDrawGizmos();
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, enemyData.DetectionRange);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, enemyData.AttackRange);
+            // Gizmos.color = Color.yellow;
+            // Gizmos.DrawWireSphere(transform.position, enemyData.DetectionRange);
+            // Gizmos.color = Color.red;
+            // Gizmos.DrawWireSphere(transform.position, enemyData.AttackRange);
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
+            // Gizmos.color = Color.green;
+            // Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
         }
 
         /// <summary>

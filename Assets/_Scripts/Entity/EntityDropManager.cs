@@ -20,6 +20,7 @@ public class EntityDrop : MonoBehaviour
 
     public void DropItems()
     {
+        if(_dropDataList == null) return;
         List<ItemData> itemsToDrop = RollRandomDrop();
         Debug.Log(itemsToDrop.Count);
         int dropCount = Mathf.Min(maxDropOut, itemsToDrop.Count);

@@ -182,7 +182,7 @@ MonoBehaviour:
   _iceHitColor: {r: 0, g: 0.065425396, b: 1, a: 1}
   _fireColor: {r: 1, g: 0, b: 0, a: 1}
   _statusBlinkInterval: 0.15
-  _alertCounterSignal: {fileID: 0}
+  _alertCounterSignal: {fileID: 496232962932987022}
 --- !u!114 &5564956290498198079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dropDataList: {fileID: 11400000, guid: 3f6e29191b235074aa472f2b36a9fe9a, type: 2}
   maxRarity: 1200
-  maxDropOut: 3
+  maxDropOut: 2
 --- !u!1 &2789665869308449548
 GameObject:
   m_ObjectHideFlags: 0
