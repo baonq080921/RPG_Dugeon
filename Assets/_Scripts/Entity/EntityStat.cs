@@ -148,32 +148,58 @@ public class EntityStat : MonoBehaviour
     public float GetElementalResistanceDisplayValue() => (1f - GetElementalResitanceValue()) * 100f;
     #endregion
 
-    [ContextMenu("Reset all the stats to default")]
-
     /// <summary>
     /// Stats for Player Only
     /// </summary>
     /// <param name="statType"></param>
     /// <returns></returns>
+    private int _strengthPoints;
+    private int _agilityPoints;
+    private int _intelligencePoints;
+    private int _vitalityPoints;
+
+    public int GetAllocatedPoints(StatType statType) => statType switch
+    {
+        StatType.Strength     => _strengthPoints,
+        StatType.Agility      => _agilityPoints,
+        StatType.Intelligence => _intelligencePoints,
+        StatType.Vitality     => _vitalityPoints,
+        _                     => 0
+    };
+
     public void ResetAllStats()
     {
-        _majorStats.Strength.Reset();
-        _majorStats.Agility.Reset();
-        _majorStats.Intelligence.Reset();
-        _majorStats.Vitality.Reset();
+        _strengthPoints     = 0;
+        _agilityPoints      = 0;
+        _intelligencePoints = 0;
+        _vitalityPoints     = 0;
 
-        _offensiveStats.Damage.Reset();
-        _offensiveStats.CritChance.Reset();
-        _offensiveStats.CritPower.Reset();
-        _offensiveStats.AttackMultiplier.Reset();
-        _offensiveStats.ElementalDamage.Reset();
+        if (_majorStats != null)
+        {
+            _majorStats.Strength.Reset();
+            _majorStats.Agility.Reset();
+            _majorStats.Intelligence.Reset();
+            _majorStats.Vitality.Reset();
+        }
 
-        _defensiveStats.MaxHealth.Reset();
-        _defensiveStats.Amor.Reset();
-        _defensiveStats.Envasion.Reset();
-        _defensiveStats.ElementalResitance.Reset();
-        _defensiveStats.KnockBackThreshHold.Reset();
-        _defensiveStats.HealthRegen.Reset();
+        if (_offensiveStats != null)
+        {
+            _offensiveStats.Damage.Reset();
+            _offensiveStats.CritChance.Reset();
+            _offensiveStats.CritPower.Reset();
+            _offensiveStats.AttackMultiplier.Reset();
+            _offensiveStats.ElementalDamage.Reset();
+        }
+
+        if (_defensiveStats != null)
+        {
+            _defensiveStats.MaxHealth.Reset();
+            _defensiveStats.Amor.Reset();
+            _defensiveStats.Envasion.Reset();
+            _defensiveStats.ElementalResitance.Reset();
+            _defensiveStats.KnockBackThreshHold.Reset();
+            _defensiveStats.HealthRegen.Reset();
+        }
     }
 
     /// <summary>Permanently adds 1 point to the chosen major stat. Called by the level-up UI.</summary>
@@ -181,14 +207,10 @@ public class EntityStat : MonoBehaviour
     {
         switch (statType)
         {
-            case StatType.Strength: StrenghLevelUp();
-            return;
-            case StatType.Agility: AgilityLevelUp();
-            return;
-            case StatType.Intelligence: IntelegenceLevelUp();
-            return;
-            case StatType.Vitality: VitalityLevelUp();
-            return;
+            case StatType.Strength:     StrenghLevelUp();     _strengthPoints++;     return;
+            case StatType.Agility:      AgilityLevelUp();     _agilityPoints++;      return;
+            case StatType.Intelligence: IntelegenceLevelUp(); _intelligencePoints++; return;
+            case StatType.Vitality:     VitalityLevelUp();    _vitalityPoints++;     return;
         }
     }
 

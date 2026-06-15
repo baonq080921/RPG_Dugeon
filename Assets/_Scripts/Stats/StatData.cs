@@ -25,20 +25,20 @@ namespace Stats
     public class Stat
     {
         public StatType statType;
-        [SerializeField]private float baseValue;
+        [SerializeField] private float baseValue;
         [System.NonSerialized] private float value;
+        [System.NonSerialized] private bool _initialized;
 
-        public float GetValue() => value;
+        public float GetValue() => _initialized ? value : baseValue;
         public float GetBaseValue() => baseValue;
-        public void AddModifier(float addValue, String name)
-        {
-            value += addValue;
-        }
-        public void RemoveModifier(float decreaseVal, String name)
-        {
-            value -= decreaseVal;
-        }
 
-        public void Reset() => value = baseValue;
+        public void AddModifier(float addValue, String name) => value += addValue;
+        public void RemoveModifier(float decreaseVal, String name) => value -= decreaseVal;
+
+        public void Reset()
+        {
+            value = baseValue;
+            _initialized = true;
+        }
     }
 }

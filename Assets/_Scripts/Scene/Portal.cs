@@ -1,5 +1,4 @@
 using Base;
-using Save;
 using UnityEngine;
 
 namespace scene
@@ -38,7 +37,6 @@ namespace scene
                 }
             }
 
-            ServiceLocator.Get<SaveManager>()?.Save();
             SceneTransitionManager.Instance.TransitionToScene(_targetScene, _destinationPortalId);
         }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Base;
 using DG.Tweening;
+using player;
 using TMPro;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ public class UI_Inventory : MonoBehaviour
     }
     void OnEnable()
     {
+        Player.ActivePlayerChanged += OnPlayerChanged;
         _eventBindingChanged = new EventBinding<OnInventoryChangedEvent>(UpdateUIInventory);
         EventBus<OnInventoryChangedEvent>.Register(_eventBindingChanged);
         _eventBindingAlert = new EventBinding<AlertNotiEvent>(AlertNotificationUI);
@@ -49,8 +51,14 @@ public class UI_Inventory : MonoBehaviour
     {
         EventBus<OnInventoryChangedEvent>.Deregister(_eventBindingChanged);
         EventBus<AlertNotiEvent>.Deregister(_eventBindingAlert);
+        Player.ActivePlayerChanged -= OnPlayerChanged;
     }
 
+
+    private void OnPlayerChanged(Player player)
+    {
+        _inventory = player.playerInventory;
+    }
 
     void AlertNotificationUI(AlertNotiEvent alertNotiEvent)
     {

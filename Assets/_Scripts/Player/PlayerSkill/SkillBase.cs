@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 namespace player
 {
@@ -19,6 +20,9 @@ namespace player
         /// <summary>True once the player has unlocked this skill via the skill tree.</summary>
         public bool IsUnlocked { get; private set; }
 
+        /// <summary>Raised whenever any skill transitions from locked to unlocked.</summary>
+        public static event Action OnAnySkillUnlocked;
+
         protected virtual void Awake(){}
 
         protected virtual void OnEnable()
@@ -30,8 +34,15 @@ namespace player
         {
             UISkillTree.OnReset -= ResetSkill;
         }
+
         /// <summary>Opens the activation gate for this skill.</summary>
-        public void Unlock() => IsUnlocked = true;
+        public void Unlock()
+        {
+            IsUnlocked = true;
+            OnAnySkillUnlocked?.Invoke();
+        }
+
+        /// <summary>Closes the activation gate for this skill.</summary>
         public void Lock() => IsUnlocked = false;
 
         /// <summary>

@@ -80,9 +80,10 @@ namespace Base
             this.itemInventory = itemInventory;
         }
     }
+    //When something change in the inventory for instance looting, or some stat upgrade that effect the ui stat on inventory
+    public struct OnInventoryChangedEvent:IEvent{} 
 
-    public struct OnInventoryChangedEvent:IEvent{}
-
+    #region Quest Event:
     /// <summary>Raised when a scene's quest begins tracking.</summary>
     public struct QuestStartedEvent : IEvent
     {
@@ -105,7 +106,18 @@ namespace Base
     }
 
     /// <summary>Raised when the player rescues (interacts with) a <see cref="NPC.RescuableNpc"/>.</summary>
+    /// CAn share this event for all the object that have same behaviour collect something.
     public struct NpcRescuedEvent : IEvent { }
+
+    /// <summary>Raised by any object that wants to grant the player skill points (chests, quest rewards, etc.).</summary>
+    public struct SkillPointRewardEvent : IEvent
+    {
+        public float Amount { get; }
+        public SkillPointRewardEvent(float amount) => Amount = amount;
+    }
+
+
+    #endregion
 
     /// <summary>Raised when the player enters a new camera zone, carrying the new bounding shape.</summary>
     public struct CameraZoneChangedEvent : IEvent

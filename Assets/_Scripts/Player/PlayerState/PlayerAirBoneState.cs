@@ -27,6 +27,16 @@ namespace player
                 stateMachine.ChangeState(dashState);
                 return;
             }
+            if(player.SkillButtonHandler.TryConsumeSkill((int)ButtonSkillName.Domain, out PlayerState domainState))
+            {
+                stateMachine.ChangeState(domainState);
+                return;
+            }
+            if(player.SkillButtonHandler.TryConsumeSkill((int)ButtonSkillName.Dismantle, out PlayerState dismantleState))
+            {
+                stateMachine.ChangeState(dismantleState);
+                return;
+            }
             if(player.movementInput.x != 0)
                 player.SetVelocity(new Vector2(player.movementInput.x * player.moveSpeed * player.airControlFactor, rb.velocity.y));
         }

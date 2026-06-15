@@ -83,6 +83,7 @@ namespace UI
                     _panelRect.anchoredPosition = _hiddenPosition;
                     Time.timeScale = 1f;
                     EventBus<GamePauseChangedEvent>.Raise(new GamePauseChangedEvent(false));
+                    EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
                 });
         }
     }

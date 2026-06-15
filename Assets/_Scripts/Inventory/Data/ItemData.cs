@@ -24,7 +24,12 @@ public class ItemData : ScriptableObject
     void OnValidate()
     {
         if (string.IsNullOrEmpty(ItemId))
+        {
             ItemId = System.Guid.NewGuid().ToString();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
+        }
         dropChance = GetDropChance();
     }
     public float GetDropChance()

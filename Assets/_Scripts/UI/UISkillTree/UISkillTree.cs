@@ -1,33 +1,28 @@
 using System;
+using player;
 using UnityEngine;
 
 public class UISkillTree : MonoBehaviour
 {
-    [SerializeField] private float _skillPoint;
     public static event Action OnReset;
 
-    public float SkillPoints => _skillPoint;
+    private PlayerInventory _playerInventory;
 
-    public bool EnoughSkillPoint(float cost) => _skillPoint >= cost;
+    public float SkillPoints => _playerInventory?.SkillPoints ?? 0f;
 
-    public void ReduceSkillPoint(float cost)
-    {
-        if (!EnoughSkillPoint(cost)) return;
-        _skillPoint -= cost;
-    }
+    private void OnEnable() => Player.ActivePlayerChanged += OnPlayerChanged;
+    private void OnDisable() => Player.ActivePlayerChanged -= OnPlayerChanged;
 
-    public void RefundSkillPoint(float cost) => _skillPoint += cost;
+    private void OnPlayerChanged(Player player) => _playerInventory = player.playerInventory;
 
-    /// <summary>Directly sets the skill point balance. Used only by the save system on load.</summary>
-    public void RestoreSkillPoints(float amount) => _skillPoint = amount;
+    public bool EnoughSkillPoint(float cost) => _playerInventory?.CanSpendSkillPoints(cost) ?? false;
 
+    public void ReduceSkillPoint(float cost) => _playerInventory?.SpendSkillPoints(cost);
 
+    public void RefundSkillPoint(float cost) => _playerInventory?.AddSkillPoints(cost);
 
+    public void RestoreSkillPoints(float amount) => _playerInventory?.SetSkillPoints(amount);
 
-    /// <summary>
-    /// Arranges all child nodes by applying line geometry then repositioning each node
-    /// to its connection point. Run this after assigning line lengths and offsets.
-    /// </summary>
     [ContextMenu("Arrange Skill Tree Nodes")]
     public void ArrangeSkillTreeNodes()
     {
@@ -36,14 +31,9 @@ public class UISkillTree : MonoBehaviour
     }
 
     [ContextMenu("Reset Skill Tree")]
-    /// <summary>
-    /// Refunds all spent skill points and resets every node in the tree back to its initial locked state.
-    /// </summary>
     public void ResetSkillTree()
     {
-        UITreeNode[] allNodes = GetComponentsInChildren<UITreeNode>();
-
-        foreach (var node in allNodes)
+        foreach (var node in GetComponentsInChildren<UITreeNode>(true))
         {
             if (node.isUnlocked && node.skillTreeData != null)
                 RefundSkillPoint(node.skillTreeData.Cost);
@@ -51,7 +41,7 @@ public class UISkillTree : MonoBehaviour
         }
         OnReset?.Invoke();
 
-        foreach (var handler in GetComponentsInChildren<UIConnectedHandler>())
+        foreach (var handler in GetComponentsInChildren<UIConnectedHandler>(true))
             handler.RefreshLineColors();
     }
 }

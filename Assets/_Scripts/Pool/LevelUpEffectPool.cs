@@ -9,6 +9,20 @@ public class LevelUpEffectPool : MonoBehaviourPool<LevelUpEffect>
 {
     [SerializeField] private LevelUpEffect _prefab;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        var manager = ServiceLocator.Get<PoolManager>();
+        if (manager != null) manager.levelupPool = this;
+    }
+
+    private void OnDestroy()
+    {
+        var manager = ServiceLocator.Get<PoolManager>();
+        if (manager != null && manager.levelupPool == this)
+            manager.levelupPool = null;
+    }
+
     protected override LevelUpEffect CreateInstance()
     {
         var item = Instantiate(_prefab, transform);

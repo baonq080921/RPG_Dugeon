@@ -16,6 +16,8 @@ public class HitEffectPool : MonoBehaviourPool<HitEffect>
     protected override void Awake()
     {
         base.Awake();
+        var manager = ServiceLocator.Get<PoolManager>();
+        if(manager !=  null) manager.hitEffectPool = this;
         _critPool = new ObjectPool<HitEffect>(
             createFunc: () => { var h = Instantiate(_hitCritPrefab); h.gameObject.SetActive(false); return h; },
             actionOnGet: h => { h.gameObject.SetActive(true); h.EnableHit(); },
@@ -27,6 +29,9 @@ public class HitEffectPool : MonoBehaviourPool<HitEffect>
     {
         base.OnDestroy();
         _critPool?.Dispose();
+        var manager = ServiceLocator.Get<PoolManager>();
+        if(manager != null && manager.hitEffectPool == this )
+            manager.hitEffectPool = null;
     }
 
     protected override HitEffect CreateInstance()

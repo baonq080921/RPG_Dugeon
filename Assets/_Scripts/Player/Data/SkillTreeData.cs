@@ -16,7 +16,12 @@ public class SkillTreeData : ScriptableObject {
     private void OnValidate()
     {
         if (string.IsNullOrEmpty(SkillTreeId))
+        {
             SkillTreeId = System.Guid.NewGuid().ToString();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
+        }
     }
 }
 [System.Serializable]

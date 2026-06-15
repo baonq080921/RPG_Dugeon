@@ -1,4 +1,5 @@
 using System.Collections;
+using Base;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -51,8 +52,21 @@ namespace scene
             _fadeCanvasGroup.blocksRaycasts = true;
 
             yield return StartCoroutine(Fade(1f));
+
+            // Snapshot before the old scene is destroyed
+            var saveManager = ServiceLocator.Get<Save.SaveManager>();
+            var leavingPlayer = FindObjectOfType<player.Player>();
+            if (leavingPlayer != null && saveManager != null)
+                saveManager.SnapshotForTransition(leavingPlayer);
+
             yield return SceneManager.LoadSceneAsync(sceneName);
+
+            // Position first, then restore all other state
             MovePlayerToSpawn();
+            var arrivingPlayer = FindObjectOfType<player.Player>();
+            if (arrivingPlayer != null && saveManager != null && saveManager.HasTransitionSnapshot)
+                yield return StartCoroutine(saveManager.RestoreAfterTransition(arrivingPlayer));
+
             yield return StartCoroutine(Fade(0f));
 
             _fadeCanvasGroup.blocksRaycasts = false;

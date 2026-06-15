@@ -67,7 +67,7 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
     {
         if(!_playerInventory.CanAddToIventory()) return;
         _playerInventory.AddToInventory(_itemInventory);
-        ServiceLocator.Get<PoolManager>()?.itemObjectPool.Return(this);
+        ServiceLocator.Get<PoolManager>()?.itemObjectPool?.Return(this);
     }
 
     public void ResetState()

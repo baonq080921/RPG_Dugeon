@@ -139,7 +139,7 @@ TextureImporter:
         width: 82
         height: 49
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -147,6 +147,153 @@ TextureImporter:
       bones: []
       spriteID: e28f7fe71cef82940b6afa786e67a7ef
       internalID: -2060641351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slice1
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 399
+        width: 95
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b158eeaa2e630214795a502908800f86
+      internalID: -1876070346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slice2
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 497
+        width: 82
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a0755b0de954ce44829d6c840554a94
+      internalID: 1688780905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slice3
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 491
+        width: 49
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de16e793ef9d4e44bbb3fa9c8e3aaa8f
+      internalID: 2143946648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slice4
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 502
+        width: 75
+        height: 78
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da79a39a732a55f4cb89535114a98b8e
+      internalID: 1519498323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slice5
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 389
+        width: 49
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6341027f853f039418433f51a61c4b8f
+      internalID: 643999113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slice6
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 393
+        width: 80
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd0171b3d0bc61643ae48a31299915ac
+      internalID: -1812180441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ryomen_sukuna_swlplus__by_godkuuxfy_di6cub6 (1)_2
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 303
+        width: 232
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb49c6e90ef840941a11da14e44ba237
+      internalID: -1771548860
       vertices: []
       indices: 
       edges: []
@@ -162,8 +309,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Slice1: -1876070346
+      Slice2: 1688780905
+      Slice6: -1812180441
       ryomen_sukuna_swlplus__by_godkuuxfy_di6cub6 (1)_0: -1003345193
       ryomen_sukuna_swlplus__by_godkuuxfy_di6cub6 (1)_1: -2060641351
+      ryomen_sukuna_swlplus__by_godkuuxfy_di6cub6 (1)_2: -1771548860
+      slice3: 2143946648
+      slice4: 1519498323
+      slice5: 643999113
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

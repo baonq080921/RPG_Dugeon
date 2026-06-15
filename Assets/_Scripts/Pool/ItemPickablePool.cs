@@ -3,11 +3,26 @@ using UnityEngine;
 
 /// <summary>
 /// Pool for <see cref="ItemObjectPickable"/> world drops.
-/// Assigned to <see cref="PoolManager"/> in the Inspector — do not register with ServiceLocator directly.
+/// Per-scene — registers itself with <see cref="PoolManager"/> on Awake so the
+/// persistent PoolManager always points to the current scene's pool.
 /// </summary>
 public class ItemPickablePool : MonoBehaviourPool<ItemObjectPickable>
 {
     [SerializeField] private ItemObjectPickable _prefab;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        var manager = ServiceLocator.Get<PoolManager>();
+        if (manager != null) manager.itemObjectPool = this;
+    }
+
+    private void OnDestroy()
+    {
+        var manager = ServiceLocator.Get<PoolManager>();
+        if (manager != null && manager.itemObjectPool == this)
+            manager.itemObjectPool = null;
+    }
 
     protected override ItemObjectPickable CreateInstance()
     {

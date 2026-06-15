@@ -57,7 +57,7 @@ namespace player
         public PlayerDeadState playerDeadState {get; private set;}
         public PlayerCounterState playerCounterState {get; private set;}
         public PlayerDismantleState playerDismantleState {get; private set;}
-
+        public PlayerDomainExpasionState playerDomainExpasionState {get; private set;}
         public PlayerInputSet input;
         public SkillButtonHandler SkillButtonHandler { get; private set; }
         public AfterImageEffect AfterImageEffect { get; private set; }
@@ -79,6 +79,7 @@ namespace player
         public PlayerCombat playerCombat {get; private set;}
         public PlayerVfx playerVfx {get; private set;}
         public PlayerLevel playerLevel {get ; private set;}
+        public PlayerInventory playerInventory {get; private set;}
 
         protected override void Awake()
         {
@@ -89,9 +90,9 @@ namespace player
             playerCombat = GetComponent<PlayerCombat>();
             playerVfx = GetComponent<PlayerVfx>();
             playerLevel = GetComponent<PlayerLevel>();
+            playerInventory = GetComponent<PlayerInventory>();
             input = new PlayerInputSet();
             CreateStates();
-
             ServiceLocator.Register<Player>(this);
         }
 
@@ -113,11 +114,14 @@ namespace player
             playerKnockBackState = new PlayerKnockBackState(this, stateMachine, "Hit");
             playerDeadState = new PlayerDeadState(this, stateMachine,"Dead");
             playerDismantleState = new PlayerDismantleState(this,stateMachine,"CanDismantle");
-
             playerCounterState = new PlayerCounterState(this, stateMachine, "EnterCounter");
+            playerDomainExpasionState = new PlayerDomainExpasionState(this, stateMachine,"CanDomain");
+
+            //Skill Button Handler for moble
             SkillButtonHandler.RegisterState((int)ButtonSkillName.CounterSkill, playerCounterState); 
             SkillButtonHandler.RegisterState((int)ButtonSkillName.Dash, playerDashState);  
             SkillButtonHandler.RegisterState((int)ButtonSkillName.Dismantle,playerDismantleState);
+            SkillButtonHandler.RegisterState((int)ButtonSkillName.Domain,playerDomainExpasionState);
             }
 
         void OnEnable()
@@ -128,11 +132,14 @@ namespace player
             input.Player.Movement.canceled += ctx => movementInput = Vector2.zero;
             input.Player.Jump.performed += ctx => { isJump = true; JumpJustPressed = true; };
             input.Player.Jump.canceled += ctx => isJump = false;
-            input.Player.Dash.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dash);
+            
             // Keyboard fallback for skill slot 0 (Counter). Mobile uses on-screen SkillButton instead.
+            input.Player.Dash.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dash);
             input.Player.Counter.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.CounterSkill);
             input.Player.TimeEcho.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.TimeEcho);
             input.Player.Dismantle.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dismantle);
+            input.Player.DomainExpasion.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Domain);
+
 
             _pauseBinding = new EventBinding<GamePauseChangedEvent>(OnPauseChanged);
             EventBus<GamePauseChangedEvent>.Register(_pauseBinding);

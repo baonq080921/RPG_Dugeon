@@ -154,6 +154,15 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DomainExpasion"",
+                    ""type"": ""Button"",
+                    ""id"": ""ae800c56-d111-462b-ac5f-9159d5fae634"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -332,6 +341,17 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""Dismantle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28472703-1c98-46b0-b5c2-833db748aa88"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DomainExpasion"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -347,6 +367,7 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
         m_Player_Counter = m_Player.FindAction("Counter", throwIfNotFound: true);
         m_Player_TimeEcho = m_Player.FindAction("TimeEcho", throwIfNotFound: true);
         m_Player_Dismantle = m_Player.FindAction("Dismantle", throwIfNotFound: true);
+        m_Player_DomainExpasion = m_Player.FindAction("DomainExpasion", throwIfNotFound: true);
     }
 
     ~@PlayerInputSet()
@@ -434,6 +455,7 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Counter;
     private readonly InputAction m_Player_TimeEcho;
     private readonly InputAction m_Player_Dismantle;
+    private readonly InputAction m_Player_DomainExpasion;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -473,6 +495,10 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Dismantle".
         /// </summary>
         public InputAction @Dismantle => m_Wrapper.m_Player_Dismantle;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/DomainExpasion".
+        /// </summary>
+        public InputAction @DomainExpasion => m_Wrapper.m_Player_DomainExpasion;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -520,6 +546,9 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
             @Dismantle.started += instance.OnDismantle;
             @Dismantle.performed += instance.OnDismantle;
             @Dismantle.canceled += instance.OnDismantle;
+            @DomainExpasion.started += instance.OnDomainExpasion;
+            @DomainExpasion.performed += instance.OnDomainExpasion;
+            @DomainExpasion.canceled += instance.OnDomainExpasion;
         }
 
         /// <summary>
@@ -552,6 +581,9 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
             @Dismantle.started -= instance.OnDismantle;
             @Dismantle.performed -= instance.OnDismantle;
             @Dismantle.canceled -= instance.OnDismantle;
+            @DomainExpasion.started -= instance.OnDomainExpasion;
+            @DomainExpasion.performed -= instance.OnDomainExpasion;
+            @DomainExpasion.canceled -= instance.OnDomainExpasion;
         }
 
         /// <summary>
@@ -641,5 +673,12 @@ public partial class @PlayerInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDismantle(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DomainExpasion" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDomainExpasion(InputAction.CallbackContext context);
     }
 }

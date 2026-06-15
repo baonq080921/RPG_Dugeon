@@ -1,5 +1,6 @@
 using System.Text;
 using Base;
+using player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,7 @@ namespace UI
 
         void OnEnable()
         {
+            Player.ActivePlayerChanged += OnPlayerChanged;
             _eventGetCraftInfoBinding = new EventBinding<CraftGetInfoEvent>(UpdateItemDetailsInfo);
             EventBus<CraftGetInfoEvent>.Register(_eventGetCraftInfoBinding);
 
@@ -33,8 +35,14 @@ namespace UI
 
         void OnDisable()
         {
+            Player.ActivePlayerChanged -= OnPlayerChanged;
             EventBus<CraftGetInfoEvent>.Deregister(_eventGetCraftInfoBinding);
             EventBus<OnInventoryChangedEvent>.Deregister(_inventoryChangedBinding);
+        }
+
+        public void OnPlayerChanged(Player player)
+        {
+            _playerInventory = player.playerInventory;
         }
 
         /// <summary>

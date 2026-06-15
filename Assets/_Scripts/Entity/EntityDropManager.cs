@@ -31,7 +31,7 @@ public class EntityDrop : MonoBehaviour
     }
 
     private void CreateDropItem(ItemData itemData) =>
-        ServiceLocator.Get<PoolManager>()?.itemObjectPool.Spawn(itemData, transform.position);
+        ServiceLocator.Get<PoolManager>()?.itemObjectPool?.Spawn(itemData, transform.position);
 
 
     public List<ItemData> RollRandomDrop()

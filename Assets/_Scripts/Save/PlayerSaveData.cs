@@ -14,6 +14,10 @@ namespace Save
         public float currentExp;
         public int currentLevel;
         public float expToNextLevel;
+        public int strengthPoints;
+        public int agilityPoints;
+        public int intelligencePoints;
+        public int vitalityPoints;
         public List<ItemSaveEntry>  inventory           = new List<ItemSaveEntry>();
         public List<EquipSaveEntry> equipment           = new List<EquipSaveEntry>();
         public SkillTreeSaveData    skillTree           = new SkillTreeSaveData();

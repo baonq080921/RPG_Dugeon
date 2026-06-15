@@ -1,5 +1,6 @@
 using Base;
 using DG.Tweening;
+using player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,13 +48,9 @@ namespace UI
             _craftButton.onClick.AddListener(TryCraft);
         }
 
-        private void Start()
-        {
-            UpdateInventoryDisplay();
-        }
-
         private void OnEnable()
         {
+            Player.ActivePlayerChanged += OnPlayerChanged;
             _inventoryChangedBinding = new EventBinding<OnInventoryChangedEvent>(UpdateInventoryDisplay);
             EventBus<OnInventoryChangedEvent>.Register(_inventoryChangedBinding);
 
@@ -66,6 +63,7 @@ namespace UI
 
         private void OnDisable()
         {
+            Player.ActivePlayerChanged -= OnPlayerChanged;
             EventBus<OnInventoryChangedEvent>.Deregister(_inventoryChangedBinding);
             EventBus<StoreCallEvent>.Deregister(_storeOpenBinding);
             EventBus<CraftGetInfoEvent>.Deregister(_craftInfoBinding);
@@ -99,8 +97,15 @@ namespace UI
 
         }
 
+        private void OnPlayerChanged(Player player)
+        {
+            _playerInventory = player.playerInventory;
+            UpdateInventoryDisplay();
+        }
+
         private void UpdateInventoryDisplay()
         {
+            if (_playerInventory == null) return;
             var items = _playerInventory.itemInventoriesList;
             for (int i = 0; i < _inventorySlots.Length; i++)
             {

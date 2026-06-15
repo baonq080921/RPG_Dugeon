@@ -13,12 +13,29 @@ public class PlayerInventory : InventoryBase {
     [field:SerializeField] public List<ItemInventoryEquipment> equipList {get; private set;}
     private EventBinding<EquipEvent> _eventEquipBinding;
     private EventBinding<PlayerDiedEvent> _eventDiedBinding;
+    private EventBinding<SkillPointRewardEvent> _skillPointRewardBinding;
+
+    [SerializeField] private float _startingSkillPoints = 0f;
+    public float SkillPoints { get; private set; }
+
+    public bool CanSpendSkillPoints(float cost) => SkillPoints >= cost;
+
+    public void SpendSkillPoints(float cost)
+    {
+        if (!CanSpendSkillPoints(cost)) return;
+        SkillPoints -= cost;
+    }
+
+    public void AddSkillPoints(float amount) => SkillPoints += amount;
+
+    public void SetSkillPoints(float amount) => SkillPoints = amount;
 
     protected override void Awake()
     {
         base.Awake();
         _playerStats = GetComponent<EntityStat>();
         _player = GetComponent<Player>();
+        SkillPoints = _startingSkillPoints;
     }
 
     void OnEnable()
@@ -27,13 +44,15 @@ public class PlayerInventory : InventoryBase {
         EventBus<EquipEvent>.Register(_eventEquipBinding);
         _eventDiedBinding = new EventBinding<PlayerDiedEvent>(DropAllItem);
         EventBus<PlayerDiedEvent>.Register(_eventDiedBinding);
-
+        _skillPointRewardBinding = new EventBinding<SkillPointRewardEvent>(e => AddSkillPoints(e.Amount));
+        EventBus<SkillPointRewardEvent>.Register(_skillPointRewardBinding);
     }
 
     void OnDisable()
     {
         EventBus<EquipEvent>.Deregister(_eventEquipBinding);
         EventBus<PlayerDiedEvent>.Deregister(_eventDiedBinding);
+        EventBus<SkillPointRewardEvent>.Deregister(_skillPointRewardBinding);
     }
 
 
@@ -134,5 +153,5 @@ public class PlayerInventory : InventoryBase {
     }
 
     private void SpawnDroppedItem(ItemData itemData) =>
-        ServiceLocator.Get<PoolManager>()?.itemObjectPool.Spawn(itemData, transform.position);
+        ServiceLocator.Get<PoolManager>()?.itemObjectPool?.Spawn(itemData, transform.position);
 }

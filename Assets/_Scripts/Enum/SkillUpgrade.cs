@@ -15,5 +15,6 @@ public enum SkillUpgrade:byte
     TimeEcho_HealOnEchoAndDuration,
 
     Dismantle,
-    Dismantle_Upgrade
+    Dismantle_Upgrade,
+    Domain
 }

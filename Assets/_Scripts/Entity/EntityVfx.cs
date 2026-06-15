@@ -57,14 +57,13 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     public void CreateEffectVFX(GameObject effect, Transform target)
     {
-        Instantiate(effect,target.position,Quaternion.identity);
-
-        Destroy(effect,2f);
+        var instance = Instantiate(effect, target.position, Quaternion.identity);
+        Destroy(instance, 2f);
     }
 
     public void CreateEffectLevelVFx()
     {
-        ServiceLocator.Get<PoolManager>()?.levelupPool.Spawn(transform.position);
+        ServiceLocator.Get<PoolManager>()?.levelupPool?.Spawn(transform.position);
     }
 
     public void UpdateHitColor(ElementType elementType)
@@ -161,7 +160,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         float randomX = Random.Range(-0.3f, 0.3f);
         float randomY = Random.Range(-0.7f, 0.7f);
         Vector2 randomHitOffSet = new Vector2(randomX, randomY);
-        ServiceLocator.Get<PoolManager>()?.hitEffectPool.SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
+        ServiceLocator.Get<PoolManager>()?.hitEffectPool?.SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
     }
 
 

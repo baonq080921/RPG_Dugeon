@@ -207,7 +207,6 @@ GameObject:
   - component: {fileID: 4984960474500209070}
   - component: {fileID: 1592552293390942200}
   - component: {fileID: 3589337403602051879}
-  - component: {fileID: 2447480955769072143}
   m_Layer: 10
   m_Name: NPC_Merchant
   m_TagString: Untagged
@@ -289,33 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802ec66218a792546b40456d73e4ba86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &2447480955769072143
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060776987101477422}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  _dialougeStr: 
 --- !u!1 &2184224489783184138
 GameObject:
   m_ObjectHideFlags: 0

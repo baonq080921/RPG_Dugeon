@@ -1672,7 +1672,7 @@ TextureImporter:
         width: 156
         height: 175
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1680,6 +1680,69 @@ TextureImporter:
       bones: []
       spriteID: 6fa9a6063555a9a4e85239c37c294106
       internalID: -1871713572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_73
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 356
+        width: 38
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b25f40d3e2778948a5fedb1fe619c57
+      internalID: 675387140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_74
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 350
+        width: 35
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8df4826502fa5c64295fd0475daacd3d
+      internalID: 1902435255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_75
+      rect:
+        serializedVersion: 2
+        x: 499
+        y: 356
+        width: 34
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93fb220b6514ed541bce32b1660364c6
+      internalID: -1816729080
       vertices: []
       indices: 
       edges: []
@@ -1768,6 +1831,9 @@ TextureImporter:
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_70: 1821549558
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_71: 411477462
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_72: -657498564
+      yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_73: 675387140
+      yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_74: 1902435255
+      yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_75: -1816729080
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_8: 1966266684
       yuji_itadori_jus_sprite_sheet__no_background__by_belugabanaple_dhsrv48_9: 1824030979
   mipmapLimitGroupName: 

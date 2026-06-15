@@ -24,7 +24,7 @@ public class LevelUpEffect : MonoBehaviour
     public void SetAnimation()
     {
         isDone = true;
-        _animator.SetBool("isDone", true);
+        _animator.SetBool("isDone", isDone);
         OnComplete?.Invoke();
     }
 
@@ -32,7 +32,7 @@ public class LevelUpEffect : MonoBehaviour
     public void ResetAnimation()
     {
         isDone = false;
-        _animator.SetBool("isDone", false);
+        _animator.SetBool("isDone", isDone);
         _animator.Rebind();
         _animator.Update(0f);
     }

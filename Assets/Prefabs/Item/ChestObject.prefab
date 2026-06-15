@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3105711245724560584}
   - component: {fileID: 8863334268337529021}
-  - component: {fileID: 1612474172582639886}
   - component: {fileID: 8912173120127777514}
+  - component: {fileID: 3172514936569884372}
   m_Layer: 11
   m_Name: ChestObject
   m_TagString: Untagged
@@ -80,22 +80,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9308746, y: 1.8039372}
   m_EdgeRadius: 0
---- !u!114 &1612474172582639886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5353978359494565047}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9649ad7f04131c043a32502798eb8c0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _entityDrop: {fileID: 8912173120127777514}
-  _currentHealth: 30
-  _collider2D: {fileID: 8863334268337529021}
-  _animator: {fileID: 0}
 --- !u!114 &8912173120127777514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,6 +95,22 @@ MonoBehaviour:
   _dropDataList: {fileID: 11400000, guid: 3f6e29191b235074aa472f2b36a9fe9a, type: 2}
   maxRarity: 1200
   maxDropOut: 3
+--- !u!114 &3172514936569884372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353978359494565047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fac473daf5ced3418c415b600db9066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 1
+  collider2D: {fileID: 8863334268337529021}
+  _animator: {fileID: 1849508967199232668}
+  _entityDrop: {fileID: 8912173120127777514}
 --- !u!1 &8273279381836407833
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1695169479
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: -1
   m_Sprite: {fileID: -1224313035, guid: a68ad43dc9c7aa34c92b431126cd0fa4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

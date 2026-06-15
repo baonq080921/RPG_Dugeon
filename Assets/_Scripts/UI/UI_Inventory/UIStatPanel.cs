@@ -1,4 +1,5 @@
 using Base;
+using player;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class UIStatPanel : MonoBehaviour
 {
-    [SerializeField] private EntityStat _entityStat;
+    private EntityStat _entityStat;
 
     [Header("Physical Damage")]
     [SerializeField] private TextMeshProUGUI _damageTmp;
@@ -32,24 +33,29 @@ public class UIStatPanel : MonoBehaviour
 
     private void OnEnable()
     {
+        Player.ActivePlayerChanged += OnPlayerChanged;
         _inventoryChangedBinding = new EventBinding<OnInventoryChangedEvent>(Refresh);
         EventBus<OnInventoryChangedEvent>.Register(_inventoryChangedBinding);
     }
 
     private void OnDisable()
     {
+        Player.ActivePlayerChanged -= OnPlayerChanged;
         EventBus<OnInventoryChangedEvent>.Deregister(_inventoryChangedBinding);
     }
 
-    private void Start() => Refresh();
+    private void OnPlayerChanged(Player player)
+    {
+        _entityStat = player.GetComponent<EntityStat>();
+        Refresh();
+    }
 
 private void Refresh()
     {
         if (_entityStat == null) return;
-
         SetText(_damageTmp,              _entityStat.GetDamageDisplayValue(),              "0");
         SetText(_critChanceTmp,          _entityStat.GetCritChanceDisplayValue(),          "0.0'%'");
-        SetText(_critPowerTmp,           _entityStat.GetCritPowerDisplayValue(),           "0.0'%'");
+        SetText(_critPowerTmp,           _entityStat.GetCritPowerDisplayValue(),           "0.0");
         SetText(_attackMultiplierTmp,    _entityStat.GetAttackMultiplier(),                "0.0");
         SetText(_maxHealthTmp,           _entityStat.GetHealthValue(),                     "0");
         SetText(_healthRegenTmp,         _entityStat.GetHealthRegen(),                     "0.0");
