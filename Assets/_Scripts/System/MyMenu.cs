@@ -1,7 +1,6 @@
+#if UNITY_EDITOR
 using Base;
-using Unity.Mathematics;
 using UnityEditor;
-using UnityEngine;
 namespace System
 {
     public static class MyMenu
@@ -14,3 +13,4 @@ namespace System
         }
     }
 }
+#endif

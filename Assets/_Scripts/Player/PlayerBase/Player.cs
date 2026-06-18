@@ -65,7 +65,6 @@ namespace player
 
         public Vector2 movementInput { get; private set; }
         public bool isJump { get; private set; }
-        public bool JumpJustPressed { get; private set; }
         public bool DashJustPressed { get; private set; }
         public int JumpCount { get; set; }
         public float LastWallJumpDirection { get; set; } = 0f;
@@ -129,10 +128,7 @@ namespace player
             ActivePlayerChanged?.Invoke(this);
             input.Enable();
             input.Player.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
-            input.Player.Movement.canceled += ctx => movementInput = Vector2.zero;
-            input.Player.Jump.performed += ctx => { isJump = true; JumpJustPressed = true; };
-            input.Player.Jump.canceled += ctx => isJump = false;
-            
+            input.Player.Movement.canceled += ctx => movementInput = Vector2.zero;            
             // Keyboard fallback for skill slot 0 (Counter). Mobile uses on-screen SkillButton instead.
             input.Player.Dash.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.Dash);
             input.Player.Counter.performed += ctx => SkillButtonHandler.PressSkill(ButtonSkillName.CounterSkill);
@@ -170,6 +166,7 @@ namespace player
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dash, skillManager.skillDash);
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.TimeEcho, skillManager.skillTimeEcho);
             SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Dismantle, skillManager.skillDismantle);
+            SkillButtonHandler.RegisterSkill((int)ButtonSkillName.Domain,skillManager.domainExpasionSkill);
         }
 
         private void OnPauseChanged(GamePauseChangedEvent e)
@@ -247,7 +244,6 @@ namespace player
         }
 
         /// <summary>Clears JumpJustPressed after it has been consumed by a state.</summary>
-        public void ConsumeJump() => JumpJustPressed = false;
         public void SetCanDash(bool value) => canDash = value;
         public override void SetVelocity(Vector2 velocity)
         {

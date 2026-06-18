@@ -1,27 +1,20 @@
-using player;
-using UnityEngine;
+using enemy;
+
 namespace enemy
 {
     /// <inheritdoc/>
     public class EnemySkeleton : Enemy
     {
-        public EnemySkeletonDeathState enemyDeathState { get; protected set; }
+        public EnemySkeletonDeathState enemyDeathState { get; private set; }
 
-        protected override void Awake()
+        protected override void InitializeStates()
         {
-            base.Awake();
-             enemyDeathState = new EnemySkeletonDeathState(this, stateMachine,"Died");
-
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-        }
-
-        protected override void Update()
-        {
-            base.Update();
+            enemyIdleState = new EnemySkeletonIdleState(this, stateMachine, "Idle");
+            enemyMoveState = new EnemySkeletonMoveState(this, stateMachine, "Move");
+            enemyChaseState = new EnemySkeletonChaseState(this, stateMachine, "Move");
+            enemyAttackState = new EnemySkeletonAttackState(this, stateMachine, "Attack");
+            enemyStunState = new EnemySkeletonStunState(this, stateMachine, "Hit");
+            enemyDeathState = new EnemySkeletonDeathState(this, stateMachine, "Died");
         }
 
         public override void ChangeToDiedState()
@@ -29,6 +22,5 @@ namespace enemy
             base.ChangeToDiedState();
             stateMachine.ChangeState(enemyDeathState);
         }
-
     }
 }

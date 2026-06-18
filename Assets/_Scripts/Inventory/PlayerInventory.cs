@@ -18,17 +18,28 @@ public class PlayerInventory : InventoryBase {
     [SerializeField] private float _startingSkillPoints = 0f;
     public float SkillPoints { get; private set; }
 
+    public event Action<float> OnSkillPointsChanged;
+
     public bool CanSpendSkillPoints(float cost) => SkillPoints >= cost;
 
     public void SpendSkillPoints(float cost)
     {
         if (!CanSpendSkillPoints(cost)) return;
         SkillPoints -= cost;
+        OnSkillPointsChanged?.Invoke(SkillPoints);
     }
 
-    public void AddSkillPoints(float amount) => SkillPoints += amount;
+    public void AddSkillPoints(float amount)
+    {
+        SkillPoints += amount;
+        OnSkillPointsChanged?.Invoke(SkillPoints);
+    }
 
-    public void SetSkillPoints(float amount) => SkillPoints = amount;
+    public void SetSkillPoints(float amount)
+    {
+        SkillPoints = amount;
+        OnSkillPointsChanged?.Invoke(SkillPoints);
+    }
 
     protected override void Awake()
     {

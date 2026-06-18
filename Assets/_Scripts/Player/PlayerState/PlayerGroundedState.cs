@@ -19,16 +19,15 @@ namespace player
         public override void Update()
         {
             base.Update();
-            if (player.JumpJustPressed && player.canAttack && input.Player.BasicAttack.WasPressedThisFrame())
+            if (input.Player.Jump.WasPressedThisFrame() && player.canAttack && input.Player.BasicAttack.WasPressedThisFrame())
             {
-                player.ConsumeJump();
                 player.playerJumpAttackState.IsUpAttack = false;
                 player.playerJumpAttackState.IsFromGround = true;
                 stateMachine.ChangeState(player.playerJumpAttackState);
                 return;
             }
 
-            if(player.isJump)
+            if(input.Player.Jump.WasPressedThisFrame())
                 stateMachine.ChangeState(player.playerJumpState);
             if(!player.isGrounded)
                 stateMachine.ChangeState(player.playerFallState);

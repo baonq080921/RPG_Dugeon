@@ -25,6 +25,16 @@ public class SaveSystemTester : MonoBehaviour
         mgr.Load();
     }
 
+    [ContextMenu("Test New Game")]
+    private void TestNewGame()
+    {
+        var mgr = ServiceLocator.Get<SaveManager>();
+        if (mgr == null) { Debug.LogError("[Tester] SaveManager not in ServiceLocator."); return; }
+        string startScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        Debug.Log($"[Tester] Starting new game → reloading '{startScene}' with all progress cleared.");
+        mgr.StartNewGame(startScene);
+    }
+
     [ContextMenu("Print Save Path")]
     private void PrintSavePath()
     {

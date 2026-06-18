@@ -7,9 +7,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ScavangeHunt", menuName = "RPG/Quest/SavangeHunt  Quest")]
 public class ScavaHunt : QuestData
 {
-    public override bool IsCompleted => throw new NotImplementedException();
-
+    public override bool IsCompleted => huntDown >= totalHuntDown;
     public override string ProgressText => $"{huntDown} / {totalHuntDown}";
+    public override int CurrentProgress => huntDown;
+    public override void RestoreProgress(int progress) => huntDown = progress;
     [field:SerializeField]public int huntDown{get; private set;} = 0;
     [field:SerializeField] public int totalHuntDown;
     [field:SerializeField] public int skillPoint{get; private set;}

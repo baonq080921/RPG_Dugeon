@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySlime : Enemy
 {
-    public EnemySlimeDeathState enemySlimeDeathState;
+    public EnemySlimeDeathState enemySlimeDeathState { get; private set; }
     [SerializeField] private int _childAmount;
     [SerializeField] private GameObject _slimeChildPefab;
     private Coroutine _spawnCoroutine;
@@ -13,9 +13,13 @@ public class EnemySlime : Enemy
     [SerializeField] private float _shootOutPowerYMax = 8f;
     [SerializeField] private bool _enableReformAnimation = true;
 
-    protected override void Awake()
+    protected override void InitializeStates()
     {
-        base.Awake();
+        enemyIdleState = new EnemySlimeIdleState(this, stateMachine, "Idle");
+        enemyMoveState = new EnemySlimeMoveState(this, stateMachine, "Move");
+        enemyChaseState = new EnemySlimeChaseState(this, stateMachine, "Move");
+        enemyAttackState = new EnemySlimeAttackState(this, stateMachine, "Attack");
+        enemyStunState = new EnemySlimeStunState(this, stateMachine, "Hit");
         enemySlimeDeathState = new EnemySlimeDeathState(this, stateMachine, "Died");
     }
 

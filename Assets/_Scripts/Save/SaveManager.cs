@@ -24,6 +24,8 @@ namespace Save
         private PlayerSaveData   _pendingLoad;
         private PlayerSaveData   _transitionSnapshot;
         private readonly HashSet<string> _completedQuestScenes = new();
+        private readonly Dictionary<string, SceneStateData> _sceneStates = new();
+        private readonly Dictionary<string, int> _questProgress = new();
 
         /// <summary>True when a portal snapshot is waiting to be applied to the new scene's player.</summary>
         public bool HasTransitionSnapshot => _transitionSnapshot != null;
@@ -57,13 +59,12 @@ namespace Save
 
         /// <summary>
         /// Called by <see cref="scene.SceneTransitionManager"/> before the old scene is unloaded.
-        /// Captures state to memory AND saves to disk so a crash mid-transition doesn't lose progress.
+        /// Captures player state to memory so it can be restored in the new scene.
+        /// Does NOT write to disk — save only happens at checkpoints or manual saves.
         /// </summary>
         public void SnapshotForTransition(Player player)
         {
             _transitionSnapshot = BuildSaveData(player);
-            WriteToDisk(_transitionSnapshot);
-            Debug.Log("[SaveManager] Transition snapshot captured.");
         }
 
         private PlayerSaveData BuildSaveData(Player player)
@@ -122,6 +123,12 @@ namespace Save
             foreach (var sceneName in _completedQuestScenes)
                 data.completedQuestScenes.Add(sceneName);
 
+            foreach (var state in _sceneStates.Values)
+                data.sceneStates.Add(state);
+
+            foreach (var kvp in _questProgress)
+                data.questProgress.Add(new QuestProgressEntry { sceneName = kvp.Key, progress = kvp.Value });
+
             return data;
         }
 
@@ -163,6 +170,57 @@ namespace Save
 
         /// <summary>Returns true if the quest for <paramref name="sceneName"/> was already completed.</summary>
         public bool IsQuestComplete(string sceneName) => _completedQuestScenes.Contains(sceneName);
+
+        /// <summary>Stores the latest numeric progress for the quest in <paramref name="sceneName"/>.</summary>
+        public void SetQuestProgress(string sceneName, int progress) => _questProgress[sceneName] = progress;
+
+        /// <summary>Returns the saved progress for the quest in <paramref name="sceneName"/>, or 0 if none.</summary>
+        public int GetQuestProgress(string sceneName)
+            => _questProgress.TryGetValue(sceneName, out var p) ? p : 0;
+
+        // -------------------------------------------------------------------------
+        // Scene state (persisted to disk — restored on Continue, cleared on New Game)
+        // -------------------------------------------------------------------------
+
+        /// <summary>
+        /// Clears all saved progress and loads <paramref name="startSceneName"/> fresh.
+        /// Call this when the player chooses New Game from the main menu.
+        /// </summary>
+        public void StartNewGame(string startSceneName)
+        {
+            _sceneStates.Clear();
+            _completedQuestScenes.Clear();
+            _questProgress.Clear();
+            if (File.Exists(SavePath))
+                File.Delete(SavePath);
+            SceneManager.LoadScene(startSceneName);
+        }
+
+        /// <summary>Records that <paramref name="enemyId"/> was killed in <paramref name="sceneName"/> this session.</summary>
+        public void MarkEnemyKilled(string sceneName, string enemyId)
+        {
+            EnsureSceneState(sceneName).killedEnemyIds.Add(enemyId);
+        }
+
+        /// <summary>Records that <paramref name="chestId"/> was opened in <paramref name="sceneName"/> this session.</summary>
+        public void MarkChestOpened(string sceneName, string chestId)
+        {
+            EnsureSceneState(sceneName).openedChestIds.Add(chestId);
+        }
+
+        /// <summary>Returns the state data for <paramref name="sceneName"/>, or null if no entities have been interacted with yet.</summary>
+        public SceneStateData GetSceneState(string sceneName)
+            => _sceneStates.TryGetValue(sceneName, out var data) ? data : null;
+
+        private SceneStateData EnsureSceneState(string sceneName)
+        {
+            if (!_sceneStates.TryGetValue(sceneName, out var data))
+            {
+                data = new SceneStateData { sceneName = sceneName };
+                _sceneStates[sceneName] = data;
+            }
+            return data;
+        }
 
         /// <summary>Reads the save file, loads the stored scene, then restores full player state including position.</summary>
         public void Load()
@@ -286,6 +344,19 @@ namespace Save
             _completedQuestScenes.Clear();
             foreach (var sceneName in data.completedQuestScenes)
                 _completedQuestScenes.Add(sceneName);
+
+            _sceneStates.Clear();
+            foreach (var state in data.sceneStates)
+                if (!string.IsNullOrEmpty(state.sceneName))
+                    _sceneStates[state.sceneName] = state;
+
+            _questProgress.Clear();
+            foreach (var entry in data.questProgress)
+                if (!string.IsNullOrEmpty(entry.sceneName))
+                    _questProgress[entry.sceneName] = entry.progress;
+
+            // SceneEntityManager.Start() ran before _sceneStates was restored, so apply now.
+            FindObjectOfType<scene.SceneEntityManager>()?.ApplySceneState();
 
             yield return null;
         }

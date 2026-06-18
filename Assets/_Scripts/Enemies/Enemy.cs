@@ -16,29 +16,59 @@ namespace enemy
         public override LayerMask LayerMask => enemyData.WhatIsPlayer;
         /// <inheritdoc/>
 
-        public EnemyIdleState enemyIdleState { get; protected set; }
-        public EnemyMoveState enemyMoveState { get; protected set; }
-        public EnemyChaseState enemyChaseState { get; protected set; }
-        public EnemyAttackState enemyAttackState { get; protected set; }
-        public EnemyStunState enemyStunState { get; protected set; }
+        public EnemyState enemyIdleState { get; protected set; }
+        public EnemyState enemyMoveState { get; protected set; }
+        public EnemyState enemyChaseState { get; protected set; }
+        public EnemyState enemyAttackState { get; protected set; }
+        public EnemyState enemyStunState { get; protected set; }
+
+        /// <summary>Scene-unique identifier generated automatically per scene instance. Never changes after first assignment.</summary>
+        [SerializeField] private string _sceneEntityId;
+        public string SceneEntityId => _sceneEntityId;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            // Skip the prefab asset itself — only assign IDs to scene instances so every
+            // placed enemy gets its own GUID rather than inheriting one from the prefab.
+            if (UnityEditor.PrefabUtility.IsPartOfPrefabAsset(this)) return;
+            if (string.IsNullOrEmpty(_sceneEntityId))
+            {
+                _sceneEntityId = Guid.NewGuid().ToString();
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+        }
+#endif
 
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
+
+        /// <summary>Raised once when this enemy dies. Subscribed to by <see cref="scene.SceneEntityManager"/>.</summary>
+        public event Action OnDied;
         public bool CanCounter { get ; set ; }
 
-        public float moveSpeed{get; private set;}      
-        public float attackSpeed {get; private set;}  
+        public float moveSpeed{get; private set;}
+        public float attackSpeed {get; private set;}
 
         private EntityDrop _entityDrop;
         protected override void Awake()
         {
             base.Awake();
+            _entityDrop = GetComponent<EntityDrop>();
+            InitializeStates();
+        }
+
+        /// <summary>
+        /// Creates all state instances for this enemy. Override in subclasses to supply enemy-specific states.
+        /// Called at the end of <see cref="Awake"/>, before <see cref="Start"/>.
+        /// </summary>
+        protected virtual void InitializeStates()
+        {
             enemyIdleState = new EnemyIdleState(this, stateMachine, "Idle");
             enemyMoveState = new EnemyMoveState(this, stateMachine, "Move");
             enemyChaseState = new EnemyChaseState(this, stateMachine, "Move");
             enemyAttackState = new EnemyAttackState(this, stateMachine, "Attack");
             enemyStunState = new EnemyStunState(this, stateMachine, "Hit");
-            _entityDrop = GetComponent<EntityDrop>();
         }
 
         protected override void Start()
@@ -86,9 +116,22 @@ namespace enemy
         }
 
         /// <summary>Returns true when the player is within <see cref="EnemyData.AttackRange"/>.</summary>
-        public bool IsPlayerInAttackRange()
+        public bool IsInAttackRange()
         {
             return Physics2D.OverlapCircle(transform.position, enemyData.AttackRange, enemyData.WhatIsPlayer);
+        }
+        /// <summary>
+        /// Make enemy invincible when doing some action
+        /// </summary> <summary>
+        /// 
+        /// </summary>
+        public void UnTargetableEnemy(bool canTarget)
+        {
+            if (canTarget)
+                this.gameObject.layer = LayerMask.NameToLayer("Untargetable");
+            else
+                this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+
         }
 
 
@@ -124,6 +167,7 @@ namespace enemy
             isDead = true;
             _entityDrop.DropItems();
             EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent(enemyData.Level, enemyData.BaseExp));
+            OnDied?.Invoke();
         }
 
         public virtual void ChangeToDiedState(){}

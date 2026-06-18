@@ -300,7 +300,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1113845855
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -1737100495, guid: e30b3b72db5330040965f3814adf8730, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -323,7 +323,7 @@ Animator:
   m_GameObject: {fileID: 3212307324540480325}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: c162b3ee713b84944a10c9e36f74b5d0, type: 2}
+  m_Controller: {fileID: 9100000, guid: f9a43f712a8bb32499d72eda9f1c7e27, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -474,7 +474,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 3.5
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 40248554cf5b9e4459b84fff275c4a24, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -512,7 +512,9 @@ MonoBehaviour:
   <enemyData>k__BackingField: {fileID: 11400000, guid: 1afdcbdffceb56042ac9e61a0d7e3358, type: 2}
   _childAmount: 0
   _slimeChildPefab: {fileID: 0}
-  _childScaleFactor: 0.8
+  _shootOutPowerX: 4
+  _shootOutPowerYMin: 4
+  _shootOutPowerYMax: 8
   _enableReformAnimation: 1
 --- !u!114 &4530540266581222611
 MonoBehaviour:

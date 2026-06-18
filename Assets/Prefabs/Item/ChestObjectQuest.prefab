@@ -134,7 +134,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.89, y: 1.04, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 819619797303882851}
@@ -201,3 +201,4 @@ MonoBehaviour:
   collider2D: {fileID: 2528974444257868455}
   _animator: {fileID: 6010290393029394086}
   _skillPointReward: 5
+  _triggerQuestEvent: 1

@@ -4,6 +4,7 @@ namespace Base
 {
     /// <summary>Raised when the player's health reaches zero and the death state is entered.</summary>
     public struct PlayerDiedEvent : IEvent { }
+    public struct PlayerCheckPointEvent:IEvent{}
 
     /// <summary>Raised when an enemy's health reaches zero. Carries the enemy's level and base XP for the reward formula.</summary>
     public struct EnemyDiedEvent : IEvent

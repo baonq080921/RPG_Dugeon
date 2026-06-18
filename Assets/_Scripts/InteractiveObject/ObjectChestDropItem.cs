@@ -5,6 +5,7 @@ public class ObjectChestDropItem : ObjectChestBase
     
     [SerializeField]private EntityDrop _entityDrop;
 
+
     protected override void DropChestItem()
     {
         base.DropChestItem();

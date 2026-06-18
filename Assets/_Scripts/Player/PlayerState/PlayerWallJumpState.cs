@@ -13,8 +13,6 @@ namespace player
             base.Enter();
             float wallDirection = player.direction;
             player.LastWallJumpDirection = wallDirection;
-            player.JumpCount = 0;
-            player.ConsumeJump();
             player.SetVelocity(new Vector2(player.WallJumpForce.x * -wallDirection, player.WallJumpForce.y));
             player.HandleFlip(-wallDirection);
         }

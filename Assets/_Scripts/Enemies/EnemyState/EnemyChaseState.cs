@@ -33,7 +33,7 @@ namespace enemy
                 return;
             }
 
-            if (enemy.IsPlayerInAttackRange())
+            if (enemy.IsInAttackRange())
             {
                 stateMachine.ChangeState(enemy.enemyAttackState);
                 return;

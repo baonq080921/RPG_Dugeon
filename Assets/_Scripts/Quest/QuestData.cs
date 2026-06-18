@@ -18,6 +18,9 @@ namespace Quest
         public abstract bool IsCompleted { get; }
         public abstract string ProgressText { get; }
 
+        /// <summary>Current numeric progress toward completion (e.g. kill count, rescue count).</summary>
+        public abstract int CurrentProgress { get; }
+
         public event Action OnProgressChanged;
         public event Action OnQuestCompleted;
 
@@ -29,6 +32,9 @@ namespace Quest
 
         /// <summary>Reset runtime progress counters back to zero.</summary>
         public abstract void Reset();
+
+        /// <summary>Restore progress to <paramref name="progress"/> without raising any events. Called on save load.</summary>
+        public abstract void RestoreProgress(int progress);
 
         protected void NotifyProgress() => OnProgressChanged?.Invoke();
         protected void NotifyCompleted() => OnQuestCompleted?.Invoke();

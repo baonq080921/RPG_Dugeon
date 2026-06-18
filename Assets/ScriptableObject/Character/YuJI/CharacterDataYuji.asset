@@ -15,9 +15,9 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 8
   <JumpForce>k__BackingField: 20
   <MaxJumpCount>k__BackingField: 1
-  <AirControlFactor>k__BackingField: 0.5
+  <AirControlFactor>k__BackingField: 0.7
   <SlideDownSpeed>k__BackingField: 0.5
-  <WallJumpForce>k__BackingField: {x: 12, y: 20}
+  <WallJumpForce>k__BackingField: {x: 13, y: 20}
   <DashSpeed>k__BackingField: 25
   <DashDuration>k__BackingField: 0.2
   <DashCooldown>k__BackingField: 1.5

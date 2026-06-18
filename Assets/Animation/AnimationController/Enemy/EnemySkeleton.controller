@@ -1,5 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1102 &-9026350581847059839
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RipplerTeleportRecorvy
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: 2024705506952366164}
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 9b903e85cf0f24041b1becd7e5e1efbe, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1109 &-7731197831137434964
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -13,6 +40,23 @@ AnimatorTransition:
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 9056246768197737179}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 1
+--- !u!1109 &-6869612166852357543
+AnimatorTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: CanTelePort
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 7292856019469895167}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
@@ -118,7 +162,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: MoveMultiplier
     m_Type: 1
-    m_DefaultFloat: 0
+    m_DefaultFloat: 5
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
@@ -142,11 +186,17 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: AttackMultplier
     m_Type: 1
-    m_DefaultFloat: 0
+    m_DefaultFloat: 1
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
   - m_Name: HasRecovery
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: CanTelePort
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -210,16 +260,19 @@ AnimatorStateMachine:
     m_Position: {x: 370, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9056246768197737179}
-    m_Position: {x: 360, y: 270, z: 0}
+    m_Position: {x: 360, y: 310, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5806032623943786348}
-    m_Position: {x: 360, y: 350, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: 6133441614624245074}
-    m_Position: {x: 350, y: 440, z: 0}
+    m_Position: {x: 390, y: 420, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3665717296951826767}
-    m_Position: {x: 744.3358, y: 291.65625, z: 0}
+    m_Position: {x: 870, y: 340, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 7292856019469895167}
+    m_Position: {x: 390, y: 530, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -9026350581847059839}
+    m_Position: {x: 700, y: 510, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions:
@@ -227,6 +280,7 @@ AnimatorStateMachine:
   - {fileID: 2336912991716407957}
   - {fileID: -7731197831137434964}
   - {fileID: 7650555811105693198}
+  - {fileID: -6869612166852357543}
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 10, z: 0}
@@ -234,6 +288,28 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 860, y: 130, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 2605789443015314091}
+--- !u!1101 &570886538008168999
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: -9026350581847059839}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 1
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1101 &912546672361009464
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -280,12 +356,37 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 88c06450f4fd5ac41a50e5fcce822abc, type: 2}
+  m_Motion: {fileID: 7400000, guid: b5976b8e65044a747b4b25ac4840b342, type: 2}
   m_Tag: 
   m_SpeedParameter: MoveMultiplier
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &2024705506952366164
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: CanTelePort
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 0}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 1
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1109 &2336912991716407957
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -324,7 +425,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 995988f7a015c1e498456303eff1dca5, type: 2}
+  m_Motion: {fileID: 7400000, guid: 20a58afc81916e54bb56e13d4b726496, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -373,7 +474,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a56fa0c535d29464da79b59a6c5f7189, type: 2}
+  m_Motion: {fileID: 7400000, guid: eb56f38644a40f94aa9041efb05aa628, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -400,7 +501,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d912d840f28907040aa826a75d4fa752, type: 2}
+  m_Motion: {fileID: 7400000, guid: e0d35d9eb45ed50489359594a0bc7691, type: 2}
   m_Tag: 
   m_SpeedParameter: AttackMultplier
   m_MirrorParameter: 
@@ -427,23 +528,24 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 51973e11037c76746a66dcfe3a8ddcbc, type: 2}
+  m_Motion: {fileID: 7400000, guid: f8b2c2a91fafba74787874bb47125ebf, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!1102 &6133441614624245074
+--- !u!1102 &7292856019469895167
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Recovy
+  m_Name: EnemyRipplerTeleport
   m_Speed: 1
   m_CycleOffset: 0
-  m_Transitions: []
+  m_Transitions:
+  - {fileID: 570886538008168999}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -453,7 +555,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a56fa0c535d29464da79b59a6c5f7189, type: 2}
+  m_Motion: {fileID: 7400000, guid: 79890bde8038c45449cf53d1bdb1e4ae, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -540,7 +642,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c766cbabd651ea649b51ced616a1631f, type: 2}
+  m_Motion: {fileID: 7400000, guid: 41dbe20c0ec40724c88f4a99492080a3, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

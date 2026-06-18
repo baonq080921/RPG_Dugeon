@@ -32,6 +32,11 @@ namespace Quest
             }
 
             _quest.Reset();
+
+            int savedProgress = saveManager?.GetQuestProgress(sceneName) ?? 0;
+            if (savedProgress > 0)
+                _quest.RestoreProgress(savedProgress);
+
             _quest.OnProgressChanged += OnProgress;
             _quest.OnQuestCompleted  += OnComplete;
             _quest.StartTracking();
@@ -49,6 +54,8 @@ namespace Quest
 
         private void OnProgress()
         {
+            string sceneName = SceneManager.GetActiveScene().name;
+            ServiceLocator.Get<SaveManager>()?.SetQuestProgress(sceneName, _quest.CurrentProgress);
             EventBus<QuestProgressEvent>.Raise(new QuestProgressEvent(_quest));
         }
 
@@ -60,9 +67,7 @@ namespace Quest
             _quest.OnQuestCompleted  -= OnComplete;
 
             string sceneName = SceneManager.GetActiveScene().name;
-            var saveManager = ServiceLocator.Get<SaveManager>();
-            saveManager?.MarkQuestComplete(sceneName);
-            saveManager?.Save();
+            ServiceLocator.Get<SaveManager>()?.MarkQuestComplete(sceneName);
 
             EventBus<QuestCompletedEvent>.Raise(new QuestCompletedEvent(_quest));
         }

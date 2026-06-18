@@ -18,6 +18,8 @@ namespace Quest
 
         public override bool IsCompleted => _rescuedCount >= RequiredRescueCount;
         public override string ProgressText => $"{_rescuedCount} / {RequiredRescueCount}";
+        public override int CurrentProgress => _rescuedCount;
+        public override void RestoreProgress(int progress) => _rescuedCount = progress;
 
         /// <inheritdoc/>
         public override void StartTracking()

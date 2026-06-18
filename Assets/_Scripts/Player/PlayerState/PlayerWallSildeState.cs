@@ -10,7 +10,6 @@ namespace player{
         public override void Enter()
         {
             base.Enter();
-            player.ConsumeJump();
         }
 
         public override void Update()
@@ -18,7 +17,7 @@ namespace player{
             base.Update();
             HandleWallSlide();
 
-            if(player.JumpJustPressed)
+            if(input.Player.Jump.WasPressedThisFrame() && player.isTouchingWall)
             {
                 stateMachine.ChangeState(player.playerWallJumpState);
                 return;

@@ -26,8 +26,11 @@ public class UI_Inventory : MonoBehaviour
     {
         _uISlots = GetComponentsInChildren<UIItemSlot>();
         _uIEquipmentSlots = GetComponentsInChildren<UIEquipmentSlot>();
-        _actionPanel.Setup(_inventory);
-        _equipmentActionPanel.Setup(_inventory);
+        if (_inventory != null)
+        {
+            _actionPanel.Setup(_inventory);
+            _equipmentActionPanel.Setup(_inventory);
+        }
         foreach (var slot in _uISlots)
             slot.SetActionPanel(_actionPanel);
         foreach (var slot in _uIEquipmentSlots)
@@ -58,6 +61,9 @@ public class UI_Inventory : MonoBehaviour
     private void OnPlayerChanged(Player player)
     {
         _inventory = player.playerInventory;
+        _actionPanel.Setup(_inventory);
+        _equipmentActionPanel.Setup(_inventory);
+        UpdateUIInventory();
     }
 
     void AlertNotificationUI(AlertNotiEvent alertNotiEvent)
@@ -73,8 +79,9 @@ public class UI_Inventory : MonoBehaviour
         _alertSequence.Append(_alertNotiTmp.DOFade(0, 0.25f).SetUpdate(true).SetEase(Ease.OutBack));
     }
 
-    void UpdateUIInventory()    
+    void UpdateUIInventory()
     {
+        if (_inventory == null) return;
         _items = _inventory.itemInventoriesList;
         _itemInventoryEquipments = _inventory.equipList;
 

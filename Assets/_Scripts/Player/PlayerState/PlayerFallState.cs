@@ -21,7 +21,7 @@ namespace player
         {
             base.Update();
 
-            if (player.JumpJustPressed && player.JumpCount < player.MaxJumpCount)
+            if ( input.Player.Jump.WasPressedThisFrame() && player.JumpCount < player.MaxJumpCount)
             {
                 stateMachine.ChangeState(player.playerJumpState);
                 return;

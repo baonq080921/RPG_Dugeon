@@ -6,7 +6,9 @@ namespace enemy
     [CreateAssetMenu(fileName = "EnemyData", menuName = "RPG/Enemy Data")]
     public class EnemyData : ScriptableObject
     {
+        [field:Header("Time stuff")]
         [field: SerializeField] public float IdleTime { get; private set; } = 2f;
+        [field:SerializeField] public float SkillCoolDown {get; private set;} 
 
         [field: Header("Attack Velocity")]
         [field:SerializeField] public Vector2 AttackVelocityRetreat {get; private set;}

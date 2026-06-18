@@ -12,11 +12,11 @@ public class EntityDrop : MonoBehaviour
 
     [SerializeField] private int maxDropOut = 3;
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.P))
-            DropItems();
-    }
+    // void Update()
+    // {
+    //     if(Input.GetKeyDown(KeyCode.P))
+    //         DropItems();
+    // }
 
     public void DropItems()
     {

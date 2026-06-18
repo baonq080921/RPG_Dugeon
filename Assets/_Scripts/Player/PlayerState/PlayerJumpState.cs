@@ -15,8 +15,8 @@ namespace player
             base.Enter();
             // DebugCustom.Log("Enter Jump State");
             player.JumpCount++;
-            player.ConsumeJump();
             player.SetVelocity(new Vector2(rb.velocity.x, player.jumpForce));
+            Debug.Log("Jump");
         }
 
         public override void Update()

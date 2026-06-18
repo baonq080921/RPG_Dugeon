@@ -538,7 +538,7 @@ TextureImporter:
         width: 33
         height: 6
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -546,6 +546,27 @@ TextureImporter:
       bones: []
       spriteID: 859159555dd775742a5dd25127245365
       internalID: -1126448355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Blank
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 2
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ccc74cf1e114fe4b95d6a54cabb2e2b
+      internalID: -982091395
       vertices: []
       indices: 
       edges: []
@@ -561,6 +582,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Blank: -982091395
       slime-Sheet_0: -1737100495
       slime-Sheet_1: 665397781
       slime-Sheet_10: 1943627606

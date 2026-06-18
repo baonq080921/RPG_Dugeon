@@ -13,11 +13,13 @@ namespace Quest
     {
         [field: SerializeField] public int RequiredKillCount { get; private set; } = 5;
 
-        [NonSerialized] private int _currentKillCount;
+        [field:SerializeField] public int _currentKillCount;
         private EventBinding<EnemyDiedEvent> _binding;
 
         public override bool IsCompleted => _currentKillCount >= RequiredKillCount;
         public override string ProgressText => $"{_currentKillCount} / {RequiredKillCount}";
+        public override int CurrentProgress => _currentKillCount;
+        public override void RestoreProgress(int progress) => _currentKillCount = progress;
 
         /// <inheritdoc/>
         public override void StartTracking()
