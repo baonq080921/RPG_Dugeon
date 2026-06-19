@@ -63,7 +63,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
 
     public void CreateEffectLevelVFx()
     {
-        ServiceLocator.Get<PoolManager>()?.levelupPool?.Spawn(transform.position);
+        ServiceLocator.Get<PoolManager>()?.levelupPool?.Spawn(transform);
     }
 
     public void UpdateHitColor(ElementType elementType)

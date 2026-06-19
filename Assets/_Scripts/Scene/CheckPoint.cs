@@ -13,10 +13,14 @@ public class CheckPoint : MonoBehaviour
     {
         if(collision.TryGetComponent<Player>(out var player))
         {
-            //call save:
+            if (!_isSave)
+            {
+                //call save:
             _isSave = true;
             ServiceLocator.Get<SaveManager>().Save();
-            ServiceLocator.Get<PoolManager>().levelupPool.Spawn(player.transform.position);
+            ServiceLocator.Get<PoolManager>().levelupPool.Spawn(player.transform);
+            }
+            
         }
     }
 }

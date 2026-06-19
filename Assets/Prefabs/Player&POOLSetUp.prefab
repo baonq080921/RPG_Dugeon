@@ -454,7 +454,6 @@ GameObject:
   - component: {fileID: 4942546815306166327}
   - component: {fileID: 5640053971523606718}
   - component: {fileID: 1259731468474032968}
-  - component: {fileID: 5125049076438946638}
   - component: {fileID: 8295385133080645915}
   - component: {fileID: 6761514264752721329}
   - component: {fileID: 6683665174711838810}
@@ -466,6 +465,7 @@ GameObject:
   - component: {fileID: 3438031169687442942}
   - component: {fileID: 7206980803847400360}
   - component: {fileID: 4715383442073328308}
+  - component: {fileID: 1738133510771374646}
   m_Layer: 8
   m_Name: PlayerYuji
   m_TagString: Untagged
@@ -482,7 +482,7 @@ Transform:
   m_GameObject: {fileID: 3576642355215004829}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.85, y: 3.78, z: 0.16611609}
+  m_LocalPosition: {x: -27.87, y: -2.67, z: 0.16611609}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -582,23 +582,6 @@ MonoBehaviour:
   _knockBackPowerHeavy: {x: 3, y: 6}
   <Data>k__BackingField: {fileID: 11400000, guid: b482251a2dc34a04faefabee0de2e46e, type: 2}
   <attackElapsedTime>k__BackingField: 0.1
---- !u!114 &5125049076438946638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3576642355215004829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e42c0d80edb59448c72086788cf5c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _defaultCapacity: 5
-  _maxSize: 20
-  _spawnInterval: 0.05
-  _ghostDuration: 0.3
-  _ghostColor: {r: 0.7830189, g: 0, b: 0.111540556, a: 1}
 --- !u!114 &8295385133080645915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,6 +784,24 @@ MonoBehaviour:
   <ExpToNextLevel>k__BackingField: 0
   _baseExpRequired: 100
   _expGrowthRate: 1.5
+--- !u!114 &1738133510771374646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3576642355215004829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e42c0d80edb59448c72086788cf5c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultCapacity: 5
+  _maxSize: 20
+  _spawnInterval: 0.05
+  _ghostDuration: 0.3
+  _ghostColor: {r: 0.3, g: 0.7, b: 1, a: 0.7}
+  _spriteRenderer: {fileID: 0}
 --- !u!1 &4600464536813594901
 GameObject:
   m_ObjectHideFlags: 0

@@ -42,9 +42,10 @@ public class LevelUpEffectPool : MonoBehaviourPool<LevelUpEffect>
     }
 
     /// <summary>Spawns a level-up effect at <paramref name="position"/>.</summary>
-    public void Spawn(Vector3 position)
+    public void Spawn(Transform tf)
     {
         var item = Get();
-        item.transform.position = position;
+        item.transform.position = tf.position;
+        item.transform.SetParent(tf);
     }
 }
