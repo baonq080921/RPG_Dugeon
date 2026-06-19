@@ -15,7 +15,6 @@ namespace scene
     {
         [SerializeField] private Enemy[]           _enemies = System.Array.Empty<Enemy>();
         [SerializeField] private ObjectChestBase[] _chests  = System.Array.Empty<ObjectChestBase>();
-
         private string _sceneName;
 
         private void Awake()

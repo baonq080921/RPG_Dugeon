@@ -116,6 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295a512a3ac3e0649b830e9e176eaac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _flipWithEntity: 1
+  _slider: {fileID: 6429537477551478068}
 --- !u!1 &1329636050365691150
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,6 +826,7 @@ MonoBehaviour:
   _knockBackPowerLight: {x: 1, y: 2}
   _knockBackPowerHeavy: {x: 2, y: 2}
   <enemyData>k__BackingField: {fileID: 11400000, guid: c8ed54df7a33ab442ac3cea41d73146f, type: 2}
+  _sceneEntityId: 2381067c-13de-4997-8af2-ba3ab7eaa29d
   _childAmount: 2
   _slimeChildPefab: {fileID: 1559404807143362823, guid: a302f30f6186c2d4399e8211997d7276, type: 3}
   _shootOutPowerX: 4

@@ -9,7 +9,7 @@ namespace NPC
         {
             Debug.Log("Hello this is NPC Merchant");
             // Now Open the Store:
-            EventBus<StoreCallEvent>.Raise(new StoreCallEvent());
+            EventBus<CraftStoreCallEvent>.Raise(new CraftStoreCallEvent());
 
         }
 

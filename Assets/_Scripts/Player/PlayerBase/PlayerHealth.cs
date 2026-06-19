@@ -15,17 +15,19 @@ namespace player
         {
             base.Awake();
             _player = GetComponent<Player>();
-            InvokeRepeating(nameof(RegenerateHealth), 0f, 1f);
+            // InvokeRepeating(nameof(RegenerateHealth), 0f, 1f);
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             _healBinding = new EventBinding<PlayerAddHealthAmount>(OnHealReceived);
             EventBus<PlayerAddHealthAmount>.Register(_healBinding);
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             EventBus<PlayerAddHealthAmount>.Deregister(_healBinding);
         }
 

@@ -91,7 +91,11 @@ namespace scene
             if (string.IsNullOrEmpty(_pendingDestinationPortalId)) return;
 
             var player = FindObjectOfType<player.Player>();
-            if (player == null) return;
+            if (player == null)
+            {
+                DebugCustom.Log("Cant find any player on next scene");
+                return;
+            }
 
             var rb = player.GetComponent<Rigidbody2D>();
             if (rb != null) rb.velocity = Vector2.zero;

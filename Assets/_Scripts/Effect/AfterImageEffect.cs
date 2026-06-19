@@ -19,7 +19,7 @@ namespace player
 
         private static Transform s_ghostContainer;
 
-        private SpriteRenderer _spriteRenderer;
+        [SerializeField]private SpriteRenderer _spriteRenderer;
         private Coroutine _spawnCoroutine;
         private WaitForSeconds _spawnWait;
 

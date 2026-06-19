@@ -625,7 +625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _newGameButton: {fileID: 998119563}
   _continueButton: {fileID: 880594212}
-  _firstSceneName: Room1
+  _firstSceneName: Room0
 --- !u!1 &1443866369
 GameObject:
   m_ObjectHideFlags: 0

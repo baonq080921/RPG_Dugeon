@@ -50,11 +50,15 @@ namespace player
         private void AddExp(float amount)
         {
             CurrentExp += amount;
+            bool leveledUp = false;
             while (CurrentExp >= ExpToNextLevel)
             {
                 CurrentExp -= ExpToNextLevel;
                 LevelUp();
+                leveledUp = true;
             }
+            if (!leveledUp)
+                EventBus<PlayerXPChangedEvent>.Raise(new PlayerXPChangedEvent(CurrentExp, ExpToNextLevel, Level));
         }
 
         private void LevelUp()
@@ -63,6 +67,8 @@ namespace player
             ExpToNextLevel = CalculateExpToNextLevel();
             _entityVfx.CreateEffectLevelVFx();
             EventBus<PlayerLevelUpEvent>.Raise(new PlayerLevelUpEvent(_stat));
+            // Reset bar to 0 for the new level; carry-over XP will appear on the next gain.
+            EventBus<PlayerXPChangedEvent>.Raise(new PlayerXPChangedEvent(0f, ExpToNextLevel, Level));
         }
 
         private float CalculateExpToNextLevel()
@@ -73,9 +79,10 @@ namespace player
 
         public void RestoreExp(PlayerSaveData data)
         {
-            CurrentExp = data.currentExp;
-            Level = data.currentLevel;
+            CurrentExp     = data.currentExp;
+            Level          = data.currentLevel;
             ExpToNextLevel = data.expToNextLevel;
+            EventBus<PlayerXPChangedEvent>.Raise(new PlayerXPChangedEvent(CurrentExp, ExpToNextLevel, Level));
         }
     }
 }

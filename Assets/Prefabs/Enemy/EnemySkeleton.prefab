@@ -132,6 +132,7 @@ MonoBehaviour:
   _knockBackPowerLight: {x: 2, y: 3}
   _knockBackPowerHeavy: {x: 6, y: 5}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 58074875e7c5a4e41964ce02729a9ab8, type: 2}
+  _sceneEntityId: aee8251b-5408-418a-9f3f-c3e67f891da7
 --- !u!114 &4660470050624362055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,3 +1048,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295a512a3ac3e0649b830e9e176eaac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _flipWithEntity: 1
+  _slider: {fileID: 359417997529720408}

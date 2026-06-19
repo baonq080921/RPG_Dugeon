@@ -44,6 +44,7 @@ public abstract class Entity : MonoBehaviour
     [field:SerializeField]public bool CanKnockBackOnHit { get; protected set; } = true;
 
     public event Action OnFlip;
+    [SerializeField] private bool _flipHealthBar = true;
     private Coroutine _knockBackCoroutine;
     public bool IsKnocked { get; private set; }
     public bool IsShocked { get; private set; } 
@@ -87,7 +88,8 @@ public abstract class Entity : MonoBehaviour
     public void Flip(float direction)
     {
         transform.localScale = new Vector3(_originalScale.x * direction, _originalScale.y, _originalScale.z) ;
-        OnFlip?.Invoke();
+        if(_flipHealthBar)
+            OnFlip?.Invoke();
     }
 
     public virtual void SetVelocity(Vector2 velocity)

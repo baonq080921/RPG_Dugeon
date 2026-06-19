@@ -25,6 +25,7 @@ namespace enemy
         /// <summary>Scene-unique identifier generated automatically per scene instance. Never changes after first assignment.</summary>
         [SerializeField] private string _sceneEntityId;
         public string SceneEntityId => _sceneEntityId;
+        
 
 #if UNITY_EDITOR
         private void OnValidate()

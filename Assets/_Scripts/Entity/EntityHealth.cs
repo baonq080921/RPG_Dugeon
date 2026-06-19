@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 
 public abstract class EntityHealth : MonoBehaviour, IHit
-{     
+{
     [field:SerializeField]public float CurrentHealth { get; private set; }
     private Entity _entity;
     private EntityStat _entityStat;
@@ -13,6 +13,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     public float MaxHealth => _entityStat.GetHealthValue();
 
     [SerializeField] private Slider _slider;
+
     protected virtual void Awake()
     {
         _entity = GetComponent<Entity>();
@@ -20,6 +21,10 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         if(_slider == null)
             _slider = GetComponentInChildren<Slider>();
     }
+
+    protected virtual void OnEnable() { }
+
+    protected virtual void OnDisable() { }
     
     protected virtual void Start()
     {

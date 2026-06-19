@@ -172,7 +172,11 @@ namespace Save
         public bool IsQuestComplete(string sceneName) => _completedQuestScenes.Contains(sceneName);
 
         /// <summary>Stores the latest numeric progress for the quest in <paramref name="sceneName"/>.</summary>
-        public void SetQuestProgress(string sceneName, int progress) => _questProgress[sceneName] = progress;
+        public void SetQuestProgress(string sceneName, int progress)
+        {
+            DebugCustom.Log("Quest" + GetQuestProgress(sceneName) + "and progress is" + progress);
+            _questProgress[sceneName] = progress;
+        }
 
         /// <summary>Returns the saved progress for the quest in <paramref name="sceneName"/>, or 0 if none.</summary>
         public int GetQuestProgress(string sceneName)
@@ -232,6 +236,18 @@ namespace Save
             }
 
             _pendingLoad = JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(SavePath));
+
+            // Pre-populate quest data before the scene loads so SceneQuestController.Start()
+            // reads the correct saved values instead of 0.
+            _completedQuestScenes.Clear();
+            foreach (var s in _pendingLoad.completedQuestScenes)
+                _completedQuestScenes.Add(s);
+
+            _questProgress.Clear();
+            foreach (var entry in _pendingLoad.questProgress)
+                if (!string.IsNullOrEmpty(entry.sceneName))
+                    _questProgress[entry.sceneName] = entry.progress;
+
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadScene(_pendingLoad.sceneName);
         }
@@ -353,7 +369,10 @@ namespace Save
             _questProgress.Clear();
             foreach (var entry in data.questProgress)
                 if (!string.IsNullOrEmpty(entry.sceneName))
+                {
                     _questProgress[entry.sceneName] = entry.progress;
+                    Debug.Log("Scene Name"+ entry.sceneName + "progress "+ entry.progress);
+                }
 
             // SceneEntityManager.Start() ran before _sceneStates was restored, so apply now.
             FindObjectOfType<scene.SceneEntityManager>()?.ApplySceneState();

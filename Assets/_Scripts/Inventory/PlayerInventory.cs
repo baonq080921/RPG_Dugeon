@@ -16,9 +16,13 @@ public class PlayerInventory : InventoryBase {
     private EventBinding<SkillPointRewardEvent> _skillPointRewardBinding;
 
     [SerializeField] private float _startingSkillPoints = 0f;
+    [SerializeField] private float _startingMoney = 0f;
+    public float Money{get; private set;}
     public float SkillPoints { get; private set; }
 
     public event Action<float> OnSkillPointsChanged;
+
+    #region  SKill Points
 
     public bool CanSpendSkillPoints(float cost) => SkillPoints >= cost;
 
@@ -41,12 +45,29 @@ public class PlayerInventory : InventoryBase {
         OnSkillPointsChanged?.Invoke(SkillPoints);
     }
 
+    #endregion
+
+
+    #region  Money asset
+    public bool CanSpendMoney(float cost) => Money >= cost;
+
+    public void SpendMoney(float cost)
+    {
+        if(!CanSpendMoney(cost))return;
+        Money -= cost;
+
+    }
+
+
+    #endregion
+
     protected override void Awake()
     {
         base.Awake();
         _playerStats = GetComponent<EntityStat>();
         _player = GetComponent<Player>();
         SkillPoints = _startingSkillPoints;
+        Money = _startingMoney;
     }
 
     void OnEnable()
@@ -73,10 +94,11 @@ public class PlayerInventory : InventoryBase {
     private void TryEquipItem(ItemInventory item)
     {
         if (item == null || item.itemData == null) return;
+        var worldPos = ServiceLocator.Get<Helper>().mainCam.WorldToScreenPoint(Input.mousePosition);
 
         if (item.itemData.EquipSlot == EquipSlotType.None)
         {
-            EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Item Cannot Be Equipped")));
+            EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Item Cannot Be Equipped"), worldPos, Color.red));
             return;
         }
 
@@ -86,7 +108,7 @@ public class PlayerInventory : InventoryBase {
         ItemInventoryEquipment targetSlot = equipList.Find(slot => slot.slotType == item.itemData.EquipSlot);
         if (targetSlot == null || targetSlot.HasItem())
         {
-            EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot")));
+            EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot"), worldPos, Color.red));
             return;
         }
         EquipItem(itemInventory, targetSlot);

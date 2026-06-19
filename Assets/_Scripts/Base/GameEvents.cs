@@ -24,10 +24,26 @@ namespace Base
         public EntityStat PlayerStat { get; }
         public PlayerLevelUpEvent(EntityStat playerStat) => PlayerStat = playerStat;
     }
+
+    /// <summary>Raised whenever the player's XP value changes — on gain, level-up carry-over, or save restore.</summary>
+    public struct PlayerXPChangedEvent : IEvent
+    {
+        public float CurrentExp    { get; }
+        public float ExpToNextLevel { get; }
+        public int   Level         { get; }
+        public PlayerXPChangedEvent(float currentExp, float expToNextLevel, int level)
+        {
+            CurrentExp     = currentExp;
+            ExpToNextLevel = expToNextLevel;
+            Level          = level;
+        }
+    }
     public struct ResetStats :IEvent {}
 
-    //Call to Open the store
-    public struct StoreCallEvent:IEvent{}
+    //Call to Open the craft store
+    public struct CraftStoreCallEvent:IEvent{}
+    // Call to Open the store 
+    public struct StoreCallEvent: IEvent{}
     /// <summary>
     /// Raised when we want to Alert some Message
     /// </summary> <summary>
@@ -36,11 +52,15 @@ namespace Base
     public struct AlertNotiEvent : IEvent
     {
         public string alertMessage{get; private set;}
-        public AlertNotiEvent(String message)
+        public Vector2 position;
+        public Color color;
+        public AlertNotiEvent(String message, Vector2 position, Color color = default)
         {
             alertMessage = message;
+            this.position = position;
+            this.color = color;
         }
-    } 
+    }
 
     public struct PlayerAddHealthAmount : IEvent
     {
@@ -69,6 +89,15 @@ namespace Base
         public CraftGetInfoEvent(ItemCraftData itemCraftData)
         {
             this.itemCraftData = itemCraftData;
+        }
+    }
+
+    public struct StoreItemGetInfoEvent : IEvent
+    {
+        public ItemData itemData;
+        public StoreItemGetInfoEvent(ItemData itemData)
+        {
+            this.itemData = itemData;
         }
     }
 

@@ -18,7 +18,7 @@ public class ItemData : ScriptableObject
     [field:SerializeField] public float rareCap{get; private set;} = 65f;
     [field:Range(0,100)]
     [field:SerializeField] public float dropChance{get; private set;}
-
+    [field:SerializeField] public float money {get; private set;}
 
 
     void OnValidate()

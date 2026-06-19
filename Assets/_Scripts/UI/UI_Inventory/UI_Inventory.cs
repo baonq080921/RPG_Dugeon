@@ -16,9 +16,6 @@ public class UI_Inventory : MonoBehaviour
     private List<ItemInventory> _items;
     private List<ItemInventoryEquipment> _itemInventoryEquipments;
     private EventBinding<OnInventoryChangedEvent> _eventBindingChanged;
-    private EventBinding<AlertNotiEvent> _eventBindingAlert;
-    private Sequence _alertSequence;
-    [SerializeField] private TextMeshProUGUI _alertNotiTmp;
     
 
 
@@ -46,14 +43,11 @@ public class UI_Inventory : MonoBehaviour
         Player.ActivePlayerChanged += OnPlayerChanged;
         _eventBindingChanged = new EventBinding<OnInventoryChangedEvent>(UpdateUIInventory);
         EventBus<OnInventoryChangedEvent>.Register(_eventBindingChanged);
-        _eventBindingAlert = new EventBinding<AlertNotiEvent>(AlertNotificationUI);
-        EventBus<AlertNotiEvent>.Register(_eventBindingAlert);
     }
 
     void OnDisable()
     {
         EventBus<OnInventoryChangedEvent>.Deregister(_eventBindingChanged);
-        EventBus<AlertNotiEvent>.Deregister(_eventBindingAlert);
         Player.ActivePlayerChanged -= OnPlayerChanged;
     }
 
@@ -66,18 +60,6 @@ public class UI_Inventory : MonoBehaviour
         UpdateUIInventory();
     }
 
-    void AlertNotificationUI(AlertNotiEvent alertNotiEvent)
-    {
-        _alertNotiTmp.text = alertNotiEvent.alertMessage;
-        Vector3 mousePos = Input.mousePosition;
-        _alertNotiTmp.rectTransform.position = mousePos;
-        _alertNotiTmp.DOKill();
-        _alertSequence?.Kill();
-        _alertSequence = DOTween.Sequence();
-        _alertSequence.Append(_alertNotiTmp.DOFade(1, 0.25f).SetUpdate(true).SetEase(Ease.InBack));
-        _alertSequence.AppendInterval(0.5f).SetUpdate(true);
-        _alertSequence.Append(_alertNotiTmp.DOFade(0, 0.25f).SetUpdate(true).SetEase(Ease.OutBack));
-    }
 
     void UpdateUIInventory()
     {

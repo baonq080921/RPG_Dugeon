@@ -32,7 +32,7 @@ namespace scene
                 var questController = FindObjectOfType<Quest.SceneQuestController>();
                 if (questController != null && !questController.IsQuestComplete)
                 {
-                    EventBus<Base.AlertNotiEvent>.Raise(new Base.AlertNotiEvent($"Finish the quest first!\n{questController.Quest.QuestName}"));
+                    EventBus<Base.AlertNotiEvent>.Raise(new Base.AlertNotiEvent($"Finish the quest first!\n{questController.Quest.QuestName}", transform.position, Color.yellow));
                     return;
                 }
             }
