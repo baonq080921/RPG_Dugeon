@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace Save
 {
-    /// <summary>Tracks which enemies were killed and which chests were opened in a single scene for the current session.</summary>
+    /// <summary>Tracks which scene entities have been permanently changed (enemies killed, chests opened, items collected, etc.) for one scene.</summary>
     [Serializable]
     public class SceneStateData
     {
         public string sceneName;
-        public List<string> killedEnemyIds = new List<string>();
-        public List<string> openedChestIds = new List<string>();
+        public List<string> persistedEntityIds = new List<string>();
     }
 }

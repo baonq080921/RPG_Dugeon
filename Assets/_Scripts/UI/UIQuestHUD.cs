@@ -57,22 +57,42 @@ namespace UI
 
         private void OnQuestStarted(QuestStartedEvent e)
         {
+            var quest = e.Quest;
             if (_noQuestTmp != null) _noQuestTmp.gameObject.SetActive(false);
-            if (_questNameTmp != null)        _questNameTmp.text        = e.Quest.QuestName;
-            if (_questDescriptionTmp != null) _questDescriptionTmp.text = e.Quest.QuestDescription;
-            if (_progressTmp != null)         _progressTmp.text         = e.Quest.ProgressText;
+            ShowQuestDetailInfo(quest, true);
+        }
+
+        private void ShowQuestDetailInfo(QuestData data, bool isStart)
+        {
+            _progressTmp.color = isStart ? Color.red: Color.yellow;            
+            if (_questNameTmp != null) _questNameTmp.text = data.QuestName;
+            if (_questDescriptionTmp != null) _questDescriptionTmp.text = data.QuestDescription;
+            if (_progressTmp != null) _progressTmp.text = data.ProgressText;
         }
 
         private void OnQuestProgress(QuestProgressEvent e)
         {
-            if (_progressTmp != null) _progressTmp.text = e.Quest.ProgressText;
+            var quest = e.Quest;
+            if (_progressTmp != null) ShowQuestDetailInfo(quest,false);
+            
+                
         }
 
         private void OnQuestCompleted(QuestCompletedEvent e)
         {
-            if (_progressTmp != null) _progressTmp.text = e.Quest.ProgressText;
+            var quest = e.Quest;
+            if (_progressTmp != null) _progressTmp.text = quest.ProgressText;
             ShowCompleteBanner();
+            ShowCompleteText();
         }
+
+        private void ShowCompleteText()
+        {
+            ShowNoQuestState();
+            _noQuestTmp.text = "You Finish Objective for this scene .Not things else to do here";
+        }
+
+        
 
         private void ShowCompleteBanner()
         {

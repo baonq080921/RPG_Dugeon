@@ -212,16 +212,10 @@ namespace Save
             SceneManager.LoadScene(startSceneName);
         }
 
-        /// <summary>Records that <paramref name="enemyId"/> was killed in <paramref name="sceneName"/> this session.</summary>
-        public void MarkEnemyKilled(string sceneName, string enemyId)
+        /// <summary>Records that the entity with <paramref name="entityId"/> has been permanently changed in <paramref name="sceneName"/> this session.</summary>
+        public void MarkEntityPersisted(string sceneName, string entityId)
         {
-            EnsureSceneState(sceneName).killedEnemyIds.Add(enemyId);
-        }
-
-        /// <summary>Records that <paramref name="chestId"/> was opened in <paramref name="sceneName"/> this session.</summary>
-        public void MarkChestOpened(string sceneName, string chestId)
-        {
-            EnsureSceneState(sceneName).openedChestIds.Add(chestId);
+            EnsureSceneState(sceneName).persistedEntityIds.Add(entityId);
         }
 
         /// <summary>Returns the state data for <paramref name="sceneName"/>, or null if no entities have been interacted with yet.</summary>

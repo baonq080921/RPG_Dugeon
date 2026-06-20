@@ -70,7 +70,9 @@ namespace Quest
             _quest.OnQuestCompleted  -= OnComplete;
 
             string sceneName = SceneManager.GetActiveScene().name;
-            ServiceLocator.Get<SaveManager>()?.MarkQuestComplete(sceneName);
+            var saveManager = ServiceLocator.Get<SaveManager>();
+            saveManager?.MarkQuestComplete(sceneName);
+            saveManager?.Save();
 
             EventBus<QuestCompletedEvent>.Raise(new QuestCompletedEvent(_quest));
         }

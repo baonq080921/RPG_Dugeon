@@ -27,6 +27,7 @@ namespace NPC
             _talkCoroutine = StartCoroutine(PlayTalkDialouge(_dialougeStr));
             IsRescued = true;
             EventBus<NpcRescuedEvent>.Raise(new NpcRescuedEvent());
+            RaiseOnPersistent();
         }
 
         IEnumerator PlayTalkDialouge(string dialougeText)

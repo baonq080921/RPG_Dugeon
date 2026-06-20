@@ -3,7 +3,7 @@ using Interfaces;
 using UnityEngine;
 
 /// <summary>Base class for all interactable chest objects in the scene.</summary>
-public class ObjectChestBase : MonoBehaviour, IHit
+public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
 {
     [SerializeField] protected float currentHealth = 1f;
     [SerializeField] protected Collider2D collider2D;
@@ -25,8 +25,11 @@ public class ObjectChestBase : MonoBehaviour, IHit
     }
 #endif
 
-    /// <summary>Raised once when this chest is opened. Subscribed to by <see cref="scene.SceneEntityManager"/>.</summary>
-    public event Action OnOpened;
+    /// <inheritdoc/>
+    public event Action OnPersisted;
+
+    /// <summary>Invokes <see cref="OnPersisted"/>. Call from subclasses when the chest's persistent state changes.</summary>
+    protected void RaiseOnPersisted() => OnPersisted?.Invoke();
 
     protected virtual void Awake()
     {
@@ -42,14 +45,14 @@ public class ObjectChestBase : MonoBehaviour, IHit
             collider2D.enabled = false;
             _animator.SetBool("Open", true);
             DropChestItem();
-            OnOpened?.Invoke();
+            RaiseOnPersisted();
             return true;
         }
         return false;
     }
 
-    /// <summary>Restores the already-opened visual state without re-dropping items. Called by <see cref="scene.SceneEntityManager"/> on scene load.</summary>
-    public void SetOpenedImmediately()
+    /// <inheritdoc/>
+    public void RestoreState()
     {
         collider2D.enabled = false;
         _animator.SetBool("Open", true);

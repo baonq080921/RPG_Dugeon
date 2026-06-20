@@ -1,5 +1,6 @@
+using System.Linq;
 using Base;
-using enemy;
+using Interfaces;
 using Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,15 +8,15 @@ using UnityEngine.SceneManagement;
 namespace scene
 {
     /// <summary>
-    /// Per-scene manager that tracks which enemies have been killed and which chests have been opened.
-    /// On scene load it disables already-dead enemies and restores the opened visual state of chests
-    /// without re-dropping items. State is persisted to disk so Continue restores it; New Game clears it.
+    /// Per-scene manager that restores persistent entity state (killed enemies, opened chests, collected items, etc.) on load.
+    /// Automatically discovers every <see cref="IScenePersistable"/> in the scene — no manual wiring needed
+    /// when new persistable entity types are added.
     /// </summary>
     public class SceneEntityManager : MonoBehaviour
     {
-        [SerializeField] private Enemy[]           _enemies = System.Array.Empty<Enemy>();
-        [SerializeField] private ObjectChestBase[] _chests  = System.Array.Empty<ObjectChestBase>();
+        private IScenePersistable[] _persistables;
         private string _sceneName;
+        private SaveManager _saveManager;
 
         private void Awake()
         {
@@ -24,64 +25,51 @@ namespace scene
 
         private void Start()
         {
-            SubscribeToEntities();
+            _saveManager = ServiceLocator.Get<SaveManager>();
+            _persistables = FindObjectsOfType<MonoBehaviour>()
+                .OfType<IScenePersistable>()
+                .ToArray();
 
-            // Portal transitions already have _sceneStates populated before Start runs.
-            // Full loads do not — SaveManager.ApplyData calls ApplySceneState() explicitly
-            // after restoring _sceneStates, so this handles only the portal case.
+            Debug.Log($"[SceneEntityManager] {_sceneName}: found {_persistables.Length} persistables: {string.Join(", ", System.Array.ConvertAll(_persistables, p => $"{p.GetType().Name}(id={p.SceneEntityId})"))}");
+
+            SubscribeToEntities();
             ApplySceneState();
         }
 
         /// <summary>
-        /// Disables enemies and sets chests that are already marked in the saved scene state.
+        /// Restores all entities already marked as persisted in the saved scene state.
         /// Called from <see cref="Start"/> for portal transitions and directly by
         /// <see cref="SaveManager"/> after a full load to fix the timing gap.
         /// </summary>
         public void ApplySceneState()
         {
-            var sceneState = ServiceLocator.Get<SaveManager>()?.GetSceneState(_sceneName);
+            if (_persistables == null) return;
+            var sceneState = _saveManager?.GetSceneState(_sceneName);
+            Debug.Log($"[SceneEntityManager] ApplySceneState on {_sceneName}: sceneState={(sceneState == null ? "NULL" : string.Join(", ", sceneState.persistedEntityIds))}");
             if (sceneState == null) return;
 
-            foreach (var enemy in _enemies)
+            foreach (var persistable in _persistables)
             {
-                if (enemy == null) continue;
-                if (sceneState.killedEnemyIds.Contains(enemy.SceneEntityId))
-                    enemy.gameObject.SetActive(false);
-            }
-
-            foreach (var chest in _chests)
-            {
-                if (chest == null) continue;
-                if (sceneState.openedChestIds.Contains(chest.SceneEntityId))
-                    chest.SetOpenedImmediately();
+                if (persistable == null) continue;
+                bool found = sceneState.persistedEntityIds.Contains(persistable.SceneEntityId);
+                Debug.Log($"[SceneEntityManager]   {persistable.GetType().Name} id={persistable.SceneEntityId} → restore={found}");
+                if (found)
+                    persistable.RestoreState();
             }
         }
 
         private void SubscribeToEntities()
         {
-            foreach (var enemy in _enemies)
+            foreach (var persistable in _persistables)
             {
-                if (enemy == null) continue;
-                string id = enemy.SceneEntityId;
-                enemy.OnDied += () => NotifyEnemyKilled(id);
+                if (persistable == null) continue;
+                string id = persistable.SceneEntityId;
+                persistable.OnPersisted += () =>
+                {
+                    Debug.Log($"[SceneEntityManager] OnPersisted fired: {persistable.GetType().Name} id={id} in {_sceneName}");
+                    _saveManager?.MarkEntityPersisted(_sceneName, id);
+                };
             }
-
-            foreach (var chest in _chests)
-            {
-                if (chest == null) continue;
-                string id = chest.SceneEntityId;
-                chest.OnOpened += () => NotifyChestOpened(id);
-            }
-        }
-
-        private void NotifyEnemyKilled(string enemyId)
-        {
-            ServiceLocator.Get<SaveManager>()?.MarkEnemyKilled(_sceneName, enemyId);
-        }
-
-        private void NotifyChestOpened(string chestId)
-        {
-            ServiceLocator.Get<SaveManager>()?.MarkChestOpened(_sceneName, chestId);
         }
     }
 }

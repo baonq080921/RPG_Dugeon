@@ -8,7 +8,7 @@ namespace enemy
     /// <summary>
     /// Base enemy entity. Holds all states and player-detection helpers used by every enemy type.
     /// </summary>
-    public class Enemy : Entity,ICounterable
+    public class Enemy : Entity, ICounterable, IScenePersistable
     {
         [field: SerializeField] public EnemyData enemyData { get; private set; }
 
@@ -44,8 +44,11 @@ namespace enemy
         /// <summary>The player transform found by the last <see cref="IsPlayerDetected"/> call.</summary>
         public Transform DetectedPlayer { get; private set; }
 
-        /// <summary>Raised once when this enemy dies. Subscribed to by <see cref="scene.SceneEntityManager"/>.</summary>
-        public event Action OnDied;
+        /// <inheritdoc/>
+        public event Action OnPersisted;
+
+        /// <summary>Invokes <see cref="OnPersisted"/>. Call from subclasses when the enemy's persistent state changes.</summary>
+        protected void RaiseOnPersisted() => OnPersisted?.Invoke();
         public bool CanCounter { get ; set ; }
 
         public float moveSpeed{get; private set;}
@@ -168,8 +171,11 @@ namespace enemy
             isDead = true;
             _entityDrop.DropItems();
             EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent(enemyData.Level, enemyData.BaseExp));
-            OnDied?.Invoke();
+            RaiseOnPersisted();
         }
+
+        /// <inheritdoc/>
+        public void RestoreState() => gameObject.SetActive(false);
 
         public virtual void ChangeToDiedState(){}
 
