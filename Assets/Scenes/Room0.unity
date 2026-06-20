@@ -10041,37 +10041,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6294266650890833884, guid: 7f29f2d73641420449289861ff763c82, type: 3}
-      propertyPath: m_Value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6294266650890833884, guid: 7f29f2d73641420449289861ff763c82, type: 3}
-      propertyPath: m_Transition
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6294266650890833884, guid: 7f29f2d73641420449289861ff763c82, type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6294266650890833884, guid: 7f29f2d73641420449289861ff763c82, type: 3}
-      propertyPath: m_Navigation.m_Mode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6719049403392532424, guid: 7f29f2d73641420449289861ff763c82, type: 3}
       propertyPath: m_Name
       value: PlayerPrefabs
       objectReference: {fileID: 0}
-    - target: {fileID: 7124667560203427521, guid: 7f29f2d73641420449289861ff763c82, type: 3}
-      propertyPath: _startingMoney
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 8351126851635947729, guid: 7f29f2d73641420449289861ff763c82, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9045181025799350680, guid: 7f29f2d73641420449289861ff763c82, type: 3}
-      propertyPath: m_SortingOrder
-      value: -10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12288,7 +12264,6 @@ MonoBehaviour:
   _groundCheckPoint: {fileID: 2070010643570658891}
   _groundCheckRadius: 0.1
   _wallCheckDistance: 1
-  <CanKnockBackOnHit>k__BackingField: 1
   _flipHealthBar: 1
   _knockBackPowerLight: {x: 2, y: 3}
   _knockBackPowerHeavy: {x: 6, y: 5}
@@ -12315,7 +12290,6 @@ MonoBehaviour:
   _groundCheckPoint: {fileID: 2070010643860894795}
   _groundCheckRadius: 0.1
   _wallCheckDistance: 1
-  <CanKnockBackOnHit>k__BackingField: 1
   _flipHealthBar: 1
   _knockBackPowerLight: {x: 2, y: 3}
   _knockBackPowerHeavy: {x: 6, y: 5}

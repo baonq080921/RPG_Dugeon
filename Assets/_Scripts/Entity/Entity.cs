@@ -41,8 +41,6 @@ public abstract class Entity : MonoBehaviour
     private Vector3 _originalScale;
     public abstract LayerMask LayerMask { get; }
     /// <summary>Whether attacks from this entity apply knockback to the target.</summary>
-    [field:SerializeField]public bool CanKnockBackOnHit { get; protected set; } = true;
-
     public event Action OnFlip;
     [SerializeField] private bool _flipHealthBar = true;
     private Coroutine _knockBackCoroutine;

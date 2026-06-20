@@ -90,34 +90,13 @@ namespace Save
 
             if (inventory != null)
             {
-                foreach (var item in inventory.itemInventoriesList)
-                {
-                    if (item?.itemData == null) continue;
-                    data.inventory.Add(new ItemSaveEntry
-                    {
-                        itemId    = item.itemData.ItemId,
-                        stackSize = item.stackSize,
-                    });
-                }
-                foreach (var slot in inventory.equipList)
-                {
-                    data.equipment.Add(new EquipSaveEntry
-                    {
-                        slotType = slot.slotType.ToString(),
-                        itemId   = slot.HasItem() ? slot.equipItem.itemData.ItemId : string.Empty,
-                    });
-                }
+                GetInventoryData(inventory, data);
             }
 
             var skillTree = ServiceLocator.Get<UIManager>()?.uISkillTree;
             if (skillTree != null)
             {
-                data.skillTree.skillPoints = inventory?.SkillPoints ?? 0f;
-                foreach (var node in skillTree.GetComponentsInChildren<UITreeNode>(true))
-                {
-                    if (node.skillTreeData == null || !node.isUnlocked) continue;
-                    data.skillTree.nodes.Add(new NodeSaveEntry { nodeKey = node.skillTreeData.name });
-                }
+                GetSkillTreeData(inventory, data, skillTree);
             }
 
             foreach (var sceneName in _completedQuestScenes)
@@ -131,6 +110,39 @@ namespace Save
 
             return data;
         }
+
+        private static void GetSkillTreeData(PlayerInventory inventory, PlayerSaveData data, UISkillTree skillTree)
+        {
+            data.skillTree.skillPoints = inventory?.SkillPoints ?? 0f;
+            foreach (var node in skillTree.GetComponentsInChildren<UITreeNode>(true))
+            {
+                if (node.skillTreeData == null || !node.isUnlocked) continue;
+                data.skillTree.nodes.Add(new NodeSaveEntry { nodeKey = node.skillTreeData.name });
+            }
+        }
+
+
+        private static void GetInventoryData(PlayerInventory inventory, PlayerSaveData data)
+        {
+            foreach (var item in inventory.itemInventoriesList)
+            {
+                if (item?.itemData == null) continue;
+                data.inventory.Add(new ItemSaveEntry
+                {
+                    itemId = item.itemData.ItemId,
+                    stackSize = item.stackSize,
+                });
+            }
+            foreach (var slot in inventory.equipList)
+            {
+                data.equipment.Add(new EquipSaveEntry
+                {
+                    slotType = slot.slotType.ToString(),
+                    itemId = slot.HasItem() ? slot.equipItem.itemData.ItemId : string.Empty,
+                });
+            }
+        }
+
 
         private void WriteToDisk(PlayerSaveData data)
         {

@@ -82,7 +82,7 @@ public class EntityStat : MonoBehaviour
 
         else 
         {
-                elementType = ElementType.None;
+            elementType = ElementType.None;
             return 0f; // Enemies do not deal elemental damage in this design
         }
     }
@@ -136,6 +136,8 @@ public class EntityStat : MonoBehaviour
 
 
     #region Display Values (deterministic, no randomization — caps match combat methods)
+    //This server the same as all the get but is server only for display all the stats that player define in the SO file
+    //example attack, amor, critchance etc...
     public float GetDamageDisplayValue() => _offensiveStats.Damage.GetValue() + _majorStats.Strength.GetValue();
     public float GetCritChanceDisplayValue()
     {
@@ -243,6 +245,7 @@ public class EntityStat : MonoBehaviour
     {
         switch (statType)
         {
+
             case StatType.Strength: 
                 return _majorStats.Strength;
             case StatType.Agility: 
@@ -251,6 +254,7 @@ public class EntityStat : MonoBehaviour
                 return _majorStats.Intelligence;
             case StatType.Vitality: 
                 return _majorStats.Vitality;
+
             case StatType.Damage: 
                 return  _offensiveStats.Damage;
              case StatType.CritChance: 

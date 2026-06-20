@@ -34975,7 +34975,7 @@ GameObject:
   - component: {fileID: 208694517}
   - component: {fileID: 208694516}
   m_Layer: 0
-  m_Name: SpawnPoint_FromMainScene
+  m_Name: SpawnPoint_FromRoom1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34993,7 +34993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17e83fbe771121846964c195fab0e796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _portalId: from_main
+  _portalId: from_room1
 --- !u!4 &208694517
 Transform:
   m_ObjectHideFlags: 0
@@ -35006,7 +35006,8 @@ Transform:
   m_LocalPosition: {x: -28.07, y: 2.56, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 358527495}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &285787753
@@ -35587,12 +35588,12 @@ Transform:
   m_GameObject: {fileID: 358527493}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 52.42, y: 23.46, z: 1.3}
+  m_LocalPosition: {x: 80.49, y: 20.9, z: 1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1112860953}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 208694517}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &395940393
 PrefabInstance:
@@ -42927,7 +42928,6 @@ SceneRoots:
   - {fileID: 1968784565}
   - {fileID: 1658070298}
   - {fileID: 208694517}
-  - {fileID: 358527495}
   - {fileID: 1849218249}
   - {fileID: 495192099}
   - {fileID: 3260050032181112804}
