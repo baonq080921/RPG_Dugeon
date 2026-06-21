@@ -679,7 +679,7 @@ MonoBehaviour:
   _groundCheckPoint: {fileID: 700508271121360018}
   _groundCheckRadius: 0.1
   _wallCheckDistance: 1.5
-  <CanKnockBackOnHit>k__BackingField: 1
+  _flipHealthBar: 1
   _knockBackPowerLight: {x: 0, y: 0}
   _knockBackPowerHeavy: {x: 0, y: 0}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 1876ab9b3c06acc42ae74f8423540fca, type: 2}
@@ -687,6 +687,8 @@ MonoBehaviour:
   _chanceToTeleport: 0.25
   _aeraCollider: {fileID: 0}
   _teleportBehindOffset: 2
+  _enemyDeathRipplerUltPrefab: {fileID: 8581316846714365907, guid: 47859b4cda7b6894d84c337988740c29, type: 3}
+  _ultSpawnOffSet: 1.2
 --- !u!114 &5946186239078372710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1052,5 +1054,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295a512a3ac3e0649b830e9e176eaac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flipWithEntity: 1
   _slider: {fileID: 6872988460910535281}

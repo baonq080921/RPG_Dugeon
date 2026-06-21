@@ -1,4 +1,5 @@
 
+using Base;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,17 +46,21 @@ public abstract class EntityHealth : MonoBehaviour, IHit
 
         float finalDamge;
         float finalElementalDamage;
-        if (entityStatDealDamage != null)
-        {
-            finalDamge = damage * entityStatDealDamage.GetMigiationValue();
-            finalElementalDamage = elementalDamage * entityStatDealDamage.GetElementalResitanceValue();
-        }
-        else
-        {
-            // Attacker has no EntityStat (e.g. a skill object clone) — apply damage as-is.
-            finalDamge = damage;
-            finalElementalDamage = elementalDamage;
-        }
+        // if (entityStatDealDamage != null)
+        // {
+        //     finalDamge = damage * _entityStat.GetMigiationValue();
+        //     Debug.Log(_entityStat.GetMigiationValue());
+        //     finalElementalDamage = elementalDamage * _entityStat.GetElementalResitanceValue();
+        // }
+        // else
+        // {
+        //     // Attacker has no EntityStat (e.g. a skill object clone) — apply damage as-is.
+        //     finalDamge = damage;
+        //     finalElementalDamage = elementalDamage;
+        // }
+        finalDamge = damage * _entityStat.GetMigiationValue();
+        DebugCustom.Log(""+_entityStat.GetMigiationValue());
+        finalElementalDamage = elementalDamage * _entityStat.GetElementalResitanceValue();
         ReduceHP(finalDamge + finalElementalDamage);
 
         return true;

@@ -8,7 +8,7 @@ using UnityEngine;
 public class UI_Inventory : MonoBehaviour
 {
 
-    [SerializeField] private PlayerInventory _inventory;
+    private PlayerInventory _inventory;
     [SerializeField] private UIItemActionPanel _actionPanel;
     [SerializeField] private UIEquipmentActionPanel _equipmentActionPanel;
     private UIItemSlot[] _uISlots;
@@ -16,6 +16,7 @@ public class UI_Inventory : MonoBehaviour
     private List<ItemInventory> _items;
     private List<ItemInventoryEquipment> _itemInventoryEquipments;
     private EventBinding<OnInventoryChangedEvent> _eventBindingChanged;
+    [SerializeField] private TextMeshProUGUI _playerGoldText;
     
 
 
@@ -34,10 +35,6 @@ public class UI_Inventory : MonoBehaviour
             slot.SetActionPanel(_equipmentActionPanel);
     }
 
-    void Start()
-    {
-        UpdateUIInventory();
-    }
     void OnEnable()
     {
         Player.ActivePlayerChanged += OnPlayerChanged;
@@ -49,6 +46,7 @@ public class UI_Inventory : MonoBehaviour
     {
         EventBus<OnInventoryChangedEvent>.Deregister(_eventBindingChanged);
         Player.ActivePlayerChanged -= OnPlayerChanged;
+        _inventory.OnMoneyChanged -=UpateCurrentPlayerGoldUI;
     }
 
 
@@ -59,6 +57,8 @@ public class UI_Inventory : MonoBehaviour
         _equipmentActionPanel.Setup(_inventory);
         UpdateUIInventory();
     }
+
+    private void UpateCurrentPlayerGoldUI(float amount) =>_playerGoldText.text = BuildText(amount);
 
 
     void UpdateUIInventory()
@@ -78,5 +78,9 @@ public class UI_Inventory : MonoBehaviour
             ItemInventoryEquipment match = _itemInventoryEquipments.Find(e => e.slotType == slot.SlotType);
             slot.UpdateUISlot(match);
         }        
+
+        UpateCurrentPlayerGoldUI(_inventory.Money);
     }
+
+    private string BuildText(float amount) => $"Your gold: <color=green>{amount}</color>";
 }

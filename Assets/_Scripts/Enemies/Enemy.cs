@@ -178,6 +178,7 @@ namespace enemy
         public void RestoreState() => gameObject.SetActive(false);
 
         public virtual void ChangeToDiedState(){}
+        public virtual void SpecialAttack(){}
 
 
         public override void ApplyEffect(float scaleFactor, ElementType elementType)

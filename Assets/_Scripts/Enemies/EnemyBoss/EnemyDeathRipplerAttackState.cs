@@ -42,9 +42,9 @@ namespace enemy
             if (!isTriggered) return;
 
             if (enemy.IsPlayerDetected())
-                stateMachine.ChangeState(enemy.enemyChaseState);
+                stateMachine.ChangeState(_enemyDeathRippler.enemyChaseState);
             else
-                stateMachine.ChangeState(enemy.enemyIdleState);
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerBattleState);
         }
 
         public override void Exit() => base.Exit();

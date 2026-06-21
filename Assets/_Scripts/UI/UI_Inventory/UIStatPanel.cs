@@ -62,7 +62,7 @@ private void Refresh()
         SetText(_armorTmp,               _entityStat.GetArmorDisplayValue(),               "0");
         SetText(_evasionTmp,             _entityStat.GetEnvasionValue(),                   "0.0'%'");
 
-        SetText(_lightDamageTmp,         _entityStat.GetElementalDamage(),         "0");
+        SetText(_lightDamageTmp,         _entityStat.GetElementalDamageDisplay(),         "0");
 
         SetText(_elementalResistanceTmp, _entityStat.GetElementalResistanceDisplayValue(), "0.00'%'");
     }

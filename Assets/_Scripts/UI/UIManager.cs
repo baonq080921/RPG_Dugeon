@@ -1,4 +1,5 @@
 using Base;
+using player;
 using UI;
 using UnityEngine;
 
@@ -19,8 +20,8 @@ public class UIManager : MonoBehaviour
             uISkillTree = GetComponentInChildren<UISkillTree>();
         if(uIInventory == null)
             uIInventory = GetComponentInChildren<UI_Inventory>();
-        ServiceLocator.Register(this);
         if(uICanvasChange == null)
             uICanvasChange = GetComponentInChildren<UICanvasChange>();
+        ServiceLocator.Register(this);
     }
 }

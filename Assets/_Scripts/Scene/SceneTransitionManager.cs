@@ -31,7 +31,6 @@ namespace scene
                 return;
             }
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             SetupFadeCanvas();
         }
 

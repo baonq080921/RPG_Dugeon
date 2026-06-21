@@ -42475,6 +42475,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrefabs
       objectReference: {fileID: 0}
+    - target: {fileID: 8351126851635947729, guid: 7f29f2d73641420449289861ff763c82, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -43639,10 +43643,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyRippler
       objectReference: {fileID: 0}
+    - target: {fileID: 6744811344588141195, guid: 18cffd3be9c518b419d82dccef7ad0b8, type: 3}
+      propertyPath: _majorStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 16b06fd287d698d4687d5dbe3dca5ade, type: 2}
+    - target: {fileID: 6744811344588141195, guid: 18cffd3be9c518b419d82dccef7ad0b8, type: 3}
+      propertyPath: _defensiveStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 2817f8c4d8fc4d449bcedaea7f4aeecc, type: 2}
+    - target: {fileID: 6744811344588141195, guid: 18cffd3be9c518b419d82dccef7ad0b8, type: 3}
+      propertyPath: _offensiveStats
+      value: 
+      objectReference: {fileID: 11400000, guid: c93c172429d61074fb535d41d7792c03, type: 2}
     - target: {fileID: 7473320679413637895, guid: 18cffd3be9c518b419d82dccef7ad0b8, type: 3}
       propertyPath: _aeraCollider
       value: 
       objectReference: {fileID: 779993015143006953}
+    - target: {fileID: 8465287988916116828, guid: 18cffd3be9c518b419d82dccef7ad0b8, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

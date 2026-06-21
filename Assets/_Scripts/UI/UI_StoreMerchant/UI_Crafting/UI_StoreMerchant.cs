@@ -134,6 +134,7 @@ namespace UI
             Time.timeScale = 0f;
             ServiceLocator.Get<GameManager>().SetPause(true);
             _storeRectTf.DOAnchorPos(_originalPosition, 0.25f).SetUpdate(true).SetEase(Ease.InQuad);
+            EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
         }
 
         public void HideStoreUI()
@@ -141,6 +142,7 @@ namespace UI
             Time.timeScale = 1f;
             ServiceLocator.Get<GameManager>().SetPause(false);
             _storeRectTf.DOAnchorPos(_hiddentPosition, 0.25f).SetUpdate(true).SetEase(Ease.OutQuad);
+            EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(false));
         }
     }
 }

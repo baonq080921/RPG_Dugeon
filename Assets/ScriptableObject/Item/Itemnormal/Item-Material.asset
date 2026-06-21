@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 364737a662f1c3946bb281cba4611fe3, type: 3}
   m_Name: Item-Material
   m_EditorClassIdentifier: 
+  <ItemId>k__BackingField: 6f693867-2a0e-4da8-809d-470b5af45b13
   <ItemName>k__BackingField: Material
   <ItemType>k__BackingField: 1
   <EquipSlot>k__BackingField: 0
@@ -20,3 +21,4 @@ MonoBehaviour:
   <itemRare>k__BackingField: 0
   <rareCap>k__BackingField: 65
   <dropChance>k__BackingField: 65
+  <money>k__BackingField: 30

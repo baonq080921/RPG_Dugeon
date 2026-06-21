@@ -113,6 +113,16 @@ namespace Base
     //When something change in the inventory for instance looting, or some stat upgrade that effect the ui stat on inventory
     public struct OnInventoryChangedEvent:IEvent{} 
 
+    //When you open store
+    public struct OnToggleButtonUIEvent:IEvent
+    {
+        public bool isShow;
+        public OnToggleButtonUIEvent(bool isShow)
+        {
+            this.isShow = isShow;
+        }
+    }
+
     #region Quest Event:
     /// <summary>Raised when a scene's quest begins tracking.</summary>
     public struct QuestStartedEvent : IEvent

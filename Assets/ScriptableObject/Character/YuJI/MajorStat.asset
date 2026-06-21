@@ -15,16 +15,12 @@ MonoBehaviour:
   <Strength>k__BackingField:
     statType: 5
     baseValue: 0
-    value: 0
   <Agility>k__BackingField:
     statType: 6
     baseValue: 2
-    value: 2
   <Intelligence>k__BackingField:
     statType: 7
     baseValue: 0
-    value: 0
   <Vitality>k__BackingField:
     statType: 8
-    baseValue: 10
-    value: 10
+    baseValue: 100

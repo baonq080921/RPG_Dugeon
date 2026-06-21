@@ -38,7 +38,7 @@ namespace UI
             _xpSlider.value = e.ExpToNextLevel > 0f ? e.CurrentExp / e.ExpToNextLevel : 0f;
 
             if (_levelText != null)
-                _levelText.text = $"Lv.{e.Level+1}";
+                _levelText.text = $"Lv.{e.Level}";
         }
     }
 }

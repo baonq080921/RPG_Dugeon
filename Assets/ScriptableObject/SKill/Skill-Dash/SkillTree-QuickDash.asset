@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b238cfb480a3f3f4089832ead1e7fddd, type: 3}
   m_Name: SkillTree-QuickDash
   m_EditorClassIdentifier: 
+  <SkillTreeId>k__BackingField: bec6c25a-1e86-4227-b1c2-6c32aa2149e1
   <SkillType>k__BackingField: 0
   <UpgradeData>k__BackingField:
     <SkillUpgrade>k__BackingField: 0
@@ -26,4 +27,4 @@ MonoBehaviour:
     You cant take damage
     why dashing'
   <Icon>k__BackingField: {fileID: 2112422244, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  <Cost>k__BackingField: 0
+  <Cost>k__BackingField: 1

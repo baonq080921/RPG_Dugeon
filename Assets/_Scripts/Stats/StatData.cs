@@ -37,6 +37,7 @@ namespace Stats
 
         public void Reset()
         {
+            // Debug.Log("Reset value");
             value = baseValue;
             _initialized = true;
         }

@@ -164,7 +164,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.BIGaming.RPG_Metrovaidain
-    Standalone: com.DefaultCompany.2DProject
+    Standalone: com.BIGaming.RPG-Metrovaidain
   buildNumber:
     Standalone: 0
     VisionOS: 0

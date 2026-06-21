@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: EnemyDeathRippler
   m_EditorClassIdentifier: 
   <IdleTime>k__BackingField: 2
+  <SkillCoolDown>k__BackingField: 5
+  <SkillDuration>k__BackingField: 3
+  <SkillSpawnInterval>k__BackingField: 0.5
+  <SkillDamageFactor>k__BackingField: 1.5
   <AttackVelocityRetreat>k__BackingField: {x: 5, y: 6}
   <MoveSpeed>k__BackingField: 8
   <MoveMultiplier>k__BackingField: 2

@@ -16,18 +16,24 @@ namespace enemy
         public override void Enter()
         {
             base.Enter();
-            stateTimer = 1.5f; // fallback in case animation event never fires
+            stateTimer = 1.5f;
             _enemyDeathRippler.UnTargetableEnemy(true);
         }
 
         public override void Update()
         {
             stateTimer -= Time.deltaTime;
+
             if (_enemyDeathRippler.IsTeleportTriggered)
             {
                 _enemyDeathRippler.transform.position = _enemyDeathRippler.FindTeleportPoint();
-                _enemyDeathRippler.SetTeleportTriggered(false); // teleport once, not every frame
+                _enemyDeathRippler.SetTeleportTriggered(false);
             }
+            if(_enemyDeathRippler.canUlt)
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerUltimateState);
+                
+            if (_enemyDeathRippler.canUlt)
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerUltimateState);
 
             if (isTriggered || stateTimer < 0)
                 stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerBattleState);

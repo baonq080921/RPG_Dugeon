@@ -1,7 +1,9 @@
+using System.Collections;
+using Base;
 using enemy;
+using player;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 namespace enemy
 {
     /// <summary>Boss enemy with its own dedicated state set.</summary>
@@ -11,6 +13,7 @@ namespace enemy
         public EnemyDeathRipplerBattleState enemyDeathRipplerBattleState { get; private set; }
         public EnemyDeathRipplerTeleportState enemyDeathRipplerTeleportState { get; private set; }
         public EnemyDeathRipplerTeleportBackState enemyDeathRipplerTeleportBackState { get; private set; }
+        public EnemyDeathRipplerUltimateState enemyDeathRipplerUltimateState {get; private set;}
         private float _offsetY = 2;
         [SerializeField] private float _chanceToTeleport = 0.25f;
         private float _defaultChanceTeleport;
@@ -20,14 +23,21 @@ namespace enemy
         public bool IsTeleportTriggered {get; private set;}
         public bool HasAggro { get; private set; }
         private Vector3? _overrideTeleportPoint;
-
+        private Coroutine _specialAttackCoroutine;
+        [SerializeField] private EnemyDeathRipplerUlt _enemyDeathRipplerUltPrefab;
+        public bool canUlt {get; private set;}
+        private float _ultCoolDownTimer;
+        [SerializeField] private float _ultSpawnOffSet ; 
+        private float offsetY = 2f;
+        private Player _player;
+    
         protected override void Awake()
         {
             base.Awake();
             _defaultChanceTeleport = _chanceToTeleport;
+            _ultCoolDownTimer = enemyData.SkillCoolDown;
+            canUlt = false;
         }
-
-
         protected override void InitializeStates()
         {
             enemyIdleState = new EnemyDeathRipplerIdleState(this, stateMachine, "Idle");
@@ -38,6 +48,7 @@ namespace enemy
             enemyDeathRipplerBattleState = new EnemyDeathRipplerBattleState(this, stateMachine, "Battle");
             enemyDeathRipplerTeleportState = new EnemyDeathRipplerTeleportState(this, stateMachine, "CanTelePort");
             enemyDeathRipplerTeleportBackState = new EnemyDeathRipplerTeleportBackState(this, stateMachine, "CanTelePort");
+            enemyDeathRipplerUltimateState = new EnemyDeathRipplerUltimateState(this, stateMachine,"canUlt");
         }
 
         protected override void Update()
@@ -47,7 +58,52 @@ namespace enemy
             {
                 transform.position = FindTeleportPoint();
             }
+
+            TickUltCoolDown();
         }
+
+        private void TickUltCoolDown()
+        {
+            if(_ultCoolDownTimer <= 0) {
+                canUlt = true;
+                return;
+            }
+            _ultCoolDownTimer -= Time.deltaTime;
+        }
+
+        public void ResetUltCoolDownTick() 
+        {
+            _ultCoolDownTimer = enemyData.SkillCoolDown;
+            canUlt = false;
+        }
+        public void StopSpecialAttack()
+        {
+            if(_specialAttackCoroutine == null) return;
+            StopCoroutine(_specialAttackCoroutine);
+            _specialAttackCoroutine = null;
+        }
+
+        public override void SpecialAttack()
+        {
+            base.SpecialAttack();
+            if(_specialAttackCoroutine != null) StopCoroutine(_specialAttackCoroutine);
+            _specialAttackCoroutine = StartCoroutine(SpecialAttackCoroutine());
+
+        }
+
+        IEnumerator SpecialAttackCoroutine()
+        {
+            _player = ServiceLocator.Get<Player>();
+            while (true)
+            {
+                var ult = Instantiate(_enemyDeathRipplerUltPrefab);
+                ult.SetUpUltimateSkill(entityStat.GetPhysicalDamageValue(out _),entityStat.GetElementalDamageValue(out _), enemyData.SkillDamageFactor);
+                var offset = _player.direction > 0 ? _ultSpawnOffSet : _ultSpawnOffSet * _player.direction;
+                ult.transform.position = new Vector3(_player.transform.position.x + offset,_player.transform.position.y + _offsetY);
+                yield return new WaitForSeconds(enemyData.SkillSpawnInterval);
+            }
+        }
+
 
         public override void ChangeToDiedState()
         {

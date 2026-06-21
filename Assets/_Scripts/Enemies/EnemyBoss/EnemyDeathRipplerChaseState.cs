@@ -19,7 +19,7 @@ namespace enemy
         public override void Enter()
         {
             base.Enter();
-            Debug.Log("Enter chase boss state");
+            // Debug.Log("Enter chase boss state");
         }
 
         public override void Update()

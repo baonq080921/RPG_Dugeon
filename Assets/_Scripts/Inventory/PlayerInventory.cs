@@ -21,6 +21,7 @@ public class PlayerInventory : InventoryBase {
     public float SkillPoints { get; private set; }
 
     public event Action<float> OnSkillPointsChanged;
+    public event Action<float> OnMoneyChanged;
 
     #region  SKill Points
 
@@ -55,9 +56,15 @@ public class PlayerInventory : InventoryBase {
     {
         if(!CanSpendMoney(cost))return;
         Money -= cost;
-
+        OnMoneyChanged?.Invoke(Money);
     }
 
+    public void SetMoney(float amout)
+    {
+        Money = amout;
+        OnMoneyChanged?.Invoke(Money);
+
+    }
 
     #endregion
 

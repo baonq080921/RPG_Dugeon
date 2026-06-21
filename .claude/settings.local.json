@@ -20,7 +20,11 @@
       "Bash(Measure-Object)",
       "Bash(Select-Object -ExpandProperty Count)",
       "Bash(Get-ChildItem -Path \"D:\\\\Unity\\\\RPG_Dugeon\\\\Assets\\\\TileMap\" -Recurse -Directory)",
-      "Bash(Select-Object FullName)"
+      "Bash(Select-Object FullName)",
+      "Read(//c/Users/Admin/Pictures/Screenshots/**)",
+      "Read(//c/Users/Admin/Desktop/**)",
+      "mcp__UnityMCP__manage_build",
+      "mcp__UnityMCP__manage_editor"
     ]
   }
 }

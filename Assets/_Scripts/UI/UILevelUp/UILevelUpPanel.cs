@@ -69,6 +69,7 @@ namespace UI
             DOTween.Kill(_canvasGroup);
             _canvasGroup.blocksRaycasts = true;
             _canvasGroup.DOFade(1f, 1f).SetUpdate(true).SetEase(Ease.InQuad);
+            EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
         }
 
         private void ChooseStat(StatType statType)
@@ -84,6 +85,7 @@ namespace UI
                     Time.timeScale = 1f;
                     EventBus<GamePauseChangedEvent>.Raise(new GamePauseChangedEvent(false));
                     EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
+                        EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
                 });
         }
     }

@@ -14,21 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Damage>k__BackingField:
     statType: 0
-    baseValue: 30
-    value: 30
+    baseValue: 300000
   <CritPower>k__BackingField:
     statType: 0
     baseValue: 0
-    value: 0
   <CritChance>k__BackingField:
     statType: 0
     baseValue: 0
-    value: 0
   <AttackMultiplier>k__BackingField:
     statType: 0
     baseValue: 1
-    value: 1
   <ElementalDamage>k__BackingField:
     statType: 0
     baseValue: 0
-    value: 0

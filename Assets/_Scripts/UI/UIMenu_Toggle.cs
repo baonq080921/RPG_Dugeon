@@ -12,6 +12,7 @@ public class UIMenu_Toggle : MonoBehaviour, IPointerDownHandler
     private bool isOpen = false;
     private Tween _moveTween;
 
+    private EventBinding<OnToggleButtonUIEvent> _toggleUiEventBinding;
     public void OnPointerDown(PointerEventData eventData)
     {
         isOpen = !isOpen;
@@ -22,6 +23,16 @@ public class UIMenu_Toggle : MonoBehaviour, IPointerDownHandler
     void Awake()
     {
         _originalPosition = _uiRectTf.anchoredPosition;
+    }
+    void OnEnable()
+    {
+        _toggleUiEventBinding = new EventBinding<OnToggleButtonUIEvent>(ToggleCanvasButtonEvent);
+        EventBus<OnToggleButtonUIEvent>.Register(_toggleUiEventBinding);
+    }
+
+    void OnDisable()
+    {
+        EventBus<OnToggleButtonUIEvent>.Deregister(_toggleUiEventBinding);
     }
 
     void Start()
@@ -34,8 +45,21 @@ public class UIMenu_Toggle : MonoBehaviour, IPointerDownHandler
         Time.timeScale = open ? 0 : 1;
         ServiceLocator.Get<GameManager>()?.SetPause(open);
         ToggleButtonsCanvas(open);
+        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
     }
 
+
+    /// <summary>
+    /// Call when player open the store or craft store
+    /// </summary>
+    /// <param name="e"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="e"></param>
+    private void ToggleCanvasButtonEvent(OnToggleButtonUIEvent e)
+    {
+        ToggleButtonsCanvas(e.isShow);
+    }
     private void ToggleButtonsCanvas(bool isShowMenu)
     {
         DOTween.Kill(_moveTween);

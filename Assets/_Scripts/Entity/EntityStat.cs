@@ -98,6 +98,13 @@ public class EntityStat : MonoBehaviour
         float mitigation = K / (K + totalResitance); // Diminishing returns formula
         return mitigation;
     }
+    /// <summary>
+    /// THe higher the Migitaion the player more defensive invincible
+    /// </summary>
+    /// <returns></returns> <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public float GetMigiationValue()
     {
 
@@ -146,7 +153,7 @@ public class EntityStat : MonoBehaviour
     }
     public float GetCritPowerDisplayValue() => _offensiveStats.CritPower.GetValue() + _majorStats.Strength.GetValue() * 0.5f;
     public float GetArmorDisplayValue() => _defensiveStats.Amor.GetValue() + _majorStats.Vitality.GetValue();
-    public float GetElementalDamage() => _offensiveStats.ElementalDamage.GetValue() + _majorStats.Intelligence.GetValue();
+    public float GetElementalDamageDisplay() => _offensiveStats.ElementalDamage.GetValue() + _majorStats.Intelligence.GetValue();
     public float GetElementalResistanceDisplayValue() => (1f - GetElementalResitanceValue()) * 100f;
     #endregion
 
@@ -169,6 +176,8 @@ public class EntityStat : MonoBehaviour
         _                     => 0
     };
 
+#if UNITY_EDITOR
+    [ContextMenu("Reset All Stats")]
     public void ResetAllStats()
     {
         _strengthPoints     = 0;
@@ -203,6 +212,8 @@ public class EntityStat : MonoBehaviour
             _defensiveStats.HealthRegen.Reset();
         }
     }
+
+    #endif
 
     /// <summary>Permanently adds 1 point to the chosen major stat. Called by the level-up UI.</summary>
     public void AddMajorStatPoint(StatType statType)

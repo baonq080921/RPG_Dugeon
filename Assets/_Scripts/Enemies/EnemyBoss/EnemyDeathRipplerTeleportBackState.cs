@@ -36,8 +36,12 @@ namespace enemy
                 _enemyDeathRippler.SetTeleportTriggered(false);
             }
 
+              if (_enemyDeathRippler.canUlt)
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerUltimateState);
+
+
             if (isTriggered || stateTimer < 0)
-                stateMachine.ChangeState(_enemyDeathRippler.enemyAttackState);
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerBattleState);
         }
 
         public override void Exit()

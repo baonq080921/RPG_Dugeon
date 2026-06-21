@@ -47,6 +47,8 @@ public class EntityCombat : MonoBehaviour
             Transform damageDealer = target.GetComponent<Transform>();
             float physicalDamage = entityStat.GetPhysicalDamageValue(out bool isCrit);
             float elementalDamage = entityStat.GetElementalDamageValue(out ElementType elementType);
+            Debug.Log(physicalDamage+ "physics");
+            Debug.Log(elementalDamage+ "magic");
             bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, damageDealer);
             if(elementType != ElementType.None)
                 ApplyStatusEffect(elementType, damageDealer,_scaleElementalFactor);
