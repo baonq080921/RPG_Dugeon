@@ -1,3 +1,4 @@
+using Base;
 using enemy;
 using Interfaces;
 using player;
@@ -31,7 +32,7 @@ public class SkillObject_Base : MonoBehaviour
     protected virtual void Update(){}
 
 
-    public void DamageEnemiesInRadius(float damage, bool appliesKnockback = true)
+    public void DamageEnemiesInRadius(float damage,bool isCrit, bool appliesKnockback = true)
     {
         var hits = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRadius, _enemyLayer);
         foreach (var hit in hits)
@@ -39,8 +40,9 @@ public class SkillObject_Base : MonoBehaviour
             if (hit.TryGetComponent<EnemyHealth>(out var health))
             {
                 Debug.Log($"Damaging enemy {hit.name} for {damage} damage.");
-                Transform attacker = appliesKnockback ? transform : null;
-                health?.TakeDamage(damage, 0, ElementType.None, attacker);
+                Transform target = appliesKnockback ? hit.transform : null;
+                health?.TakeDamage(damage, 0, ElementType.None, target);
+                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.position,damage,isCrit));
             }
         }
     }

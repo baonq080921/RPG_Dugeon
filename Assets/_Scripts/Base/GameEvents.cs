@@ -38,51 +38,40 @@ namespace Base
             Level          = level;
         }
     }
+
     public struct ResetStats :IEvent {}
 
-    //Call to Open the craft store
-    public struct CraftStoreCallEvent:IEvent{}
-    // Call to Open the store 
-    public struct StoreCallEvent: IEvent{}
-    /// <summary>
-    /// Raised when we want to Alert some Message
-    /// </summary> <summary>
-    /// 
-    /// </summary>
-    public struct AlertNotiEvent : IEvent
-    {
-        public string alertMessage{get; private set;}
-        public Vector2 position;
-        public Color color;
-        public AlertNotiEvent(String message, Vector2 position, Color color = default)
-        {
-            alertMessage = message;
-            this.position = position;
-            this.color = color;
-        }
-    }
+    
+    #region Boosting Event:
 
-    public struct PlayerAddHealthAmount : IEvent
+    public struct PlayerAddHealthAmountEvent : IEvent
     {
         public float Amount { get; }
 
-        public PlayerAddHealthAmount(float amount)
+        public PlayerAddHealthAmountEvent(float amount)
         {
             Amount = amount;
         }
     }
 
-    public struct TargetGotHitEvent : IEvent
+     public struct PlayerBoostingAmountEvent : IEvent
     {
-        public Transform target;
-        public bool isCrit;
-        public TargetGotHitEvent(Transform target, bool isCrit)
+        public float Amount { get; }
+
+        public PlayerBoostingAmountEvent(float amount)
         {
-            this.target = target;
-            this.isCrit = isCrit;
+            Amount = amount;
         }
     }
 
+    #endregion
+
+    
+
+    /// <summary>Raised when the player deals damage to an enemy, so a floating damage number can be spawned at the hit location.</summary>
+    
+
+    #region  UIEvent
     public struct CraftGetInfoEvent: IEvent
     {
         public ItemCraftData itemCraftData;
@@ -122,6 +111,35 @@ namespace Base
             this.isShow = isShow;
         }
     }
+
+
+
+    //Call to Open the craft store
+    public struct CraftStoreCallEvent:IEvent{}
+    // Call to Open the store 
+    public struct StoreCallEvent: IEvent{}
+    /// <summary>
+    /// Raised when we want to Alert some Message
+    /// </summary> <summary>
+    /// 
+    /// </summary>
+    public struct AlertNotiEvent : IEvent
+    {
+        public string alertMessage{get; private set;}
+        public Vector2 position;
+        public Color color;
+        public AlertNotiEvent(String message, Vector2 position, Color color = default)
+        {
+            alertMessage = message;
+            this.position = position;
+            this.color = color;
+        }
+    }
+
+    #endregion
+
+
+
 
     #region Quest Event:
     /// <summary>Raised when a scene's quest begins tracking.</summary>
@@ -171,5 +189,34 @@ namespace Base
     {
         public bool IsPause;
         public GamePauseChangedEvent(bool isPause) => IsPause = isPause;
+    }
+
+
+
+    public struct TargetGotHitEvent : IEvent
+    {
+        public Transform target;
+        public bool isCrit;
+        public TargetGotHitEvent(Transform target, bool isCrit)
+        {
+            this.target = target;
+            this.isCrit = isCrit;
+        }
+    }
+
+
+
+    public struct DamagePopupEvent : IEvent
+    {
+        public Vector3 WorldPosition { get; }
+        public float Damage { get; }
+        public bool IsCrit { get; }
+
+        public DamagePopupEvent(Vector3 worldPosition, float damage, bool isCrit)
+        {
+            WorldPosition = worldPosition;
+            Damage = damage;
+            IsCrit = isCrit;
+        }
     }
 }

@@ -41,7 +41,12 @@ public class UIItemActionPanel : MonoBehaviour
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
-        bool isEquippable = slot.itemInSlot?.itemData is EquipmentData;
+        bool isEquippable;
+        if(slot.itemInSlot?.itemData is EquipmentData || slot.itemInSlot?.itemData is ItemUse)
+            isEquippable = true;
+        else
+            isEquippable = false;
+
         _equipButton.gameObject.SetActive(isEquippable);
 
         _equipButton.onClick.RemoveAllListeners();
@@ -82,6 +87,8 @@ public class UIItemActionPanel : MonoBehaviour
             string sign = mod.value >= 0 ? "+" : string.Empty;
             sb.AppendLine($"{mod.statType}: {sign}{mod.value}");
         }
+        sb.AppendLine($"{item.itemData.describleItem}");
+        
         _skillTmp.text = sb.ToString().TrimEnd();
     }
 

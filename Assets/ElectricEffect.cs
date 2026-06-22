@@ -24,7 +24,7 @@ public class ElectricEffect : MonoBehaviour
         {
             if(_results[i].TryGetComponent<IHit>(out var hit))
             {
-                DebugCustom.Log("Electric passive hit enemy "+ ServiceLocator.Get<Player>().entityStat.GetElementalDamageDisplay()*1.1f);
+                // DebugCustom.Log("Electric passive hit enemy "+ ServiceLocator.Get<Player>().entityStat.GetElementalDamageDisplay()*1.1f);
                 hit?.TakeDamage(0,ServiceLocator.Get<Player>().entityStat.GetElementalDamageValue(out _)*1.1f,ElementType.Electric,transform);
 
             }

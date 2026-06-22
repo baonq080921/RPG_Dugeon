@@ -28,7 +28,9 @@ public enum ItemTypes:byte
     RedJade,
     BrownJade,
     Diamond,
-    GreenScepter
+    GreenScepter,
+    HealingPotion,
+    Dopping
 
 }
     

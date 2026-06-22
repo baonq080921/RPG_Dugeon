@@ -9,7 +9,7 @@ namespace player
     {
         public event Action OnPlayerTalkingDamage;
         private Player _player;
-        private EventBinding<PlayerAddHealthAmount> _healBinding;
+        private EventBinding<PlayerAddHealthAmountEvent> _healBinding;
 
         protected override void Awake()
         {
@@ -21,17 +21,17 @@ namespace player
         protected override void OnEnable()
         {
             base.OnEnable();
-            _healBinding = new EventBinding<PlayerAddHealthAmount>(OnHealReceived);
-            EventBus<PlayerAddHealthAmount>.Register(_healBinding);
+            _healBinding = new EventBinding<PlayerAddHealthAmountEvent>(OnHealReceived);
+            EventBus<PlayerAddHealthAmountEvent>.Register(_healBinding);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            EventBus<PlayerAddHealthAmount>.Deregister(_healBinding);
+            EventBus<PlayerAddHealthAmountEvent>.Deregister(_healBinding);
         }
 
-        private void OnHealReceived(PlayerAddHealthAmount healEvent) => HealHP(healEvent.Amount);
+        private void OnHealReceived(PlayerAddHealthAmountEvent healEvent) => HealHP(healEvent.Amount);
 
 
 

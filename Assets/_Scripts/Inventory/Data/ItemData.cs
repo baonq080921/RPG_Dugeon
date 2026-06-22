@@ -20,6 +20,8 @@ public class ItemData : ScriptableObject
     [field:SerializeField] public float dropChance{get; private set;}
     [field:SerializeField] public float money {get; private set;}
 
+    [field:TextArea]
+    [field:SerializeField] public string  describleItem{get ; private set;}
 
     void OnValidate()
     {

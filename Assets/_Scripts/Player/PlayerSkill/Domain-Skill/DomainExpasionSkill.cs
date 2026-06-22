@@ -18,7 +18,7 @@ public class DomainExpasionSkill : SkillBase
         base.ExecuteSkillEffect();
         DomainExpasionSkillObject skill = Instantiate(_domainExpasionAera,transform.position,Quaternion.identity);
         skill.OpenDomain(SkillBaseDefinition.Duration);
-        skill.SetUpDamageForDomain(SkillBaseDefinition.Damage,_physicalDamage,_elementalDamge, scaleFactor);
+        skill.SetUpDamageForDomain(SkillBaseDefinition.Damage,_physicalDamage,_elementalDamge, scaleFactor, isCrit);
 
     }
 }

@@ -4,6 +4,7 @@ using Base;
 using DG.Tweening;
 using player;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class PlayerInventory : InventoryBase {
@@ -108,20 +109,30 @@ public class PlayerInventory : InventoryBase {
             EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Item Cannot Be Equipped"), worldPos, Color.red));
             return;
         }
-
         ItemInventory itemInventory = FindItem(item);
         if (itemInventory == null) return;
 
+        if(item.itemData.EquipSlot == EquipSlotType.Use) 
+        {
+            UseItem(item); // Some item like health potion may be in the future have mana or some potion that can cool down etc
+            return;
+        }
+
         ItemInventoryEquipment targetSlot = equipList.Find(slot => slot.slotType == item.itemData.EquipSlot);
-        if (targetSlot == null || targetSlot.HasItem())
+        ItemInventoryEquipment slotToEquip = equipList.Find(slot => slot.slotType == item.itemData.EquipSlot);
+        if (slotToEquip == null || slotToEquip.HasItem())
         {
             EventBus<AlertNotiEvent>.Raise(new AlertNotiEvent(GameMessages.Alert("Weapon Already In Slot"), worldPos, Color.red));
             return;
         }
-        EquipItem(itemInventory, targetSlot);
+        EquipItem(itemInventory, slotToEquip);
     }
 
-
+    /// <summary>
+    /// This for item that can be equip in the player equip slot like weapon amor,etc...
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="slot"></param>
     private void EquipItem(ItemInventory item, ItemInventoryEquipment slot)
     {
         if (item.stackSize > 1)
@@ -136,7 +147,39 @@ public class PlayerInventory : InventoryBase {
         }
         slot.equipItem.AddModifiers(_playerStats);
         slot.equipItem.AddItemEffect(_player);
-        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
+        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent()); //Update UI Slot on the inventory
+    }
+
+
+
+    /// <summary>
+    /// This for item that can increase player like health mana but right now just health 
+    /// </summary>
+    /// <param name="item"></param>
+    private void UseItem(ItemInventory item) // refactore this in the future to support many kind of item that can be used for all types
+    {
+         if (item.stackSize > 1)
+        {
+            item.RemoveStackSize();
+        }
+        else
+        {
+            ClearFromInventory(item);
+        }
+        ItemUse itemUse = item.itemData as ItemUse;
+        EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent()); // Update UI Slot on the inventory
+        switch (item.itemData.ItemType)
+        {
+            
+            case ItemTypes.HealingPotion : 
+                EventBus<PlayerAddHealthAmountEvent>.Raise(new PlayerAddHealthAmountEvent(itemUse.Amount));
+                return;
+            case ItemTypes.Dopping :
+                EventBus<PlayerBoostingAmountEvent>.Raise(new PlayerBoostingAmountEvent(itemUse.Amount));
+                return;
+            //Define here in the future
+        }
+
     }
 
     /// <summary>

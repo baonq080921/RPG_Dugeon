@@ -95,7 +95,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: canUlt
+    m_ConditionEvent: canSpecial
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
@@ -118,7 +118,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemyDeathRipplerUltiPeform
+  m_Name: EnemyDeathRipplerSpecialAttackPeform
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -192,7 +192,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemyDeathRipplerEntryUltimate
+  m_Name: EnemyDeathRipplerEntrySpecialAttack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -249,7 +249,7 @@ AnimatorTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: canUlt
+    m_ConditionEvent: canSpecial
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1262703211680076798}
@@ -320,7 +320,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: canUlt
+  - m_Name: canSpecial
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -399,10 +399,10 @@ AnimatorStateMachine:
     m_Position: {x: 700, y: 510, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1262703211680076798}
-    m_Position: {x: 236.77063, y: 615.3909, z: 0}
+    m_Position: {x: 240, y: 610, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4045979919657969411}
-    m_Position: {x: 630, y: 610, z: 0}
+    m_Position: {x: 580, y: 640, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions:

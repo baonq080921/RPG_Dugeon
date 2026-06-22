@@ -10,5 +10,6 @@ public enum EquipSlotType:byte
     GloveSlot,
     HammerSlot,
     PantSlot,
-    FeetSlot
+    FeetSlot,
+    Use
 }

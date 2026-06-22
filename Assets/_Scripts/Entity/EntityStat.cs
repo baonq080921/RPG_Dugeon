@@ -14,6 +14,8 @@ public enum EntityType
 public class EntityStat : MonoBehaviour
 {
     [SerializeField]private EntityType _entityType;
+    /// <summary>Read-only access to this entity's high-level type (player vs enemy) for systems that need to branch on it.</summary>
+    public EntityType EntityType => _entityType;
     [SerializeField] private MajorStats _majorStats;
     //[SerializeField] private OffensiveStats _offensiveStats;
     [SerializeField] private DefensiveStats _defensiveStats;

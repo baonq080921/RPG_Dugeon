@@ -42,6 +42,7 @@ namespace player
 
         public bool canAirAttack { get; private set; } = true;
         private float _airAttackCooldownTimer;
+        private float _boostingCoolDownTimer;
 
         // Protected set so character subclasses can swap states in CreateStates()
         public PlayerIdleState playerIdleState { get; protected set; }
@@ -62,6 +63,8 @@ namespace player
         public SkillButtonHandler SkillButtonHandler { get; private set; }
         public AfterImageEffect AfterImageEffect { get; private set; }
         private EventBinding<GamePauseChangedEvent> _pauseBinding;
+        private EventBinding<PlayerBoostingAmountEvent> _eventBoostingBinding;
+
 
         public Vector2 movementInput { get; private set; }
         public bool isJump { get; private set; }
@@ -69,7 +72,7 @@ namespace player
         public int JumpCount { get; set; }
         public float LastWallJumpDirection { get; set; } = 0f;
         private Coroutine _queueComboCouroutine;
-
+        private Coroutine _boostingCoroutine;
 
         [field:SerializeField]public float attackElapsedTime { get; set; }
 
@@ -139,14 +142,20 @@ namespace player
 
             _pauseBinding = new EventBinding<GamePauseChangedEvent>(OnPauseChanged);
             EventBus<GamePauseChangedEvent>.Register(_pauseBinding);
+            _eventBoostingBinding = new EventBinding<PlayerBoostingAmountEvent>(BoostingPlayerPhysicality);
+            EventBus<PlayerBoostingAmountEvent>.Register(_eventBoostingBinding);
         }
 
         void OnDisable()
         {
             input.Disable();
             EventBus<GamePauseChangedEvent>.Deregister(_pauseBinding);
+            EventBus<PlayerBoostingAmountEvent>.Deregister(_eventBoostingBinding);
+            // Restore character defaults so a fresh scene doesn't inherit stacked boosts.
+            Data?.ResetBoosts();
         }
 
+       
         protected override void Start()
         {
             base.Start();
@@ -175,6 +184,26 @@ namespace player
             else input.Enable();
         }
 
+
+        private void BoostingPlayerPhysicality(PlayerBoostingAmountEvent e)
+        {
+            if(Data == null) return;
+            if(_boostingCoroutine != null) StopCoroutine(_boostingCoroutine);
+            _boostingCoroutine = StartCoroutine(BoostingCoroutine(e.Amount));
+            
+        }
+
+
+        IEnumerator BoostingCoroutine(float amount)
+        {
+            Data.BoostMoveSpeed(amount);
+            Data.BoostDashSpeed(amount);
+            Data.BoostJumpForce(amount);
+            Data.BoostMaxJumpCount((int)amount);
+            yield return new WaitForSeconds(6f);
+            Data.ResetBoosts();
+        }
+
         protected override void Update()
         {
             if (ServiceLocator.Get<GameManager>()?.IsPause ?? false) return;
@@ -184,11 +213,9 @@ namespace player
             TickTimeEchoSkill();
         }
 
-        private void TickTimeEchoSkill()
-        {
-            if (!SkillButtonHandler.TryConsumeEffect((int)ButtonSkillName.TimeEcho)) return;
-            ServiceLocator.Get<PlayerSkillManager>()?.skillTimeEcho.ExecuteSkillEffect();
-        }
+
+
+       
 
         public override void ApplyKnockBack(float damage)
         {
@@ -214,7 +241,6 @@ namespace player
             stateMachine.ChangeState(playerDeadState);
         }
 
-
         public void StartAttackCooldown()
         {
             canAttack = false;
@@ -225,6 +251,15 @@ namespace player
         {
             canAirAttack = false;
             _airAttackCooldownTimer = Data.AirAttackCooldown;
+        }
+
+      
+
+
+         private void TickTimeEchoSkill()
+        {
+            if (!SkillButtonHandler.TryConsumeEffect((int)ButtonSkillName.TimeEcho)) return;
+            ServiceLocator.Get<PlayerSkillManager>()?.skillTimeEcho.ExecuteSkillEffect();
         }
 
         private void TickAttackCooldown()

@@ -220,7 +220,7 @@ public class SkillObjectTimeEcho : SkillObject_Base
             float amount = _skillTimeEchoDefinition.HealingAmount;
             GameObject vfx = Instantiate(_healingVfxPrefab, spawnTransform.position, Quaternion.identity);
             vfx.transform.SetParent(spawnTransform);
-            EventBus<PlayerAddHealthAmount>.Raise(new PlayerAddHealthAmount(amount));
+            EventBus<PlayerAddHealthAmountEvent>.Raise(new PlayerAddHealthAmountEvent(amount));
             Destroy(vfx, 2f);
         }
         EchoDisappearEffect();
@@ -259,7 +259,11 @@ public class SkillObjectTimeEcho : SkillObject_Base
     private void DealDamage(bool appliesKnockback)
     {
         float skilldamage = _skillTimeEchoDefinition.Damage;
-        DamageEnemiesInRadius(skilldamage, appliesKnockback);
+        float playerPhysicDamage = ServiceLocator.Get<Player>().entityStat.GetPhysicalDamageValue( out bool isCrit);
+        float playerElementalDamage = ServiceLocator.Get<Player>().entityStat.GetPhysicalDamageValue( out _);
+        float totalPlayerSkillDamage = playerPhysicDamage + playerElementalDamage;
+        float finalDamage = skilldamage + totalPlayerSkillDamage * 0.8f;
+        DamageEnemiesInRadius(finalDamage,isCrit, appliesKnockback);
     }
 
     private void SpawnSmokeEffect()

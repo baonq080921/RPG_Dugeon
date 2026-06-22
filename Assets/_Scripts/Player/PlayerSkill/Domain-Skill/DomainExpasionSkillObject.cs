@@ -17,6 +17,7 @@ public class DomainExpasionSkillObject : MonoBehaviour
     private Coroutine _domainCoroutine;
     [SerializeField] private Collider2D[] hits;
     [SerializeField] private SpriteRenderer _shrineSr;
+    private bool _isCrit;
     private void Awake()
     {
         _targetScale = transform.localScale;
@@ -72,9 +73,10 @@ public class DomainExpasionSkillObject : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SetUpDamageForDomain(float damage, float elementalDamage, float physicDamage, float scaleFactor)
+    public void SetUpDamageForDomain(float damage, float elementalDamage, float physicDamage, float scaleFactor,bool isCrit)
     {
         float secondScaleFactor = scaleFactor *0.3f;
+        _isCrit = isCrit;
         if(physicDamage >= elementalDamage)
         {
             _damage = damage + physicDamage * scaleFactor;
@@ -98,6 +100,8 @@ public class DomainExpasionSkillObject : MonoBehaviour
             {
                 target?.TakeDamage(_damage,_elementalDamage,ElementType.None,transform);
                 ServiceLocator.Get<PoolManager>()?.sliceEffectPool.Spawn(targetTf);
+                float finalDamage = _damage +_elementalDamage;
+                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(targetTf.position,finalDamage,_isCrit));
             }
         }
     }

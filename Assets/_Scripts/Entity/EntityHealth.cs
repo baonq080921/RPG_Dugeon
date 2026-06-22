@@ -40,31 +40,16 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         {
             return false ;
         }
-        EntityStat entityStatDealDamage = targetDealDamage != null
-            ? targetDealDamage.GetComponent<EntityStat>()
-            : null;
-
         float finalDamge;
         float finalElementalDamage;
-        // if (entityStatDealDamage != null)
-        // {
-        //     finalDamge = damage * _entityStat.GetMigiationValue();
-        //     Debug.Log(_entityStat.GetMigiationValue());
-        //     finalElementalDamage = elementalDamage * _entityStat.GetElementalResitanceValue();
-        // }
-        // else
-        // {
-        //     // Attacker has no EntityStat (e.g. a skill object clone) — apply damage as-is.
-        //     finalDamge = damage;
-        //     finalElementalDamage = elementalDamage;
-        // }
         finalDamge = damage * _entityStat.GetMigiationValue();
-        DebugCustom.Log(""+_entityStat.GetMigiationValue());
+        // DebugCustom.Log(""+_entityStat.GetMigiationValue());
         finalElementalDamage = elementalDamage * _entityStat.GetElementalResitanceValue();
         ReduceHP(finalDamge + finalElementalDamage);
 
         return true;
     }
+
 
 
     private bool AttackEnvaded() => Random.Range(0f, 100f) < _entityStat.GetEnvasionValue();

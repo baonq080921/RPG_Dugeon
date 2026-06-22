@@ -101,6 +101,8 @@ namespace enemy
                 var offset = _player.direction > 0 ? _ultSpawnOffSet : _ultSpawnOffSet * _player.direction;
                 ult.transform.position = new Vector3(_player.transform.position.x + offset,_player.transform.position.y + _offsetY);
                 yield return new WaitForSeconds(enemyData.SkillSpawnInterval);
+                Destroy(gameObject,2f);
+
             }
         }
 

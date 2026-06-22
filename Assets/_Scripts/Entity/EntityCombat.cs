@@ -23,9 +23,11 @@ public class EntityCombat : MonoBehaviour
     [SerializeField] private float _scaleElementalFactor=1f;
 
     [SerializeField] private float _electricStatusDuration = 2f;
-    
+
     [Range(0f,1f)]
     [SerializeField] private float _electricBuildUpCharge = 0.5f;
+
+    [SerializeField] private Vector3 _damagePopupOffset = new Vector3(0f, 1f, 0f);
 
     protected virtual void Awake()
     {
@@ -47,8 +49,8 @@ public class EntityCombat : MonoBehaviour
             Transform damageDealer = target.GetComponent<Transform>();
             float physicalDamage = entityStat.GetPhysicalDamageValue(out bool isCrit);
             float elementalDamage = entityStat.GetElementalDamageValue(out ElementType elementType);
-            Debug.Log(physicalDamage+ "physics");
-            Debug.Log(elementalDamage+ "magic");
+            // Debug.Log(physicalDamage+ "physics");
+            // Debug.Log(elementalDamage+ "magic");
             bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, damageDealer);
             if(elementType != ElementType.None)
                 ApplyStatusEffect(elementType, damageDealer,_scaleElementalFactor);
@@ -57,11 +59,14 @@ public class EntityCombat : MonoBehaviour
                 _entityVfx?.UpdateHitColor(elementType);
                 // OnTargetHit?.Invoke(target.transform,isCrit);
                 EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(target.transform,isCrit));
+                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.transform.position,physicalDamage+elementalDamage,isCrit));
             }
 
         }
     }
     
+
+  
 
     public virtual void ApplyStatusEffect(ElementType elementType, Transform target, float scaleFactor = 1f)
     {

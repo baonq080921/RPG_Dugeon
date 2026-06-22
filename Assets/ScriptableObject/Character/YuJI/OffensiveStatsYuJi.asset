@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Damage>k__BackingField:
     statType: 0
-    baseValue: 1000
+    baseValue: 200
   <CritPower>k__BackingField:
     statType: 14
     baseValue: 5
