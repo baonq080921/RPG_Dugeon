@@ -18,6 +18,7 @@ public class EnemyDeathRipplerUlt : MonoBehaviour
     {
         _ultDamage = ultDamage * scaleFactor;
         _elementalUltDamage = elementalDamage * scaleFactor;
+        Destroy(gameObject,2f);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

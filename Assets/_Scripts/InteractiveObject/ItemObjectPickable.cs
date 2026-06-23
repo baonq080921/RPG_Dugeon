@@ -12,7 +12,7 @@ public class ItemObjectPickable : MonoBehaviour, ICollectable
     private ItemInventory _itemInventory;
     [SerializeField] private Collider2D _collider2D;
     [SerializeField] private Rigidbody2D _rigidbody2D;
-    [SerializeField] private float _shootPower = 1.5f;
+    private float _shootPower =  4f;
     [SerializeField] private LayerMask _groundLayer;
 
 

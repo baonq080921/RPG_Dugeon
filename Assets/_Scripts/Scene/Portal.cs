@@ -20,6 +20,10 @@ namespace scene
         {
             GetComponent<Collider2D>().isTrigger = true;
         }
+        void OnValidate()
+        {
+            gameObject.name = $"Portal {_targetScene}";
+        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {

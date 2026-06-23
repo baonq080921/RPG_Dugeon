@@ -46,7 +46,6 @@ public class UI_Inventory : MonoBehaviour
     {
         EventBus<OnInventoryChangedEvent>.Deregister(_eventBindingChanged);
         Player.ActivePlayerChanged -= OnPlayerChanged;
-        _inventory.OnMoneyChanged -=UpateCurrentPlayerGoldUI;
     }
 
 

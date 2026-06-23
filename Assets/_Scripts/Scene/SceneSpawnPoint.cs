@@ -13,6 +13,12 @@ namespace scene
         /// <summary>Must match the portal's destination portal ID.</summary>
         public string PortalId => _portalId;
 
+
+        void OnValidate()
+        {
+            gameObject.name = $"Spawn Point from {_portalId}";
+        }
+
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.cyan;
