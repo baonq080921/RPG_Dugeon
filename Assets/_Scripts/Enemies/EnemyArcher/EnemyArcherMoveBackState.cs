@@ -19,11 +19,6 @@ public class EnemyArcherMoveBackState : EnemyState
     {
         base.Update();
         _enemyArcher.SetVelocity(new Vector2(-_enemyArcher.direction * _enemyArcher.moveSpeed,rb.velocity.y));
-        if(_enemyArcher.DistanceToPlayer()  <= _enemyArcher.enemyData.AttackRange * 0.8f) // distance to player is about 80% of attackrange
-        {
-            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
-            return;
-        } 
         if(stateTimer <= 0)
         {
             stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
