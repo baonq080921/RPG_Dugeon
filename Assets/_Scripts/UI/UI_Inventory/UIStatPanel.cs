@@ -34,6 +34,8 @@ public class UIStatPanel : MonoBehaviour
     private void OnEnable()
     {
         Player.ActivePlayerChanged += OnPlayerChanged;
+        if (Player.ActivePlayer != null)
+            OnPlayerChanged(Player.ActivePlayer);
         _inventoryChangedBinding = new EventBinding<OnInventoryChangedEvent>(Refresh);
         EventBus<OnInventoryChangedEvent>.Register(_inventoryChangedBinding);
     }

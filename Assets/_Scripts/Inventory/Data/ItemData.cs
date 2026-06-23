@@ -34,6 +34,16 @@ public class ItemData : ScriptableObject
         }
         dropChance = GetDropChance();
     }
+
+#if UNITY_EDITOR
+    [ContextMenu("Regenerate ItemId")]
+    private void RegenerateItemId()
+    {
+        ItemId = System.Guid.NewGuid().ToString();
+        UnityEditor.EditorUtility.SetDirty(this);
+        UnityEngine.Debug.Log($"[ItemData] New ItemId generated for '{name}': {ItemId}");
+    }
+#endif
     public float GetDropChance()
     {
         float maxRareItem = 1000;

@@ -28,6 +28,14 @@ namespace NPC
                 UnityEditor.EditorUtility.SetDirty(this);
             }
         }
+
+        [UnityEditor.ContextMenu("Regenerate SceneEntityId")]
+        private void RegenerateSceneEntityId()
+        {
+            _sceneEntityId = Guid.NewGuid().ToString();
+            UnityEditor.EditorUtility.SetDirty(this);
+            Debug.Log($"[Npc] New SceneEntityId on '{name}': {_sceneEntityId}");
+        }
 #endif
 
 

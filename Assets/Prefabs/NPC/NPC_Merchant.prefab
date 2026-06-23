@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialougeStr: 
+  _sceneEntityId: 75cd1f6e-e045-485d-a060-ad0f23ef11fc
 --- !u!1 &2184224489783184138
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +355,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SHOP
+  m_text: Carft
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 00b76a373848b9a4ab8a4a89a74fd8ba, type: 2}
   m_sharedMaterial: {fileID: 4710019573797909498, guid: 00b76a373848b9a4ab8a4a89a74fd8ba, type: 2}

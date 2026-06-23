@@ -23,6 +23,14 @@ public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
             UnityEditor.EditorUtility.SetDirty(this);
         }
     }
+
+    [ContextMenu("Regenerate SceneEntityId")]
+    private void RegenerateSceneEntityId()
+    {
+        _sceneEntityId = Guid.NewGuid().ToString();
+        UnityEditor.EditorUtility.SetDirty(this);
+        Debug.Log($"[ObjectChestBase] New SceneEntityId on '{name}': {_sceneEntityId}");
+    }
 #endif
 
     /// <inheritdoc/>

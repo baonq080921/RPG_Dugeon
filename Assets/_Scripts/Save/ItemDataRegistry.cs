@@ -38,6 +38,41 @@ namespace Save
             EditorUtility.SetDirty(this);
             Debug.Log($"[ItemDataRegistry] Refreshed — {_items.Count} items found.");
         }
+
+        /// <summary>
+        /// Finds all ItemData with a duplicated ItemId and assigns a new GUID to the second+ occurrences.
+        /// Run this after duplicating any ItemData asset.
+        /// </summary>
+        [ContextMenu("Fix Duplicate ItemIds")]
+        private void FixDuplicateItemIds()
+        {
+            var seen = new Dictionary<string, ItemData>();
+            int fixedCount = 0;
+            foreach (var item in _items)
+            {
+                if (item == null || string.IsNullOrEmpty(item.ItemId)) continue;
+                if (seen.ContainsKey(item.ItemId))
+                {
+                    var so = new UnityEditor.SerializedObject(item);
+                    var prop = so.FindProperty("<ItemId>k__BackingField");
+                    if (prop != null)
+                    {
+                        string newId = System.Guid.NewGuid().ToString();
+                        prop.stringValue = newId;
+                        so.ApplyModifiedPropertiesWithoutUndo();
+                        EditorUtility.SetDirty(item);
+                        Debug.Log($"[ItemDataRegistry] Fixed duplicate on '{item.name}' — new ItemId: {newId}");
+                        fixedCount++;
+                    }
+                }
+                else
+                {
+                    seen[item.ItemId] = item;
+                }
+            }
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[ItemDataRegistry] Done — {fixedCount} duplicate(s) fixed.");
+        }
 #endif
 
         /// <summary>Builds the lookup dictionary. Called once by <see cref="SaveManager"/> on startup.</summary>

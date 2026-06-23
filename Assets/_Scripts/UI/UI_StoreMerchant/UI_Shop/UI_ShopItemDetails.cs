@@ -37,6 +37,8 @@ namespace UI
         void OnEnable()
         {
             Player.ActivePlayerChanged += OnPlayerChanged;
+            if (Player.ActivePlayer != null)
+                OnPlayerChanged(Player.ActivePlayer);
             _storeItemInfoBinding = new EventBinding<StoreItemGetInfoEvent>(OnStoreItemInfo);
             EventBus<StoreItemGetInfoEvent>.Register(_storeItemInfoBinding);
             _inventoryChangedBinding = new EventBinding<OnInventoryChangedEvent>(RefreshAffordability);

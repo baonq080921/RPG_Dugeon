@@ -12,7 +12,12 @@ public class UISkillTree : MonoBehaviour
 
     public float SkillPoints => _playerInventory?.SkillPoints ?? 0f;
 
-    private void OnEnable() => Player.ActivePlayerChanged += OnPlayerChanged;
+    private void OnEnable()
+    {
+        Player.ActivePlayerChanged += OnPlayerChanged;
+        if (Player.ActivePlayer != null)
+            OnPlayerChanged(Player.ActivePlayer);
+    }
 
     private void OnDisable()
     {

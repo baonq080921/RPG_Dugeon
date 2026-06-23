@@ -21,4 +21,11 @@ public class DomainExpasionSkill : SkillBase
         skill.SetUpDamageForDomain(SkillBaseDefinition.Damage,_physicalDamage,_elementalDamge, scaleFactor, isCrit);
 
     }
+
+
+    public override void SetUpgradeForSkill(UpgradeData upgrade)
+    {
+        base.SetUpgradeForSkill(upgrade);
+        SkillBaseDefinition.SetToUpgradeDamage(upgrade.UpgradeDamage);
+    }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e7f0ebb62bb0948afd1c65cd27923f, type: 3}
   m_Name: ItemUse-Dopping
   m_EditorClassIdentifier: 
-  <ItemId>k__BackingField: bc90ae61-e56c-400e-b31e-e518879b2b67
+  <ItemId>k__BackingField: e9cae8e1-82c1-4149-8a42-ee7eac9f607f
   <ItemName>k__BackingField: Dopping
   <ItemType>k__BackingField: 24
   <EquipSlot>k__BackingField: 8

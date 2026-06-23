@@ -26,6 +26,8 @@ namespace UI
         void OnEnable()
         {
             Player.ActivePlayerChanged += OnPlayerChanged;
+            if (Player.ActivePlayer != null)
+                OnPlayerChanged(Player.ActivePlayer);
             _eventGetCraftInfoBinding = new EventBinding<CraftGetInfoEvent>(UpdateItemDetailsInfo);
             EventBus<CraftGetInfoEvent>.Register(_eventGetCraftInfoBinding);
 

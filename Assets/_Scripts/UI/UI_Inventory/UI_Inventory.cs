@@ -38,6 +38,8 @@ public class UI_Inventory : MonoBehaviour
     void OnEnable()
     {
         Player.ActivePlayerChanged += OnPlayerChanged;
+        if (Player.ActivePlayer != null)
+            OnPlayerChanged(Player.ActivePlayer);
         _eventBindingChanged = new EventBinding<OnInventoryChangedEvent>(UpdateUIInventory);
         EventBus<OnInventoryChangedEvent>.Register(_eventBindingChanged);
     }

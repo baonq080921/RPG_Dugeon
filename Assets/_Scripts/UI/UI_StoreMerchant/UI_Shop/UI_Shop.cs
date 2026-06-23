@@ -25,6 +25,9 @@ public class UI_Shop : MonoBehaviour
         EventBus<StoreCallEvent>.Register(_storeCallEventBinding);
         _closeBtn.onClick.AddListener(CloseStoreUI);
         Player.ActivePlayerChanged += OnPlayerChanged;
+
+        if (Player.ActivePlayer != null)
+            OnPlayerChanged(Player.ActivePlayer);
     }
 
     void OnDisable()
@@ -37,10 +40,11 @@ public class UI_Shop : MonoBehaviour
 
     private void OnPlayerChanged(Player player)
     {
+        if (_playerInventory != null)
+            _playerInventory.OnMoneyChanged -= UpdateDisplay;
         _playerInventory = player.playerInventory;
         _playerInventory.OnMoneyChanged += UpdateDisplay;
         UpdateDisplay(_playerInventory.Money);
-
     }
 
     private void UpdateDisplay(float amount)

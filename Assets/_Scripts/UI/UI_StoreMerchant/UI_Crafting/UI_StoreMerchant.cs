@@ -51,6 +51,8 @@ namespace UI
         private void OnEnable()
         {
             Player.ActivePlayerChanged += OnPlayerChanged;
+            if (Player.ActivePlayer != null)
+                OnPlayerChanged(Player.ActivePlayer);
             _inventoryChangedBinding = new EventBinding<OnInventoryChangedEvent>(UpdateInventoryDisplay);
             EventBus<OnInventoryChangedEvent>.Register(_inventoryChangedBinding);
 

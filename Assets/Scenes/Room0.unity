@@ -1316,11 +1316,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6745156845300583034, guid: a5fafeaaee3db8640891542ef82faeb5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.08
+      value: 34.95
       objectReference: {fileID: 0}
     - target: {fileID: 6745156845300583034, guid: a5fafeaaee3db8640891542ef82faeb5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.17
+      value: 1.12
       objectReference: {fileID: 0}
     - target: {fileID: 6745156845300583034, guid: a5fafeaaee3db8640891542ef82faeb5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1356,7 +1356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7920913565323239538, guid: a5fafeaaee3db8640891542ef82faeb5, type: 3}
       propertyPath: m_Name
-      value: Gipsy spritesheet_0
+      value: NPC_SHOP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10794,10 +10794,6 @@ PrefabInstance:
     - target: {fileID: 1060776987101477422, guid: 58d45833f885c22428d6cbf6e3b6158a, type: 3}
       propertyPath: m_Name
       value: NPC_Merchant
-      objectReference: {fileID: 0}
-    - target: {fileID: 4395633015475923166, guid: 58d45833f885c22428d6cbf6e3b6158a, type: 3}
-      propertyPath: m_text
-      value: Carft
       objectReference: {fileID: 0}
     - target: {fileID: 4984960474500209070, guid: 58d45833f885c22428d6cbf6e3b6158a, type: 3}
       propertyPath: m_LocalPosition.x

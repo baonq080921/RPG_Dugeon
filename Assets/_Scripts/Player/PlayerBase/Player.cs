@@ -32,6 +32,9 @@ namespace player
         public int ComboLimit => Data.ComboLimit;
         public float timeResetCombo => Data.TimeResetCombo;
 
+        /// <summary>The currently active controlled player. Null when no player is active.</summary>
+        public static Player ActivePlayer { get; private set; }
+
         /// <summary>Fired when this player becomes the active controlled character.</summary>
         public static event Action<Player> ActivePlayerChanged;
         public bool canDash { get; private set; } = true;
@@ -128,6 +131,7 @@ namespace player
 
         void OnEnable()
         {
+            ActivePlayer = this;
             ActivePlayerChanged?.Invoke(this);
             input.Enable();
             input.Player.Movement.performed += ctx => movementInput = ctx.ReadValue<Vector2>();
@@ -148,6 +152,7 @@ namespace player
 
         void OnDisable()
         {
+            if (ActivePlayer == this) ActivePlayer = null;
             input.Disable();
             EventBus<GamePauseChangedEvent>.Deregister(_pauseBinding);
             EventBus<PlayerBoostingAmountEvent>.Deregister(_eventBoostingBinding);

@@ -29,6 +29,8 @@ namespace Base
         {
             Player.ActivePlayerChanged += OnPlayerActive;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            if (Player.ActivePlayer != null)
+                OnPlayerActive(Player.ActivePlayer);
             _zoneBinding = new EventBinding<CameraZoneChangedEvent>(OnZoneChanged);
             EventBus<CameraZoneChangedEvent>.Register(_zoneBinding);
         }
