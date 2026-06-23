@@ -191,12 +191,12 @@ public abstract class Entity : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position,_wallCheckDistance * Vector2.right * direction + (Vector2)transform.position);
-        // if(isGrounded){
-        //     Gizmos.color = Color.green;
-        //     Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
-        //     return;
-        // }
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);           
+        if(isGrounded){
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
+            return;
+        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);           
     }    
 }

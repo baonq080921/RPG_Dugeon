@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab1b7cc3ac2ff3d47abd02e6e3417aba, type: 3}
+  m_Name: EnemyArcher
+  m_EditorClassIdentifier: 
+  <IdleTime>k__BackingField: 2
+  <SkillCoolDown>k__BackingField: 0.5
+  <SkillDuration>k__BackingField: 0
+  <SkillSpawnInterval>k__BackingField: 0.1
+  <SkillDamageFactor>k__BackingField: 1
+  <AttackVelocityRetreat>k__BackingField: {x: 3, y: 2}
+  <MoveSpeed>k__BackingField: 6
+  <MoveMultiplier>k__BackingField: 2
+  <JumpForce>k__BackingField: 10
+  <Level>k__BackingField: 1
+  <BaseExp>k__BackingField: 20
+  <minDistanceRetreat>k__BackingField: 1.5
+  <DetectionRange>k__BackingField: 15
+  <AttackRange>k__BackingField: 12
+  <WhatIsPlayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 768
+  <Material>k__BackingField: {fileID: 2100000, guid: b3f1139abae8ade42a6b46a18dddf8f5, type: 2}

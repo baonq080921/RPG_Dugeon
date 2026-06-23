@@ -215,13 +215,13 @@ namespace enemy
         {
             base.OnDrawGizmos();
 
-            // Gizmos.color = Color.yellow;
-            // Gizmos.DrawWireSphere(transform.position, enemyData.DetectionRange);
-            // Gizmos.color = Color.red;
-            // Gizmos.DrawWireSphere(transform.position, enemyData.AttackRange);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, enemyData.DetectionRange);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, enemyData.AttackRange);
 
-            // Gizmos.color = Color.green;
-            // Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
         }
 
         /// <summary>
