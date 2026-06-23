@@ -1,6 +1,7 @@
 using System;
 using Base;
 using Interfaces;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace enemy
@@ -111,6 +112,14 @@ namespace enemy
 
             DetectedPlayer = col.transform;
             return true;
+        }
+
+
+        public float DistanceToPlayer()
+        {
+            if (DetectedPlayer == null) return float.MaxValue;
+            float distance = Vector2.Distance(DetectedPlayer.position, transform.position);
+            return Mathf.Abs(distance);
         }
 
         /// <summary>Applies a vertical jump impulse using <see cref="EnemyData.JumpForce"/>.</summary>

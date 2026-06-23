@@ -16,7 +16,7 @@ public class LevelUpEffectPool : MonoBehaviourPool<LevelUpEffect>
         if (manager != null) manager.levelupPool = this;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         var manager = ServiceLocator.Get<PoolManager>();
         if (manager != null && manager.levelupPool == this)

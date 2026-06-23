@@ -29,7 +29,7 @@ namespace NPC
             }
         }
 
-        [UnityEditor.ContextMenu("Regenerate SceneEntityId")]
+        [ContextMenu("Regenerate SceneEntityId")]
         private void RegenerateSceneEntityId()
         {
             _sceneEntityId = Guid.NewGuid().ToString();

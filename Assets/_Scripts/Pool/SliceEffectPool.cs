@@ -16,7 +16,7 @@ public class SliceEffectPool : MonoBehaviourPool<SliceEffect>
         if (manager != null) manager.sliceEffectPool = this;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         var manager = ServiceLocator.Get<PoolManager>();
         if (manager != null && manager.sliceEffectPool == this)

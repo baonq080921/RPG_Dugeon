@@ -28,7 +28,6 @@ namespace enemy
         public bool canUlt {get; private set;}
         private float _ultCoolDownTimer;
         [SerializeField] private float _ultSpawnOffSet ; 
-        private float offsetY = 2f;
         private Player _player;
     
         protected override void Awake()

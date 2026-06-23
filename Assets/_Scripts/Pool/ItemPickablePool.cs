@@ -17,7 +17,7 @@ public class ItemPickablePool : MonoBehaviourPool<ItemObjectPickable>
         if (manager != null) manager.itemObjectPool = this;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         var manager = ServiceLocator.Get<PoolManager>();
         if (manager != null && manager.itemObjectPool == this)

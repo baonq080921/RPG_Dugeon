@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
 {
     [SerializeField] protected float currentHealth = 1f;
-    [SerializeField] protected Collider2D collider2D;
+    protected Collider2D col2D;
     [SerializeField] protected Animator _animator;
 
     /// <summary>Scene-unique identifier generated automatically per scene instance. Never changes after first assignment.</summary>
@@ -41,7 +41,7 @@ public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
 
     protected virtual void Awake()
     {
-        collider2D = GetComponent<Collider2D>();
+        col2D = GetComponent<Collider2D>();
         _animator = GetComponentInChildren<Animator>();
     }
 
@@ -50,7 +50,7 @@ public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
         currentHealth -= damage + elementalDamage;
         if (currentHealth <= 0)
         {
-            collider2D.enabled = false;
+            col2D.enabled = false;
             _animator.SetBool("Open", true);
             DropChestItem();
             RaiseOnPersisted();
@@ -62,7 +62,7 @@ public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
     /// <inheritdoc/>
     public void RestoreState()
     {
-        collider2D.enabled = false;
+        col2D.enabled = false;
         _animator.SetBool("Open", true);
     }
 
