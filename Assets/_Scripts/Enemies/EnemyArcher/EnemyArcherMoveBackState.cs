@@ -28,6 +28,12 @@ public class EnemyArcherMoveBackState : EnemyState
             stateMachine.ChangeState(_enemyArcher.enemyAttackState);
             return;
         }
+        if(_enemyArcher.DistanceToPlayer() >= _enemyArcher.enemyData.AttackRange * 0.8f)
+        {
+            _enemyArcher.SetVelocity(new Vector2(0.001f,rb.velocity.y));
+            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+            return;
+        }
         if(stateTimer <= 0)
         {
             stateMachine.ChangeState(_enemyArcher.enemyAttackState);
