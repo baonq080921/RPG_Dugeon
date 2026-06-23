@@ -1,6 +1,7 @@
 using UnityEngine;
 using enemy;
 using stateMachine;
+using System.IO;
 
 /// <summary>
 /// Locks the archer in place while the attack animation plays, then returns to <see cref="EnemyArcherCombatState"/>.
@@ -25,11 +26,21 @@ public class EnemyArcherAttackState : EnemyState
     public override void Update()
     {
         base.Update();
-        if (!isTriggered) return;
-        if (!_enemyArcher.IsPlayerDetected())
-            stateMachine.ChangeState(_enemyArcher.enemyIdleState);
-        else
-            stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
+        _enemyArcher.FacePlayer();
+        if (!_enemyArcher.IsInAttackRange())
+        {
+            stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+            return;
+        }
+        if (isTriggered)
+        {
+            if(!_enemyArcher.isGrounded || _enemyArcher.isTouchingWall)
+            {
+                stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+                return;
+            }
+                stateMachine.ChangeState(_enemyArcher.enemyArcherMoveBackState);
+        }
     }
 
     public override void Exit()

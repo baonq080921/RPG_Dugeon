@@ -14,20 +14,19 @@ public class EnemyArcherCombatState : EnemyState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("This is Combat State");
     }
 
     public override void Update()
     {
         base.Update();
-        if (!_enemyArcher.IsInAttackRange())
+        if (_enemyArcher.IsInAttackRange())
         {
-            stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
             return;
         }
-        if (_enemyArcher.DistanceToPlayer() <= _enemyArcher.enemyData.AttackRange * 0.25f)
-            stateMachine.ChangeState(_enemyArcher.enemyArcherMoveBackState);
-        else
-            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+        
+    
     }
     public override void Exit()
     {

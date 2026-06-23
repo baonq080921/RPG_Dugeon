@@ -15,15 +15,15 @@ public class EnemyArcherIdleState : EnemyState
     {
         base.Enter();
         _enemyArcher.SetVelocity(Vector2.zero);
-        stateTimer = _enemyArcher.enemyData.IdleTime;
     }
 
 
     public override void Update()
     {
         base.Update();
-        if(stateTimer <= 0)
+        if(_enemyArcher.IsPlayerDetected())
             stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+     
     }
 
     public override void Exit()
