@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
+using player;
 using UnityEngine;
 namespace NPC
 {
@@ -13,6 +14,7 @@ namespace NPC
 
         public string SceneEntityId => _sceneEntityId;
         [SerializeField] private string _sceneEntityId;
+        [SerializeField] private LayerMask _whatIsPlayer;
         public  event Action OnPersisted;
 
 
@@ -51,10 +53,11 @@ namespace NPC
             gameObject.SetActive(false);
         }
 
-        protected virtual void OnTriggerEnter2D(Collider2D other)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            if (other.TryGetComponent<player.PlayerInteract>(out var playerInteract))
+            if((1 <<  collision.gameObject.layer & _whatIsPlayer) != 0)
             {
+                PlayerInteract playerInteract = collision.GetComponent<PlayerInteract>();
                 playerInteract?.InteractDectect();
             }
         }

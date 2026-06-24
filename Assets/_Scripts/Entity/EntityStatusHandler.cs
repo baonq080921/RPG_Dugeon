@@ -18,8 +18,12 @@ public class EntityStatusHandler : MonoBehaviour
     [Header("Electric Strike")]
     [SerializeField] private float _shockDuration = 2f;
 
+    [Header("Ice Effect")]
+    [SerializeField] private float _iceDuration = 3f;
+
     [Header("Coroutine")]
     private Coroutine _electricEffectCoroutine;
+    private Coroutine _iceEffectCoroutine;
     private Coroutine _draculaDoTCoroutine;
 
     void Awake()
@@ -76,13 +80,23 @@ public class EntityStatusHandler : MonoBehaviour
     #endregion
 
 
-    public void ApplyIceEffect(ElementType elementType,float _slowPercent)
+    public void ApplyIceEffect(ElementType elementType, float slowPercent)
     {
-        _entityVfx.UpdateStatusEffectVFX(elementType,_shockDuration);
-        if(_entityVfx.isEffectDone)
+        if (_iceEffectCoroutine != null)
+        {
+            StopCoroutine(_iceEffectCoroutine);
             _entity.ResetEffect();
+        }
+        _entityVfx.UpdateStatusEffectVFX(elementType, _iceDuration);
+        _entity.ApplyEffect(slowPercent, elementType);
+        _iceEffectCoroutine = StartCoroutine(IceEffectCoroutine());
+    }
 
-        _entity.ApplyEffect(_slowPercent,elementType);
+    private IEnumerator IceEffectCoroutine()
+    {
+        yield return new WaitForSeconds(_iceDuration);
+        _entity.ResetEffect();
+        _iceEffectCoroutine = null;
     }
 
     #region Dracula DoT

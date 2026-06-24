@@ -13,5 +13,7 @@ namespace player
         }
 
         public void SetTriggerFallAnimation() => _player.playerJumpAttackState.TriggerFallState();
+
+        public void SetDiedAnimationEvent() => _player.RaiseDeadEvent();
     }
 }

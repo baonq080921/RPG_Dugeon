@@ -32,6 +32,7 @@ public class EnemyArcherChaseState : EnemyState
         if (_enemyArcher.IsInAttackRange())
         {
             stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
+            return;
         }
         _enemyArcher.SetVelocity(new Vector2(_enemyArcher.direction * _velocity, rb.velocity.y));
 

@@ -86,6 +86,7 @@ namespace Save
                 agilityPoints      = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Agility)      : 0,
                 intelligencePoints = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Intelligence) : 0,
                 vitalityPoints     = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Vitality)     : 0,
+                currentGolds       = inventory  != null? inventory.Money : 0,
             };
 
             if (inventory != null)

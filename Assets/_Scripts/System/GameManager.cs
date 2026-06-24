@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public void SetPause(bool pause)
     {
         IsPause = pause;
+        Time.timeScale = pause ? 0 : 1;
         EventBus<GamePauseChangedEvent>.Raise(new GamePauseChangedEvent(pause));
     }
 

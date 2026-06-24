@@ -8,6 +8,7 @@ namespace enemy
     {
         [field:Header("Time stuff")]
         [field: SerializeField] public float IdleTime { get; private set; } = 2f;
+        [field: SerializeField] public float AttackCooldown { get; private set; } = 1.5f;
         [field:Header("SKILL UlTIMATE DATA")]
         [field:SerializeField] public float SkillCoolDown {get; private set;}
         [field:SerializeField] public float SkillDuration{get; private set;}

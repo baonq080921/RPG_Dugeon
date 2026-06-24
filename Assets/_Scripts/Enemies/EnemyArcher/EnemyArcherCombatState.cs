@@ -14,7 +14,8 @@ public class EnemyArcherCombatState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("This is Combat State");
+        _enemyArcher.SetVelocity(Vector2.zero);
+        _enemyArcher.FacePlayer();
     }
 
     public override void Update()
@@ -22,11 +23,22 @@ public class EnemyArcherCombatState : EnemyState
         base.Update();
         if (_enemyArcher.IsInAttackRange())
         {
-            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
-            return;
+            if (_enemyArcher.CanAttack())
+            {
+                
+                stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+                return;
+            }
+            else
+            {
+                stateMachine.ChangeState(_enemyArcher.enemyIdleState);
+                return;
+            }
         }
+        else 
+            stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+            
         
-    
     }
     public override void Exit()
     {

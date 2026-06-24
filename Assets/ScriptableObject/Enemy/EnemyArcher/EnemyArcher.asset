@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: EnemyArcher
   m_EditorClassIdentifier: 
   <IdleTime>k__BackingField: 2
+  <AttackCooldown>k__BackingField: 0.5
   <SkillCoolDown>k__BackingField: 0.5
   <SkillDuration>k__BackingField: 0
   <SkillSpawnInterval>k__BackingField: 0.1

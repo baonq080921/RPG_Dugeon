@@ -22,6 +22,7 @@ namespace player
             ApplyDashVelocity();
             ServiceLocator.Get<PlayerSkillManager>()?.skillDash.ExecuteSkillEffect();
             player.AfterImageEffect?.StartEffect();
+            player.UnTargetableEnemy(true);
         }
 
         public override void Update()
@@ -49,6 +50,7 @@ namespace player
             rb.gravityScale = 3.5f;
             player.AfterImageEffect?.StopEffect();
             player.SetCanDash(true);
+            player.UnTargetableEnemy(false);
         }
 
           private void ApplyDashVelocity()

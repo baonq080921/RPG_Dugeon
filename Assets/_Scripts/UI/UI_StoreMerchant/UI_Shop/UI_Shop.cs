@@ -56,20 +56,17 @@ public class UI_Shop : MonoBehaviour
         return $"Your gold: <color=green>{amount}</color>";
     }
 
-    private void OpenStoreUI() 
+    private void OpenStoreUI()
     {
         UpdateDisplay(_playerInventory.Money);
         _rectTransform.anchoredPosition = _originalPosition;
         EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
-        Time.timeScale = 0f;
         ServiceLocator.Get<GameManager>().SetPause(true);
     }
     public void CloseStoreUI()
     {
         _rectTransform.anchoredPosition = _hiddentPosition;
-        Time.timeScale = 1f;
         EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(false));
         ServiceLocator.Get<GameManager>().SetPause(false);
-
-    } 
+    }
 }

@@ -15,6 +15,7 @@ public class PlayerInventory : InventoryBase {
     private EventBinding<EquipEvent> _eventEquipBinding;
     private EventBinding<PlayerDiedEvent> _eventDiedBinding;
     private EventBinding<SkillPointRewardEvent> _skillPointRewardBinding;
+    private EventBinding<MoneyAddRewardEvent> _moneyPointRewardBinding;
 
     [SerializeField] private float _startingSkillPoints = 0f;
     [SerializeField] private float _startingMoney = 0f;
@@ -60,6 +61,12 @@ public class PlayerInventory : InventoryBase {
         OnMoneyChanged?.Invoke(Money);
     }
 
+    public void AddMoney(float amount)
+    {
+        Money += amount;
+        OnMoneyChanged?.Invoke(Money);
+    }
+
     public void SetMoney(float amout)
     {
         Money = amout;
@@ -86,6 +93,8 @@ public class PlayerInventory : InventoryBase {
         EventBus<PlayerDiedEvent>.Register(_eventDiedBinding);
         _skillPointRewardBinding = new EventBinding<SkillPointRewardEvent>(e => AddSkillPoints(e.Amount));
         EventBus<SkillPointRewardEvent>.Register(_skillPointRewardBinding);
+        _moneyPointRewardBinding = new EventBinding<MoneyAddRewardEvent>(e => AddMoney(e.Amount));
+        EventBus<MoneyAddRewardEvent>.Register(_moneyPointRewardBinding);
     }
 
     void OnDisable()
@@ -93,6 +102,8 @@ public class PlayerInventory : InventoryBase {
         EventBus<EquipEvent>.Deregister(_eventEquipBinding);
         EventBus<PlayerDiedEvent>.Deregister(_eventDiedBinding);
         EventBus<SkillPointRewardEvent>.Deregister(_skillPointRewardBinding);
+        EventBus<MoneyAddRewardEvent>.Deregister(_moneyPointRewardBinding);
+
     }
 
 

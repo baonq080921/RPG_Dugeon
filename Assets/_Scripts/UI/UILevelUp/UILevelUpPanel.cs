@@ -62,8 +62,7 @@ namespace UI
             if (_levelText != null && _playerLevel != null)
                 _levelText.text = $"Level {_playerLevel.Level}!\nChoose a stat to upgrade";
 
-            Time.timeScale = 0f;
-            EventBus<GamePauseChangedEvent>.Raise(new GamePauseChangedEvent(true));
+            ServiceLocator.Get<GameManager>().SetPause(true);
 
             _panelRect.anchoredPosition = _originalPosition;
             DOTween.Kill(_canvasGroup);
@@ -82,8 +81,7 @@ namespace UI
                 {
                     _canvasGroup.blocksRaycasts = false;
                     _panelRect.anchoredPosition = _hiddenPosition;
-                    Time.timeScale = 1f;
-                    EventBus<GamePauseChangedEvent>.Raise(new GamePauseChangedEvent(false));
+                    ServiceLocator.Get<GameManager>().SetPause(false);
                     EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
                         EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
                 });

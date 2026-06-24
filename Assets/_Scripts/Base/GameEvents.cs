@@ -174,6 +174,12 @@ namespace Base
         public SkillPointRewardEvent(float amount) => Amount = amount;
     }
 
+    public struct MoneyAddRewardEvent : IEvent
+    {
+        public float Amount{get;}
+        public  MoneyAddRewardEvent(float amount) => Amount = amount;
+    }
+
 
     #endregion
 

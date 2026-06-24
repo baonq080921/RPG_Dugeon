@@ -18,19 +18,19 @@ namespace player
         /// <inheritdoc/>
         public override LayerMask LayerMask => Data.WhatisTarget;
 
+        public float moveSpeed { get; private set; }
+        public float jumpForce { get; private set; }
+        public int MaxJumpCount { get; private set; }
+        public float airControlFactor { get; private set; }
+        public float slideDownSpeed { get; private set; }
+        public Vector2 WallJumpForce { get; private set; }
+        public float dashSpeed { get; private set; }
+        public float dashDuration { get; private set; }
+        public float dashCooldown { get; private set; }
+        public Vector2[] attackVelocity { get; private set; }
+        public int ComboLimit { get; private set; }
+        public float timeResetCombo { get; private set; }
 
-        public float moveSpeed => Data.MoveSpeed;
-        public float jumpForce => Data.JumpForce;
-        public int MaxJumpCount => Data.MaxJumpCount;
-        public float airControlFactor => Data.AirControlFactor;
-        public float slideDownSpeed => Data.SlideDownSpeed;
-        public Vector2 WallJumpForce => Data.WallJumpForce;
-        public float dashSpeed => Data.DashSpeed;
-        public float dashDuration => Data.DashDuration;
-        public float dashCooldown => Data.DashCooldown;
-        public Vector2[] attackVelocity => Data.AttackVelocities;
-        public int ComboLimit => Data.ComboLimit;
-        public float timeResetCombo => Data.TimeResetCombo;
 
         /// <summary>The currently active controlled player. Null when no player is active.</summary>
         public static Player ActivePlayer { get; private set; }
@@ -129,7 +129,7 @@ namespace player
             SkillButtonHandler.RegisterState((int)ButtonSkillName.Domain,playerDomainExpasionState);
             }
 
-        void OnEnable()
+       private void OnEnable()
         {
             ActivePlayer = this;
             ActivePlayerChanged?.Invoke(this);
@@ -150,22 +150,37 @@ namespace player
             EventBus<PlayerBoostingAmountEvent>.Register(_eventBoostingBinding);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             if (ActivePlayer == this) ActivePlayer = null;
             input.Disable();
             EventBus<GamePauseChangedEvent>.Deregister(_pauseBinding);
             EventBus<PlayerBoostingAmountEvent>.Deregister(_eventBoostingBinding);
-            // Restore character defaults so a fresh scene doesn't inherit stacked boosts.
-            Data?.ResetBoosts();
         }
 
        
         protected override void Start()
         {
             base.Start();
+            LoadStatsFromData();
             stateMachine.Initialize(playerIdleState);
             RegisterSkillReferences();
+        }
+
+        private void LoadStatsFromData()
+        {
+            moveSpeed = Data.MoveSpeed;
+            jumpForce = Data.JumpForce;
+            MaxJumpCount = Data.MaxJumpCount;
+            airControlFactor = Data.AirControlFactor;
+            slideDownSpeed = Data.SlideDownSpeed;
+            WallJumpForce = Data.WallJumpForce;
+            dashSpeed = Data.DashSpeed;
+            dashDuration = Data.DashDuration;
+            dashCooldown = Data.DashCooldown;
+            attackVelocity = Data.AttackVelocities;
+            ComboLimit = Data.ComboLimit;
+            timeResetCombo = Data.TimeResetCombo;
         }
 
         /// <summary>c
@@ -201,12 +216,15 @@ namespace player
 
         IEnumerator BoostingCoroutine(float amount)
         {
-            Data.BoostMoveSpeed(amount);
-            Data.BoostDashSpeed(amount);
-            Data.BoostJumpForce(amount);
-            Data.BoostMaxJumpCount((int)amount);
+            moveSpeed = Data.MoveSpeed + amount;
+            dashSpeed = Data.DashSpeed + amount;
+            jumpForce = Data.JumpForce + amount;
+            MaxJumpCount = Data.MaxJumpCount + (int)amount;
             yield return new WaitForSeconds(6f);
-            Data.ResetBoosts();
+            moveSpeed = Data.MoveSpeed;
+            dashSpeed = Data.DashSpeed;
+            jumpForce = Data.JumpForce;
+            MaxJumpCount = Data.MaxJumpCount;
         }
 
         protected override void Update()
@@ -242,10 +260,42 @@ namespace player
         public override void Die()
         {
             base.Die();
-            EventBus<PlayerDiedEvent>.Raise(new PlayerDiedEvent());
             stateMachine.ChangeState(playerDeadState);
         }
 
+
+        //Call this when the died animation play all through then open the gameover Menu
+        public void RaiseDeadEvent()
+        {
+            EventBus<PlayerDiedEvent>.Raise(new PlayerDiedEvent());
+        }
+
+        public override void ApplyEffect(float scaleFactor, ElementType elementType)
+        {
+            if(elementType == ElementType.Ice)
+            {
+                moveSpeed = moveSpeed - moveSpeed * scaleFactor;
+                dashSpeed = dashSpeed - dashSpeed * scaleFactor;
+            }
+        }
+
+
+        public override void ResetEffect()
+        {
+            base.ResetEffect();
+            moveSpeed = Data.MoveSpeed;
+            dashSpeed = Data.DashSpeed;
+        }
+
+        public override void UnTargetableEnemy(bool canTarget)
+        {
+            base.UnTargetableEnemy(canTarget);
+            if (canTarget)
+                this.gameObject.layer = LayerMask.NameToLayer("Untargetable");
+            else 
+                this.gameObject.layer = LayerMask.NameToLayer("Player");
+
+        }
         public void StartAttackCooldown()
         {
             canAttack = false;

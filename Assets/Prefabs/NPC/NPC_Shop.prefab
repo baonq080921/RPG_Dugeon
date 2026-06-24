@@ -424,7 +424,7 @@ GameObject:
   - component: {fileID: 2659949775714488149}
   - component: {fileID: 7532482648092589444}
   m_Layer: 10
-  m_Name: Gipsy spritesheet_0
+  m_Name: NPC_Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -532,6 +532,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dialougeStr: "\t"
+  _sceneEntityId: e7c7777d-80fe-436f-84fc-1a93ec0a1f4c
+  _whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!70 &7532482648092589444
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

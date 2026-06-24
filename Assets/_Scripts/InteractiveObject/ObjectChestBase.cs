@@ -1,4 +1,5 @@
 using System;
+using Base;
 using Interfaces;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ using UnityEngine;
 public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
 {
     [SerializeField] protected float currentHealth = 1f;
+    [SerializeField]protected float _goldDropAmount;
     protected Collider2D col2D;
     [SerializeField] protected Animator _animator;
 
@@ -52,6 +54,7 @@ public class ObjectChestBase : MonoBehaviour, IHit, IScenePersistable
         {
             col2D.enabled = false;
             _animator.SetBool("Open", true);
+            EventBus<MoneyAddRewardEvent>.Raise(new MoneyAddRewardEvent(_goldDropAmount));
             DropChestItem();
             RaiseOnPersisted();
             return true;

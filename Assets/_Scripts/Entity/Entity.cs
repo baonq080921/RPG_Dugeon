@@ -141,16 +141,18 @@ public abstract class Entity : MonoBehaviour
 
 
     public virtual void ApplyKnockBack(float damage)
-        {
-            float ratio = damage / entityHealth.CurrentHealth;
-            // Heavy when hit is a  bigger fraction of max health, light otherwise
-            Vector2 power = ratio < entityStat.GetKnockBackThreshHold()
-                ?  _knockBackPowerLight
-                :_knockBackPowerHeavy;
-            // Negate x so the enemy is pushed away from the player (enemy faces toward player)
-            Vector2 knockBack = new Vector2(power.x * - direction, power.y);
-            ReciveKnockBack(knockBack,entityStat.StunDuration);
-        }
+    {
+        float ratio = damage / entityHealth.CurrentHealth;
+        // Heavy when hit is a  bigger fraction of max health, light otherwise
+        Vector2 power = ratio < entityStat.GetKnockBackThreshHold()
+            ?  _knockBackPowerLight
+            :_knockBackPowerHeavy;
+        // Negate x so the enemy is pushed away from the player (enemy faces toward player)
+        Vector2 knockBack = new Vector2(power.x * - direction, power.y);
+        ReciveKnockBack(knockBack,entityStat.StunDuration);
+    }
+
+    public virtual void UnTargetableEnemy(bool canTarget){}
 
 
 

@@ -12,7 +12,8 @@ namespace player
         {
             base.Enter();
             Debug.Log("Entered Dead State");
-            rb.simulated = false;
+            rb.isKinematic = false;
+            rb.velocity = new Vector2(0.001f,0.001f);
             input.Disable();
         }
 

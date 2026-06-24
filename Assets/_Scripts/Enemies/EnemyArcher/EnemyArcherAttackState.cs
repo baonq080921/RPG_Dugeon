@@ -34,17 +34,13 @@ public class EnemyArcherAttackState : EnemyState
         }
         if (isTriggered)
         {
-            if(!_enemyArcher.isGrounded || _enemyArcher.isTouchingWall)
-            {
-                stateMachine.ChangeState(_enemyArcher.enemyAttackState);
-                return;
-            }
-                stateMachine.ChangeState(_enemyArcher.enemyArcherMoveBackState);
+            stateMachine.ChangeState(_enemyArcher.enemyArcherMoveBackState);
         }
     }
 
     public override void Exit()
     {
         base.Exit();
+        _enemyArcher.StartAttackCooldown();
     }
 }

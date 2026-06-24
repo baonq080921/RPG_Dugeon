@@ -56,10 +56,12 @@ namespace enemy
         public float attackSpeed {get; private set;}
 
         private EntityDrop _entityDrop;
+        protected EntityCombat entityCombat;
         protected override void Awake()
         {
             base.Awake();
             _entityDrop = GetComponent<EntityDrop>();
+            entityCombat = GetComponent<EntityCombat>();
             InitializeStates();
         }
 
@@ -138,7 +140,7 @@ namespace enemy
         /// </summary> <summary>
         /// 
         /// </summary>
-        public void UnTargetableEnemy(bool canTarget)
+        public override void UnTargetableEnemy(bool canTarget)
         {
             if (canTarget)
                 this.gameObject.layer = LayerMask.NameToLayer("Untargetable");

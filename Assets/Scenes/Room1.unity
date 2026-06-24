@@ -1032,6 +1032,7 @@ Transform:
   - {fileID: 1663125765}
   - {fileID: 651907072}
   - {fileID: 377809330}
+  - {fileID: 481142847}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &250772999
@@ -1702,6 +1703,68 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &481142846
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 147829585}
+    m_Modifications:
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -37.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.24452111
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2179136620331772189, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+      propertyPath: m_Name
+      value: Trap
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+--- !u!4 &481142847 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1504750180180623201, guid: 8ef698d0d81805648930e4d350dbf02b, type: 3}
+  m_PrefabInstance: {fileID: 481142846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &539678434
 GameObject:
   m_ObjectHideFlags: 0
@@ -25845,6 +25908,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!4 &2778283419230004839
 Transform:
   m_ObjectHideFlags: 0
@@ -26337,7 +26401,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 1
-  collider2D: {fileID: 8863334268741783455}
   _animator: {fileID: 0}
   _sceneEntityId: fd644331-cef4-499c-9185-0d2b92706b52
   _entityDrop: {fileID: 8912173119459333576}
@@ -26354,7 +26417,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 1
-  collider2D: {fileID: 8863334267973449832}
   _animator: {fileID: 0}
   _sceneEntityId: fd644331-cef4-499c-9185-0d2b92706b52
   _entityDrop: {fileID: 8912173120494019135}
@@ -26371,7 +26433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 1
-  collider2D: {fileID: 8863334267971963242}
   _animator: {fileID: 0}
   _sceneEntityId: fd644331-cef4-499c-9185-0d2b92706b52
   _entityDrop: {fileID: 8912173120493327165}
@@ -26388,7 +26449,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 1
-  collider2D: {fileID: 8863334269415767257}
   _animator: {fileID: 0}
   _sceneEntityId: fd644331-cef4-499c-9185-0d2b92706b52
   _entityDrop: {fileID: 8912173119051703950}
@@ -29535,6 +29595,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!114 &7551090624536398007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29551,6 +29612,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!114 &7551090624621300493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29567,6 +29629,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!114 &7551090624909308173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29583,6 +29646,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!1 &7661531678787169209
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Base;
 using Interfaces;
 using UnityEngine;
 
@@ -33,6 +34,7 @@ namespace player
     
         public bool IsPerformedCounter()
         {
+            // DebugCustom.Log("Counter");
             if(!IsdetectTargetColliders()) return false;
             bool isCounter = false;
             foreach(var target in targetColliders)

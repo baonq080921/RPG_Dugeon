@@ -8,7 +8,8 @@ public enum EntityType
     None,
     PlayerNormal,
     PlayerSpecial,
-    Enemy
+    Enemy,
+    EnemyArcher
 }
 
 public class EntityStat : MonoBehaviour
@@ -72,16 +73,20 @@ public class EntityStat : MonoBehaviour
 
     public float GetElementalDamageValue(out ElementType elementType)
     {
-        float lightDamage = _offensiveStats.ElementalDamage.GetValue();
+        float elementalDamage = _offensiveStats.ElementalDamage.GetValue();
         float bonusElementalDamage = _majorStats.Intelligence.GetValue(); // with each intelligence point increase they will bonus 0.5 % elemental damage
-        float totalLightDamage = lightDamage + bonusElementalDamage;
+        float totalElementalDamage = elementalDamage + bonusElementalDamage;
 
         if(_entityType == EntityType.PlayerNormal)
         {
             elementType = ElementType.Electric;
-            return totalLightDamage; // Player normal attack will only deal light damage
+            return totalElementalDamage; // Player normal attack will only deal light damage
         }
-
+        else if(_entityType == EntityType.EnemyArcher)
+        {
+            elementType = ElementType.Ice;
+            return totalElementalDamage ;
+        }
         else 
         {
             elementType = ElementType.None;

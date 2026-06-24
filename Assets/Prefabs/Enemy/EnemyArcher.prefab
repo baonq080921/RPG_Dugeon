@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2308894244992075555}
   - component: {fileID: 1550798183399274507}
   - component: {fileID: 4724684595318538197}
+  - component: {fileID: 5907542189135602107}
   m_Layer: 6
   m_Name: EnemyArcher
   m_TagString: Enemy
@@ -43,6 +44,7 @@ Transform:
   - {fileID: 647461447848780571}
   - {fileID: 4772388432610158291}
   - {fileID: 7152721316279348455}
+  - {fileID: 4301462625785756849}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2823593178735276491
@@ -104,8 +106,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.17975421, y: 0.066779196}
-  m_Size: {x: 0.48832226, y: 1.1804693}
+  m_Offset: {x: 0.22118145, y: 0.05132119}
+  m_Size: {x: 0.5413967, y: 1.192672}
   m_Direction: 0
 --- !u!114 &4285700423291677227
 MonoBehaviour:
@@ -122,7 +124,7 @@ MonoBehaviour:
   targetColliders: []
   _targetCheck: {fileID: 647461447848780571}
   _targetRadius: 1.2
-  _scaleElementalFactor: 1
+  _scaleElementalFactor: 0.3
   _electricStatusDuration: 2
   _electricBuildUpCharge: 0.5
   _damagePopupOffset: {x: 0, y: 1, z: 0}
@@ -155,7 +157,7 @@ MonoBehaviour:
   HitFlashDuration: 0.15
   _hitColor: {r: 1, g: 1, b: 1, a: 1}
   _electricHitColor: {r: 1, g: 0.9372549, b: 0.23137255, a: 1}
-  _iceHitColor: {r: 0, g: 0.065425396, b: 1, a: 1}
+  _iceHitColor: {r: 0, g: 0.7031789, b: 1, a: 1}
   _fireColor: {r: 1, g: 0, b: 0, a: 1}
   _statusBlinkInterval: 0.15
   _alertCounterSignal: {fileID: 1024949173413902653}
@@ -171,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dd3eb31c3753c418514d1a817ab9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _entityType: 3
+  _entityType: 4
   _majorStats: {fileID: 11400000, guid: 2a6d404b85ee1b24a8a3e987f7d8eb8d, type: 2}
   _defensiveStats: {fileID: 11400000, guid: c1e29906abd0570468c2199fb5270379, type: 2}
   _offensiveStats: {fileID: 11400000, guid: e44e9f607fee0a14c8705aa65df3aec3, type: 2}
@@ -192,6 +194,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!114 &1550798183399274507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +236,25 @@ MonoBehaviour:
   _knockBackPowerHeavy: {x: 6, y: 5}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 28e4688d71e6154408e6de446a6cfa0a, type: 2}
   _sceneEntityId: 5ccf5355-5d75-4a86-8a28-ad310784f0bb
+  _projectileSpeed: 12
+  _arrowStartTf: {fileID: 4301462625785756849}
+  _chanceToSpawnIceArrow: 0.4
+--- !u!114 &5907542189135602107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032484600882267570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b590a2c3d7de0e94b94769f6297f8993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arrowPrefab: {fileID: 5108200359485790679, guid: 4b45ca059c4c08248b729274328b3725, type: 3}
+  _arrowIcePrefab: {fileID: 5471187393564023696, guid: 1903d08d62b600e40b9fd2095d9866c0, type: 3}
+  _defaultCapacity: 20
+  _maxSize: 50
 --- !u!1 &3472643015412623818
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +455,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4996584429915062052
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4301462625785756849}
+  m_Layer: 6
+  m_Name: ArrowStart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4301462625785756849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996584429915062052}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.839, y: -0.013, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1883087041968728917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6544065932818309114
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,7 +774,7 @@ Transform:
   m_GameObject: {fileID: 7429339353213843076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.008, z: 0}
+  m_LocalPosition: {x: 0.235, y: 1.008, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -64,6 +64,28 @@ public class EntityCombat : MonoBehaviour
 
         }
     }
+
+
+    public  void PerformedAttackOnTarget(Transform target, float damageScale = 1f)
+    {
+       
+            IHit hit = target.GetComponent<IHit>();
+            Transform damageDealer = target.GetComponent<Transform>();
+            float physicalDamage = entityStat.GetPhysicalDamageValue(out bool isCrit) * damageScale;
+            float elementalDamage = entityStat.GetElementalDamageValue(out ElementType elementType) * damageScale;
+            // Debug.Log(physicalDamage+ "physics");
+            // Debug.Log(elementalDamage+ "magic");
+            bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, damageDealer);
+            if(elementType != ElementType.None)
+                ApplyStatusEffect(elementType, damageDealer,_scaleElementalFactor * damageScale);
+            if (targetGotHit)
+            {
+                _entityVfx?.UpdateHitColor(elementType);
+                // OnTargetHit?.Invoke(target.transform,isCrit);
+                EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(target.transform,isCrit));
+                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.transform.position,physicalDamage+elementalDamage,isCrit));
+            }
+    }
     
 
   

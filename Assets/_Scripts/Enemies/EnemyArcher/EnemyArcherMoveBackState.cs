@@ -13,7 +13,7 @@ public class EnemyArcherMoveBackState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        stateTimer = 0.05f;
+        stateTimer = 0.25f;
         _enemyArcher.SetDirection(-_enemyArcher.direction);
         _enemyArcher.Flip(_enemyArcher.direction);
     }
@@ -25,18 +25,12 @@ public class EnemyArcherMoveBackState : EnemyState
         if(!_enemyArcher.isGrounded || _enemyArcher.isTouchingWall)
         {
             _enemyArcher.SetVelocity(new Vector2(0.001f,rb.velocity.y));
-            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
-            return;
-        }
-        if(_enemyArcher.DistanceToPlayer() >= _enemyArcher.enemyData.AttackRange * 0.8f)
-        {
-            _enemyArcher.SetVelocity(new Vector2(0.001f,rb.velocity.y));
-            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+            stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
             return;
         }
         if(stateTimer <= 0)
         {
-            stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+            stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
         }
     }
 

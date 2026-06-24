@@ -290,6 +290,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dialougeStr: 
   _sceneEntityId: 75cd1f6e-e045-485d-a060-ad0f23ef11fc
+  _whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &2184224489783184138
 GameObject:
   m_ObjectHideFlags: 0

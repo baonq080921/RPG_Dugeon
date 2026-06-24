@@ -25,5 +25,10 @@ namespace enemy
             _enemy.CanCounter = false;
             _enemyVFX.DisableCounterAlert();
         }
+
+        public void SpecicalAttackAnimationEvent()
+        {
+            _enemy.SpecialAttack();
+        }
     }
 }
