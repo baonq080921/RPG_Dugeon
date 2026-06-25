@@ -54,17 +54,14 @@ namespace scene
 
             // Snapshot before the old scene is destroyed
             var saveManager = ServiceLocator.Get<Save.SaveManager>();
-            var leavingPlayer = FindObjectOfType<player.Player>();
-            if (leavingPlayer != null && saveManager != null)
-                saveManager.SnapshotForTransition(leavingPlayer);
+            saveManager?.SnapshotForTransition();
 
             yield return SceneManager.LoadSceneAsync(sceneName);
 
             // Position first, then restore all other state
             MovePlayerToSpawn();
-            var arrivingPlayer = FindObjectOfType<player.Player>();
-            if (arrivingPlayer != null && saveManager != null && saveManager.HasTransitionSnapshot)
-                yield return StartCoroutine(saveManager.RestoreAfterTransition(arrivingPlayer));
+            if (saveManager != null && saveManager.HasTransitionSnapshot)
+                yield return StartCoroutine(saveManager.RestoreAfterTransition());
 
             yield return StartCoroutine(Fade(0f));
 

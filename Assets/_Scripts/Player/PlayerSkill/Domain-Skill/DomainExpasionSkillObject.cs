@@ -2,6 +2,7 @@ using System.Collections;
 using Base;
 using DG.Tweening;
 using Interfaces;
+using Pool;
 using UnityEngine;
 
 public class DomainExpasionSkillObject : MonoBehaviour
@@ -55,7 +56,7 @@ public class DomainExpasionSkillObject : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            DectectTargetInRadius();
+            DamageTargetInRadius();
             yield return new WaitForSeconds(1f);
             elapsed += 1f;
         }
@@ -89,22 +90,26 @@ public class DomainExpasionSkillObject : MonoBehaviour
             _elementalDamage = damage + elementalDamage *scaleFactor;            
         }
     }
-    private void DectectTargetInRadius()
+    private void DamageTargetInRadius()
     {
         hits = Physics2D.OverlapCircleAll(transform.position,_radiusDamge,_targetLayer);
        for(int i = 0 ; i < hits.Length; i++)
         {
-            var target = hits[i].GetComponent<IHit>();
+            var hit = hits[i].GetComponent<IHit>();
             var targetTf = hits[i].GetComponent<Transform>();
-            if(target != null)
+            if(hit != null)
             {
-                target?.TakeDamage(_damage,_elementalDamage,ElementType.None,transform);
+                var targetVfx = targetTf.GetComponent<EntityVfx>();
+                hit?.TakeDamage(_damage,_elementalDamage,ElementType.None,transform);
                 ServiceLocator.Get<PoolManager>()?.sliceEffectPool.Spawn(targetTf);
                 float finalDamage = _damage +_elementalDamage;
+                targetVfx.UpdateStatusEffectVFX(ElementType.Fire,0.3f);
                 EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(targetTf.position,finalDamage,_isCrit));
             }
         }
     }
+
+    
 
     void OnDrawGizmos()
     {

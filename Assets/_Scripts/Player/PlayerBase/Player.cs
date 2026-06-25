@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using Base;
+using Pool;
 using stateMachine;
-using UI;
 using UnityEngine;
 
 namespace player
@@ -99,6 +99,11 @@ namespace player
             input = new PlayerInputSet();
             CreateStates();
             ServiceLocator.Register<Player>(this);
+
+            // Added at runtime so every player prefab/variant supports save/load without
+            // needing PlayerPersistence wired in the inspector. Its Awake registers IPlayerPersistence.
+            if (GetComponent<PlayerPersistence>() == null)
+                gameObject.AddComponent<PlayerPersistence>();
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 using System;
 using Base;
 using Interfaces;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace enemy
@@ -56,12 +55,11 @@ namespace enemy
         public float attackSpeed {get; private set;}
 
         private EntityDrop _entityDrop;
-        protected EntityCombat entityCombat;
+        public Action OnDied;
         protected override void Awake()
         {
             base.Awake();
             _entityDrop = GetComponent<EntityDrop>();
-            entityCombat = GetComponent<EntityCombat>();
             InitializeStates();
         }
 
@@ -225,36 +223,14 @@ namespace enemy
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
         }
-
         /// <summary>
-        /// Resets the enemy to its initial state when retrieved from the pool.
-        /// Called automatically by <see cref="EnemyPool"/> — do not call directly.
-        /// </summary>
-        public void OnGetFromPool()
-        {
-            isDead = false;
-            col.enabled = true;
-            animator.enabled = true;
-            ResetKnockbackState();
-            rb.velocity = Vector2.zero;
-            GetComponent<EntityHealth>().ResetHealth();
-            ResetAllAnimatorBools();
-            stateMachine.Initialize(enemyIdleState);
-        }
-
-        /// <summary>
-        /// Returns this enemy to the <see cref="EnemyPool"/> registered in <see cref="ServiceLocator"/>.
-        /// Falls back to <see cref="Object.Destroy"/> if no pool is registered.
+        /// Signals that this enemy has died by invoking <see cref="OnDied"/>.
+        /// The owning <see cref="Pool.EnemyPool"/> subscribes to this callback to return the enemy to the pool,
+        /// keeping the enemy decoupled from the pool implementation.
         /// </summary>
         public void ReturnToPool()
         {
-            var pool = ServiceLocator.Get<EnemyPool>();
-            if (pool == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            pool.Return(this);
+           OnDied?.Invoke();
         }
 
         public void EnableCounter()

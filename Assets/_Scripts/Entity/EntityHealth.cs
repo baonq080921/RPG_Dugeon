@@ -9,16 +9,14 @@ public abstract class EntityHealth : MonoBehaviour, IHit
 {
     [field:SerializeField]public float CurrentHealth { get; private set; }
     private Entity _entity;
-    private EntityStat _entityStat;
     /// <summary>Maximum health sourced from the entity's ScriptableObject data.</summary>
-    public float MaxHealth => _entityStat.GetHealthValue();
+    public float MaxHealth => _entity.entityStat.GetHealthValue();
 
     [SerializeField] private Slider _slider;
 
     protected virtual void Awake()
     {
         _entity = GetComponent<Entity>();
-        _entityStat = GetComponent<EntityStat>();
         if(_slider == null)
             _slider = GetComponentInChildren<Slider>();
     }
@@ -29,7 +27,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
     
     protected virtual void Start()
     {
-        CurrentHealth = _entityStat.GetHealthValue();
+        CurrentHealth = _entity.entityStat.GetHealthValue();
         UpdateHealthBar();
     }
     
@@ -42,9 +40,9 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         }
         float finalDamge;
         float finalElementalDamage;
-        finalDamge = damage * _entityStat.GetMigiationValue();
+        finalDamge = damage * _entity.entityStat.GetMigiationValue();
         // DebugCustom.Log(""+_entityStat.GetMigiationValue());
-        finalElementalDamage = elementalDamage * _entityStat.GetElementalResitanceValue();
+        finalElementalDamage = elementalDamage * _entity.entityStat.GetElementalResitanceValue();
         ReduceHP(finalDamge + finalElementalDamage);
 
         return true;
@@ -52,12 +50,12 @@ public abstract class EntityHealth : MonoBehaviour, IHit
 
 
 
-    private bool AttackEnvaded() => Random.Range(0f, 100f) < _entityStat.GetEnvasionValue();
+    private bool AttackEnvaded() => Random.Range(0f, 100f) < _entity.entityStat.GetEnvasionValue();
 
     public virtual void ReduceHP(float damage)
     {
         CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
-        GetComponent<IHitVFX>()?.PlayHitVFX();
+        // GetComponent<IHitVFX>()?.PlayHitVFX();
         UpdateHealthBar();
         if (CurrentHealth <= 0)
             _entity.Die();
@@ -80,7 +78,7 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         if (CurrentHealth >= MaxHealth)
             return;
 
-        float regenAmount = _entityStat.GetHealthRegen();
+        float regenAmount = _entity.entityStat.GetHealthRegen();
         if (regenAmount <= 0f)
             return;
 

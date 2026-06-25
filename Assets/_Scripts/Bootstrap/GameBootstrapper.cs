@@ -1,7 +1,9 @@
+using Base;
 using Save;
+using scene;
 using UnityEngine;
 
-namespace Base
+namespace Bootstrap
 {
   /// <summary>
   /// Automatically creates a Helper instance before any scene loads.

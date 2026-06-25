@@ -1,4 +1,5 @@
 using Base;
+using enemy;
 using Interfaces;
 using player;
 using UnityEngine;
@@ -36,17 +37,18 @@ public class SkillObjectDismantle : SkillProjectileBase
     protected override void OnHit(Collider2D other)
     {
         float damgeBase = _player.entityStat.GetPhysicalDamageValue(out bool isCrit);
-        float damgeElementBase = _player.entityStat.GetElementalDamageValue(out _);
+        float damgeElementBase = _player.entityStat.GetElementalDamageValue(out ElementType elementType);
         float totaldamage = damgeBase + damgeElementBase;
-        if (other.TryGetComponent<IHit>(out var target))
+        if (other.TryGetComponent<Enemy>(out var enemy))
         {
+            var hit = enemy.GetComponent<IHit>();
             float skillDamge = _skillBaseDefinition.Damage;
             float finalDamage = skillDamge + totaldamage * 0.5f;
-            target.TakeDamage(finalDamage, 0, ElementType.None, transform);
+            hit?.TakeDamage(finalDamage, 0, ElementType.None, transform);
             EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(transform.position,finalDamage,isCrit));
         }
 
-        other.GetComponent<IHitVFX>()?.PlayHitVFX();
+        enemy.entityVfx.UpdateStatusEffectVFX(elementType,0.3f);
         EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(other.transform, false));
 
         if (_willReturnOnHit && !_isReturning)

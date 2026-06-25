@@ -1,3 +1,4 @@
+using InteractiveObject;
 using UnityEngine;
 
 public class ItemObjectCraft : ItemObjectPickable

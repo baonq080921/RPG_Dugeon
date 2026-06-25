@@ -1,73 +1,77 @@
 using Base;
+using Effect;
 using UnityEngine;
 
-/// <summary>
-/// Pool for <see cref="DamagePopup"/> instances. Listens for <see cref="DamagePopupEvent"/>
-/// and spawns a floating damage number at the requested world position.
-/// Assigned to <see cref="PoolManager"/> in the Inspector — do not register with ServiceLocator directly.
-/// </summary>
-public class DamagePopupPool : MonoBehaviourPool<DamagePopup>
+namespace Pool
 {
-    [SerializeField] private DamagePopup _prefab;
-
-    private EventBinding<DamagePopupEvent> _eventBinding;
-
-    protected override void Awake()
+    /// <summary>
+    /// Pool for <see cref="DamagePopup"/> instances. Listens for <see cref="DamagePopupEvent"/>
+    /// and spawns a floating damage number at the requested world position.
+    /// Assigned to <see cref="PoolManager"/> in the Inspector — do not register with ServiceLocator directly.
+    /// </summary>
+    public class DamagePopupPool : MonoBehaviourPool<DamagePopup>
     {
-        base.Awake();
-        var manager = ServiceLocator.Get<PoolManager>();
-        if (manager != null) manager.damagePopupPool = this;
-    }
+        [SerializeField] private DamagePopup _prefab;
 
-    private void OnEnable()
-    {
-        _eventBinding = new EventBinding<DamagePopupEvent>(OnDamagePopup);
-        EventBus<DamagePopupEvent>.Register(_eventBinding);
-    }
+        private EventBinding<DamagePopupEvent> _eventBinding;
 
-    private void OnDisable()
-    {
-        EventBus<DamagePopupEvent>.Deregister(_eventBinding);
-    }
+        protected override void Awake()
+        {
+            base.Awake();
+            var manager = ServiceLocator.Get<PoolManager>();
+            if (manager != null) manager.damagePopupPool = this;
+        }
 
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        var manager = ServiceLocator.Get<PoolManager>();
-        if (manager != null && manager.damagePopupPool == this)
-            manager.damagePopupPool = null;
-    }
+        private void OnEnable()
+        {
+            _eventBinding = new EventBinding<DamagePopupEvent>(OnDamagePopup);
+            EventBus<DamagePopupEvent>.Register(_eventBinding);
+        }
 
-    /// <inheritdoc/>
-    protected override DamagePopup CreateInstance()
-    {
-        var item = Instantiate(_prefab, transform);
-        item.gameObject.SetActive(false);
-        return item;
-    }
+        private void OnDisable()
+        {
+            EventBus<DamagePopupEvent>.Deregister(_eventBinding);
+        }
 
-    /// <inheritdoc/>
-    protected override void OnGet(DamagePopup item)
-    {
-        item.OnComplete = () => Release(item);
-    }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            var manager = ServiceLocator.Get<PoolManager>();
+            if (manager != null && manager.damagePopupPool == this)
+                manager.damagePopupPool = null;
+        }
 
-    /// <inheritdoc/>
-    protected override void OnRelease(DamagePopup item)
-    {
-        item.OnComplete = null;
-        item.transform.SetParent(transform);
-    }
+        /// <inheritdoc/>
+        protected override DamagePopup CreateInstance()
+        {
+            var item = Instantiate(_prefab, transform);
+            item.gameObject.SetActive(false);
+            return item;
+        }
 
-    /// <summary>Spawns a floating damage number at <paramref name="worldPosition"/>.</summary>
-    public void Spawn(Vector3 worldPosition, float damage, bool isCrit)
-    {
-        var item = Get();
-        item.Play(worldPosition, damage, isCrit);
-    }
+        /// <inheritdoc/>
+        protected override void OnGet(DamagePopup item)
+        {
+            item.OnComplete = () => Release(item);
+        }
 
-    private void OnDamagePopup(DamagePopupEvent evt)
-    {
-        Spawn(evt.WorldPosition, evt.Damage, evt.IsCrit);
+        /// <inheritdoc/>
+        protected override void OnRelease(DamagePopup item)
+        {
+            item.OnComplete = null;
+            item.transform.SetParent(transform);
+        }
+
+        /// <summary>Spawns a floating damage number at <paramref name="worldPosition"/>.</summary>
+        public void Spawn(Vector3 worldPosition, float damage, bool isCrit)
+        {
+            var item = Get();
+            item.Play(worldPosition, damage, isCrit);
+        }
+
+        private void OnDamagePopup(DamagePopupEvent evt)
+        {
+            Spawn(evt.WorldPosition, evt.Damage, evt.IsCrit);
+        }
     }
 }

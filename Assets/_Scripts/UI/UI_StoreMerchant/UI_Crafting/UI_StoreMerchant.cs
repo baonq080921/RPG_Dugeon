@@ -1,5 +1,6 @@
 using Base;
 using DG.Tweening;
+using InteractiveObject;
 using player;
 using TMPro;
 using UnityEngine;

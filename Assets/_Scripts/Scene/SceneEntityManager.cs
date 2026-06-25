@@ -17,10 +17,24 @@ namespace scene
         private IScenePersistable[] _persistables;
         private string _sceneName;
         private SaveManager _saveManager;
+        private EventBinding<SceneStateRestoredEvent> _sceneStateRestoredBinding;
 
         private void Awake()
         {
             _sceneName = SceneManager.GetActiveScene().name;
+        }
+
+        private void OnEnable()
+        {
+            // SaveManager raises this after a full disk load (its restore runs after our Start),
+            // so we re-apply scene state when notified instead of being called directly.
+            _sceneStateRestoredBinding = new EventBinding<SceneStateRestoredEvent>(ApplySceneState);
+            EventBus<SceneStateRestoredEvent>.Register(_sceneStateRestoredBinding);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<SceneStateRestoredEvent>.Deregister(_sceneStateRestoredBinding);
         }
 
         private void Start()
@@ -38,8 +52,8 @@ namespace scene
 
         /// <summary>
         /// Restores all entities already marked as persisted in the saved scene state.
-        /// Called from <see cref="Start"/> for portal transitions and directly by
-        /// <see cref="SaveManager"/> after a full load to fix the timing gap.
+        /// Called from <see cref="Start"/> for portal transitions, and again on
+        /// <see cref="SceneStateRestoredEvent"/> after a full disk load to fix the timing gap.
         /// </summary>
         public void ApplySceneState()
         {

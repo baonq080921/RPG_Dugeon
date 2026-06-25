@@ -128,10 +128,8 @@ public abstract class Entity : MonoBehaviour
         stateMachine.currentState.TriggerAnimation();
     }
 
-    public virtual void Die()
-    {
-        isDead = true;
-    }
+    public virtual void Die() =>isDead = true;
+    public void ResetDie() => isDead = false;
 
     public virtual void ApplyEffect(float scaleFactor, ElementType elementType)
     {
@@ -180,15 +178,7 @@ public abstract class Entity : MonoBehaviour
         IsKnocked = false;
     }
 
-    /// <summary>Sets all Animator bool parameters to false for a clean state on pool re-use.</summary>
-    protected void ResetAllAnimatorBools()
-    {
-        foreach (var param in animator.parameters)
-        {
-            if (param.type == AnimatorControllerParameterType.Bool)
-                animator.SetBool(param.name, false);
-        }
-    }
+
     protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;

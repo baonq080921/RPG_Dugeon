@@ -1,15 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using player;
 using UnityEngine;
 
-public class BearTrap : MonoBehaviour
+namespace Trap
 {
-    void OnTriggerEnter2D(Collider2D collision)
+    public class BearTrap : MonoBehaviour
     {
-        if(collision.TryGetComponent<Player>(out Player player))
+        void OnTriggerEnter2D(Collider2D collision)
         {
-            player?.Die();
+            if (collision.TryGetComponent<Player>(out Player player))
+            {
+                player?.Die();
+            }
         }
     }
 }

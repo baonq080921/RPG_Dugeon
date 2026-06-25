@@ -15,8 +15,6 @@ public class EntityCombat : MonoBehaviour
     [SerializeField] private Transform _targetCheck;
     [SerializeField] protected float _targetRadius = 0.75f;
     protected Entity entity;
-    protected EntityStat entityStat;
-    private EntityVfx _entityVfx;
     // public event Action<Transform,bool> OnTargetHit;
     
     [Range(0f,2f)]
@@ -32,8 +30,6 @@ public class EntityCombat : MonoBehaviour
     protected virtual void Awake()
     {
         entity = GetComponent<Entity>();
-        entityStat = GetComponent<EntityStat>();
-        _entityVfx = GetComponentInChildren<EntityVfx>();
     }
 
     /// <summary>
@@ -46,19 +42,20 @@ public class EntityCombat : MonoBehaviour
         {
             IHit hit = target.GetComponent<IHit>();
             if(hit == null) continue;
-            Transform damageDealer = target.GetComponent<Transform>();
-            float physicalDamage = entityStat.GetPhysicalDamageValue(out bool isCrit);
-            float elementalDamage = entityStat.GetElementalDamageValue(out ElementType elementType);
+            Transform targetTakeDamage = target.GetComponent<Transform>();
+            float physicalDamage = entity.entityStat.GetPhysicalDamageValue(out bool isCrit);
+            float elementalDamage = entity.entityStat.GetElementalDamageValue(out ElementType elementType);
             // Debug.Log(physicalDamage+ "physics");
             // Debug.Log(elementalDamage+ "magic");
-            bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, damageDealer);
+            bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, targetTakeDamage);
             if(elementType != ElementType.None)
-                ApplyStatusEffect(elementType, damageDealer,_scaleElementalFactor);
+                ApplyStatusEffect(elementType, targetTakeDamage,_scaleElementalFactor);
             if (targetGotHit)
             {
-                _entityVfx?.UpdateHitColor(elementType);
+                var hitColor = entity.entityVfx.GetHitColor(elementType);
+                var targetVFX = targetTakeDamage.GetComponent<EntityVfx>();
                 // OnTargetHit?.Invoke(target.transform,isCrit);
-                EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(target.transform,isCrit));
+                targetVFX.SpawnHitEffect(targetTakeDamage, isCrit,hitColor);
                 EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.transform.position,physicalDamage+elementalDamage,isCrit));
             }
 
@@ -70,19 +67,20 @@ public class EntityCombat : MonoBehaviour
     {
        
             IHit hit = target.GetComponent<IHit>();
-            Transform damageDealer = target.GetComponent<Transform>();
-            float physicalDamage = entityStat.GetPhysicalDamageValue(out bool isCrit) * damageScale;
-            float elementalDamage = entityStat.GetElementalDamageValue(out ElementType elementType) * damageScale;
+            Transform targetTakeDamage = target.GetComponent<Transform>();
+            float physicalDamage = entity.entityStat.GetPhysicalDamageValue(out bool isCrit) * damageScale;
+            float elementalDamage = entity.entityStat.GetElementalDamageValue(out ElementType elementType) * damageScale;
             // Debug.Log(physicalDamage+ "physics");
             // Debug.Log(elementalDamage+ "magic");
-            bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, damageDealer);
+            bool targetGotHit = hit.TakeDamage(physicalDamage,elementalDamage,elementType, targetTakeDamage);
             if(elementType != ElementType.None)
-                ApplyStatusEffect(elementType, damageDealer,_scaleElementalFactor * damageScale);
-            if (targetGotHit)
+                ApplyStatusEffect(elementType, targetTakeDamage,_scaleElementalFactor * damageScale);
+           if (targetGotHit)
             {
-                _entityVfx?.UpdateHitColor(elementType);
+                var hitColor = entity.entityVfx.GetHitColor(elementType);
+                var targetVFX = targetTakeDamage.GetComponent<EntityVfx>();
                 // OnTargetHit?.Invoke(target.transform,isCrit);
-                EventBus<TargetGotHitEvent>.Raise(new TargetGotHitEvent(target.transform,isCrit));
+                targetVFX.SpawnHitEffect(targetTakeDamage, isCrit,hitColor);
                 EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.transform.position,physicalDamage+elementalDamage,isCrit));
             }
     }
@@ -97,7 +95,7 @@ public class EntityCombat : MonoBehaviour
 
         if(elementType == ElementType.Electric && statusHandler.CanElementalStatusApply(elementType))
         {
-            float electricDamage = entityStat.GetElementalDamageValue(out _) * scaleFactor;
+            float electricDamage = entity.entityStat.GetElementalDamageValue(out _) * scaleFactor;
             statusHandler.ApplyElectricEffect(_electricStatusDuration,electricDamage,_electricBuildUpCharge); // Example duration
         } 
 

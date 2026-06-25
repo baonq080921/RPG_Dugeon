@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class ObjectChestDropItem : ObjectChestBase
+namespace InteractiveObject
 {
-    
-    [SerializeField]private EntityDrop _entityDrop;
-
-
-    protected override void DropChestItem()
+    public class ObjectChestDropItem : ObjectChestBase
     {
-        base.DropChestItem();
-        _entityDrop.DropItems();
+        [SerializeField] private EntityDrop _entityDrop;
+
+        protected override void DropChestItem()
+        {
+            base.DropChestItem();
+            _entityDrop.DropItems();
+        }
     }
-    
 }

@@ -55,7 +55,7 @@ public class ItemEffectIceData : ItemEffectData
          player= character;
         player.playerHealth.OnPlayerTalkingDamage += ExecuteEffect;
         _lastTriggerTime = float.NegativeInfinity;
-        
+
     }
 
     /// <inheritdoc/>

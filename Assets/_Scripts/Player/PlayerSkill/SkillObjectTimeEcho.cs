@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Base;
+using Effect;
 using Interfaces;
 using player;
 using UnityEngine;
@@ -260,10 +261,11 @@ public class SkillObjectTimeEcho : SkillObject_Base
     {
         float skilldamage = _skillTimeEchoDefinition.Damage;
         float playerPhysicDamage = ServiceLocator.Get<Player>().entityStat.GetPhysicalDamageValue( out bool isCrit);
-        float playerElementalDamage = ServiceLocator.Get<Player>().entityStat.GetPhysicalDamageValue( out _);
+        float playerElementalDamage = ServiceLocator.Get<Player>().entityStat.GetElementalDamageValue( out ElementType elementType);
         float totalPlayerSkillDamage = playerPhysicDamage + playerElementalDamage;
         float finalDamage = skilldamage + totalPlayerSkillDamage * 0.8f;
-        DamageEnemiesInRadius(finalDamage,isCrit, appliesKnockback);
+        DamageEnemiesInRadius(finalDamage,isCrit,elementType, appliesKnockback);
+
     }
 
     private void SpawnSmokeEffect()

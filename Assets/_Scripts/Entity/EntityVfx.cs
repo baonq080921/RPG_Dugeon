@@ -2,14 +2,15 @@ using System.Collections;
 using Interfaces;
 using UnityEngine;
 using Base;
+using Pool;
 using Unity.VisualScripting;
 
 /// <summary>
 /// Base class for entity visual effects. Handles material swapping for hit flash.
 /// </summary>
-public abstract class EntityVfx : MonoBehaviour,IHitVFX
+public  class EntityVfx : MonoBehaviour
 {
-    protected abstract Material KnockBackMat { get; }
+    protected  Material knockBackMat;
 
     [SerializeField] protected float HitFlashDuration = 0.3f;
 
@@ -25,10 +26,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
     [SerializeField]private Color _fireColor;
     [SerializeField] private float _statusBlinkInterval = 0.15f;
     private Color defaultHitColor;
-    private EntityCombat _entityCombat;
-    private Entity _entity;
     private Coroutine _statusEffectCoroutine;
-    private EventBinding<TargetGotHitEvent> _hitEventBinding;
     public bool isEffectDone {get; private set;}
 
 
@@ -37,22 +35,6 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         OriginalMaterial = SpriteRenderer.material;
         defaultHitColor = _hitColor;
-        _entityCombat = GetComponent<EntityCombat>();
-        _entity = GetComponent<Entity>();
-    }
-
-    protected virtual void OnEnable()
-    {
-        _hitEventBinding = new EventBinding<TargetGotHitEvent>(OnHitCreate);
-        EventBus<TargetGotHitEvent>.Register(_hitEventBinding);
-
-        // _entityCombat.OnTargetHit += CreateHitEffect;
-    }
-
-    protected virtual void OnDisable()
-    {
-        EventBus<TargetGotHitEvent>.Deregister(_hitEventBinding);
-        // _entityCombat.OnTargetHit -= CreateHitEffect;
     }
 
     public void CreateEffectVFX(GameObject effect, Transform target)
@@ -66,16 +48,18 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         ServiceLocator.Get<PoolManager>()?.levelupPool?.Spawn(transform);
     }
 
-    public void UpdateHitColor(ElementType elementType)
+    public Color GetHitColor(ElementType elementType)
     {
         // Debug.Log(_electricHitColor);
         if(elementType == ElementType.Electric)
         {
             _hitColor = _electricHitColor;
+            return _hitColor;
         }
         else
         {
             _hitColor = defaultHitColor;
+            return _hitColor;
         }
     }
 
@@ -125,40 +109,11 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
         _statusEffectCoroutine = null;
     }
 
-
-
-
-
-     /// <inheritdoc/>
-    public virtual void PlayHitVFX()
-    {
-        if (_hitVfxCoroutine != null)
-            StopCoroutine(_hitVfxCoroutine);
-        _hitVfxCoroutine = StartCoroutine(HitVfxCoroutine());
-    }
-
-    private IEnumerator HitVfxCoroutine()
-    {
-        SpriteRenderer.material = KnockBackMat;
-        yield return new WaitForSeconds(HitFlashDuration);
-        SpriteRenderer.material = OriginalMaterial;
-        _hitVfxCoroutine = null;
-
-    }
-
-    private void OnHitCreate(TargetGotHitEvent hit)
-    {
-        CreateHitEffect(hit.target,hit.isCrit);
-    }
-    private void CreateHitEffect(Transform target, bool isCrit)
-    {
-        SpawnHitEffect(target, isCrit);
-    }
-
-    private void SpawnHitEffect(Transform target, bool isCrit)
+    public void SpawnHitEffect(Transform target, bool isCrit, Color color)
     {
         float randomX = Random.Range(-0.3f, 0.3f);
         float randomY = Random.Range(-0.7f, 0.7f);
+        _hitColor = color;
         Vector2 randomHitOffSet = new Vector2(randomX, randomY);
         ServiceLocator.Get<PoolManager>()?.hitEffectPool?.SpawnHitEffect(target, _hitColor, randomHitOffSet, isCrit);
     }

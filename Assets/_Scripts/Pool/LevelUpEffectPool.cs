@@ -1,51 +1,55 @@
 using Base;
+using Effect;
 using UnityEngine;
 
-/// <summary>
-/// Pool for <see cref="LevelUpEffect"/> VFX instances.
-/// Assigned to <see cref="PoolManager"/> in the Inspector — do not register with ServiceLocator directly.
-/// </summary>
-public class LevelUpEffectPool : MonoBehaviourPool<LevelUpEffect>
+namespace Pool
 {
-    [SerializeField] private LevelUpEffect _prefab;
-
-    protected override void Awake()
+    /// <summary>
+    /// Pool for <see cref="LevelUpEffect"/> VFX instances.
+    /// Assigned to <see cref="PoolManager"/> in the Inspector — do not register with ServiceLocator directly.
+    /// </summary>
+    public class LevelUpEffectPool : MonoBehaviourPool<LevelUpEffect>
     {
-        base.Awake();
-        var manager = ServiceLocator.Get<PoolManager>();
-        if (manager != null) manager.levelupPool = this;
-    }
+        [SerializeField] private LevelUpEffect _prefab;
 
-    protected override void OnDestroy()
-    {
-        var manager = ServiceLocator.Get<PoolManager>();
-        if (manager != null && manager.levelupPool == this)
-            manager.levelupPool = null;
-    }
+        protected override void Awake()
+        {
+            base.Awake();
+            var manager = ServiceLocator.Get<PoolManager>();
+            if (manager != null) manager.levelupPool = this;
+        }
 
-    protected override LevelUpEffect CreateInstance()
-    {
-        var item = Instantiate(_prefab, transform);
-        item.gameObject.SetActive(false);
-        return item;
-    }
+        protected override void OnDestroy()
+        {
+            var manager = ServiceLocator.Get<PoolManager>();
+            if (manager != null && manager.levelupPool == this)
+                manager.levelupPool = null;
+        }
 
-    protected override void OnGet(LevelUpEffect item)
-    {
-        item.ResetAnimation();
-        item.OnComplete = () => Release(item);
-    }
+        protected override LevelUpEffect CreateInstance()
+        {
+            var item = Instantiate(_prefab, transform);
+            item.gameObject.SetActive(false);
+            return item;
+        }
 
-    protected override void OnRelease(LevelUpEffect item)
-    {
-        item.OnComplete = null;
-    }
+        protected override void OnGet(LevelUpEffect item)
+        {
+            item.ResetAnimation();
+            item.OnComplete = () => Release(item);
+        }
 
-    /// <summary>Spawns a level-up effect at <paramref name="position"/>.</summary>
-    public void Spawn(Transform tf)
-    {
-        var item = Get();
-        item.transform.position = tf.position;
-        item.transform.SetParent(tf);
+        protected override void OnRelease(LevelUpEffect item)
+        {
+            item.OnComplete = null;
+        }
+
+        /// <summary>Spawns a level-up effect at <paramref name="position"/>.</summary>
+        public void Spawn(Transform tf)
+        {
+            var item = Get();
+            item.transform.position = tf.position;
+            item.transform.SetParent(tf);
+        }
     }
 }

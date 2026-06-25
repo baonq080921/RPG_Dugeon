@@ -1,19 +1,22 @@
 using Base;
 using UnityEngine;
 
-public class PoolManager : MonoBehaviour 
+namespace Pool
 {
-
-    public AfterImageEffect afterEffectPool;
-
-    public ItemPickablePool itemObjectPool;
-    
-    public LevelUpEffectPool levelupPool;
-    public HitEffectPool hitEffectPool;
-    public SliceEffectPool sliceEffectPool;
-    public DamagePopupPool damagePopupPool;
-    private void Awake()
+    public class PoolManager : MonoBehaviour
     {
-        ServiceLocator.Register<PoolManager>(this);
+
+        public AfterImageEffect afterEffectPool;
+
+        public ItemPickablePool itemObjectPool;
+
+        public LevelUpEffectPool levelupPool;
+        public HitEffectPool hitEffectPool;
+        public SliceEffectPool sliceEffectPool;
+        public DamagePopupPool damagePopupPool;
+        private void Awake()
+        {
+            ServiceLocator.Register<PoolManager>(this);
+        }
     }
 }

@@ -56,8 +56,8 @@ namespace Quest
         private void OnProgress()
         {
             string sceneName = SceneManager.GetActiveScene().name;
-            Debug.Log(sceneName);
-            Debug.Log(_quest.CurrentProgress);
+            // Debug.Log(sceneName);
+            // Debug.Log(_quest.CurrentProgress);
             ServiceLocator.Get<SaveManager>()?.SetQuestProgress(sceneName, _quest.CurrentProgress);
             EventBus<QuestProgressEvent>.Raise(new QuestProgressEvent(_quest));
         }

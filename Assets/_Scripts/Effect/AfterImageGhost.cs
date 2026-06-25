@@ -2,11 +2,11 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace player
+namespace Effect
 {
     /// <summary>
     /// A single pooled ghost image. Fades out then invokes a callback so the caller can return it to the pool.
-    /// Managed exclusively by <see cref="AfterImageEffect"/>.
+    /// Managed exclusively by <see cref="Pool.AfterImageEffect"/>.
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     public class AfterImageGhost : MonoBehaviour

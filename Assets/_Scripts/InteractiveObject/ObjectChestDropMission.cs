@@ -1,19 +1,22 @@
 using Base;
 using UnityEngine;
 
-public class ObjectChestDropMission : ObjectChestBase
+namespace InteractiveObject
 {
-    [SerializeField] private int _skillPointReward;
-    [SerializeField] private bool _triggerQuestEvent = true;
-
-    protected override void DropChestItem()
+    public class ObjectChestDropMission : ObjectChestBase
     {
-        base.DropChestItem();
+        [SerializeField] private int _skillPointReward;
+        [SerializeField] private bool _triggerQuestEvent = true;
 
-        if (_triggerQuestEvent)
-            EventBus<NpcRescuedEvent>.Raise(new NpcRescuedEvent());
+        protected override void DropChestItem()
+        {
+            base.DropChestItem();
 
-        if (_skillPointReward > 0)
-            EventBus<SkillPointRewardEvent>.Raise(new SkillPointRewardEvent(_skillPointReward));
+            if (_triggerQuestEvent)
+                EventBus<NpcRescuedEvent>.Raise(new NpcRescuedEvent());
+
+            if (_skillPointReward > 0)
+                EventBus<SkillPointRewardEvent>.Raise(new SkillPointRewardEvent(_skillPointReward));
+        }
     }
 }

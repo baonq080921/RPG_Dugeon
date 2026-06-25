@@ -1,11 +1,11 @@
 using System.Collections;
+using Base;
 using Cinemachine;
 using player;
-using scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Base
+namespace scene
 {
     /// <summary>
     /// Adjusts the Cinemachine Virtual Camera orthographic size once at startup so the

@@ -15,11 +15,8 @@ namespace enemy
         {
             base.Enter();
             _enemySlime.CreateChild();
-            stateTimer = 3f;
-            rb.simulated = false;
-            
-
-            
+            stateTimer = 2f;
+            enemy.col.enabled = false;
         }
 
         public override void Update()
@@ -27,13 +24,15 @@ namespace enemy
             base.Update();
             if (stateTimer <= 0)
             {                
-                enemy.ReturnToPool();
+                stateMachine.ChangeState(_enemySlime.enemyIdleState);
+                _enemySlime.ReturnToPool();
             }
         }
 
         public override void Exit()
         {
             base.Exit();
+            _enemySlime.ResetDie();
         }
     }
 }

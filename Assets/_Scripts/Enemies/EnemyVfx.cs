@@ -2,18 +2,18 @@ using Interfaces;
 using UnityEngine;
 namespace enemy
 {
-    public class EnemyVfx : EntityVfx, IHitVFX
+    public class EnemyVfx : EntityVfx
     {
 
         private Enemy _enemy;
         [SerializeField] private Alert _alertCounterSignal;
 
-        protected override Material KnockBackMat =>_enemy.enemyData.Material;
         protected override void Awake()
         {
             base.Awake();
             _enemy = GetComponent<Enemy>();
             _alertCounterSignal = GetComponentInChildren<Alert>();
+            knockBackMat = _enemy.enemyData.Material;
         }
 
 

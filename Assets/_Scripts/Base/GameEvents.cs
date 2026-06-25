@@ -197,6 +197,13 @@ namespace Base
         public GamePauseChangedEvent(bool isPause) => IsPause = isPause;
     }
 
+    /// <summary>
+    /// Raised by the SaveManager after world/scene state has been restored, so each scene's
+    /// SceneEntityManager can re-apply persisted entity state. Lets SaveManager trigger the
+    /// scene layer without depending on it (breaks the Save ↔ scene cycle).
+    /// </summary>
+    public struct SceneStateRestoredEvent : IEvent { }
+
 
 
     public struct TargetGotHitEvent : IEvent

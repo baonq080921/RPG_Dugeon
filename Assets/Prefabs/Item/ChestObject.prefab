@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8863334268337529021}
   - component: {fileID: 8912173120127777514}
   - component: {fileID: 3172514936569884372}
+  - component: {fileID: -58293146860628896}
+  - component: {fileID: -1281966497663628610}
   m_Layer: 11
   m_Name: ChestObject
   m_TagString: Untagged
@@ -67,7 +69,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.16924989, y: -0.021156192}
+  m_Offset: {x: -0.16924989, y: 0.0053533018}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -78,7 +80,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.9308746, y: 1.8039372}
+  m_Size: {x: 1.9308746, y: 1.3873599}
   m_EdgeRadius: 0
 --- !u!114 &8912173120127777514
 MonoBehaviour:
@@ -107,10 +109,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fac473daf5ced3418c415b600db9066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 1
-  collider2D: {fileID: 8863334268337529021}
+  currentHealth: 0
+  _goldDropAmount: 10
   _animator: {fileID: 1849508967199232668}
+  _sceneEntityId: d51b48ef-85cd-405e-964f-abf4a6dc8ea3
   _entityDrop: {fileID: 8912173120127777514}
+--- !u!114 &-58293146860628896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353978359494565047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd727365c1d16b4faa688af01807d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HitFlashDuration: 0.3
+  _hitColor: {r: 1, g: 1, b: 1, a: 1}
+  _electricHitColor: {r: 1, g: 1, b: 0, a: 1}
+  _iceHitColor: {r: 0, g: 0, b: 1, a: 1}
+  _fireColor: {r: 1, g: 0, b: 0, a: 1}
+  _statusBlinkInterval: 0.15
+--- !u!114 &-1281966497663628610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353978359494565047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040117eeddf436a4cb48499e8e207bd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _electricEffectPrefab: {fileID: 0}
+  _currentCharge: 0
+  _maxiumCharge: 1
+  _shockDuration: 2
+  _iceDuration: 3
 --- !u!1 &8273279381836407833
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using Base;
-using enemy;
 using Interfaces;
 using player;
 using UnityEngine;
@@ -32,17 +31,19 @@ public class SkillObject_Base : MonoBehaviour
     protected virtual void Update(){}
 
 
-    public void DamageEnemiesInRadius(float damage,bool isCrit, bool appliesKnockback = true)
+    public void DamageEnemiesInRadius(float damage,bool isCrit,ElementType elementType = ElementType.None, bool appliesKnockback = true)
     {
-        var hits = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRadius, _enemyLayer);
-        foreach (var hit in hits)
+        var cols = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRadius, _enemyLayer);
+        foreach (var col in cols)
         {
-            if (hit.TryGetComponent<EnemyHealth>(out var health))
+            var targetVfx = col.GetComponent<EntityVfx>();
+            if (col.TryGetComponent<IHit>(out var hit))
             {
-                Debug.Log($"Damaging enemy {hit.name} for {damage} damage.");
-                Transform target = appliesKnockback ? hit.transform : null;
-                health?.TakeDamage(damage, 0, ElementType.None, target);
-                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.position,damage,isCrit));
+                Transform target = appliesKnockback ? col.transform : null;
+                hit?.TakeDamage(damage, 0, ElementType.None, target);
+                targetVfx.UpdateStatusEffectVFX(elementType,0.3f);
+                // Spawn the popup at the hit collider, not at target, which is null when knockback is skipped.
+                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(col.transform.position, damage, isCrit));
             }
         }
     }

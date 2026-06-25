@@ -1,7 +1,5 @@
 using System.Collections;
 using Base;
-using enemy;
-using player;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace enemy
@@ -28,7 +26,9 @@ namespace enemy
         public bool canUlt {get; private set;}
         private float _ultCoolDownTimer;
         [SerializeField] private float _ultSpawnOffSet ; 
-        private Player _player;
+        // Typed as the Entity base (global namespace) rather than the concrete Player so the
+        // enemy namespace no longer depends on the player namespace. Resolved from DetectedPlayer.
+        private Entity _player;
     
         protected override void Awake()
         {
@@ -92,7 +92,11 @@ namespace enemy
 
         IEnumerator SpecialAttackCoroutine()
         {
-            _player = ServiceLocator.Get<Player>();
+            // The boss only ults while engaged (entered from a teleport state), so DetectedPlayer
+            // still holds the current target. Read it through the Entity base to stay decoupled
+            // from the concrete Player type.
+            _player = DetectedPlayer != null ? DetectedPlayer.GetComponent<Entity>() : null;
+            if (_player == null) yield break;
             while (true)
             {
                 var ult = Instantiate(_enemyDeathRipplerUltPrefab);

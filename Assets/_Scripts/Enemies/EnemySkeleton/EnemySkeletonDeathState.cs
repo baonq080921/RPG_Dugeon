@@ -5,8 +5,10 @@ namespace enemy
 {
     public class EnemySkeletonDeathState : EnemyState
     {
+        private EnemySkeleton _enemySkeleton;
         public EnemySkeletonDeathState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
         {
+            _enemySkeleton = enemy as EnemySkeleton;
         }
         public override void Enter()
         {
@@ -20,12 +22,16 @@ namespace enemy
         {
             base.Update();
             if (stateTimer <= 0)
-                enemy.ReturnToPool();
+            {
+                stateMachine.ChangeState(_enemySkeleton.enemyIdleState);
+                _enemySkeleton.ReturnToPool();
+            }
         }
 
         public override void Exit()
         {
             base.Exit();
+            _enemySkeleton.ResetDie();
         }
     }
 }

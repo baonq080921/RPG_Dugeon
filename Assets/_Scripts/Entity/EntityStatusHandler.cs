@@ -37,7 +37,7 @@ public class EntityStatusHandler : MonoBehaviour
     public void ApplyElectricEffect(float duration,float damage, float charge)
     {
         _currentCharge =_currentCharge + charge;
-        Debug.Log($"Current Charge: {_currentCharge}/{_maxiumCharge}");
+        // Debug.Log($"Current Charge: {_currentCharge}/{_maxiumCharge}");
         if(_currentCharge >=_maxiumCharge)
         {
             DoElectricStrike(damage);

@@ -3,6 +3,7 @@
 using System.Collections;
 using Base;
 using player;
+using Pool;
 using Save;
 using UnityEngine;
 
@@ -15,8 +16,6 @@ public class CheckPoint : MonoBehaviour
         StartCoroutine(SaveNextFrame(player));
     }
 
-    // Defer one frame so any OnComplete() callbacks (MarkQuestComplete, etc.)
-    // that fire on the same frame as the trigger finish writing to memory first.
     private IEnumerator SaveNextFrame(Player player)
     {
         yield return null;

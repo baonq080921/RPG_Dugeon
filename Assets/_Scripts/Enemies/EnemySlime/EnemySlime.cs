@@ -38,28 +38,24 @@ public class EnemySlime : Enemy
     public void CreateChild()
     {
         if (_slimeChildPefab == null || _childAmount <= 0) return;
-        if (_spawnCoroutine != null) StopCoroutine(_spawnCoroutine);
-        _spawnCoroutine = StartCoroutine(SpawnSlimeChild());
+        SpawnSlimeChild();
     }
 
-    private IEnumerator SpawnSlimeChild()
+    private void SpawnSlimeChild()
     {
-        while (_childAmount > 0)
+        for(int i = 0 ; i < _childAmount; i++)
         {
-            yield return new WaitForSeconds(0.2f);
             GameObject go = Instantiate(_slimeChildPefab);
-            var slimeChild = go.GetComponent<EnemySlime>();
-            slimeChild.transform.position = transform.position;
-            SetUpSlimeChild(slimeChild);
-            _childAmount--;
+            var enemySlimeChild = go.GetComponent<EnemySlime>();
+            ShootUpSlimeChild(enemySlimeChild);
         }
     }
 
-    private void SetUpSlimeChild(EnemySlime enemySlime)
+    private void ShootUpSlimeChild(EnemySlime enemySlime)
     {
         Vector2 velocity = new Vector2(
             Random.Range(-_shootOutPowerX, _shootOutPowerX),
             Random.Range(_shootOutPowerYMin, _shootOutPowerYMax));
-        enemySlime.SetVelocity(velocity);
+        enemySlime.SetVelocity(new Vector2(velocity.x + transform.position.x, velocity.y+transform.position.y));
     }
 }
