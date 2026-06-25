@@ -295,6 +295,7 @@ namespace Save
             player.playerLevel.RestoreExp(data);
 
             inventory.ClearAllInventory();
+            inventory.SetMoney(data.currentGolds);
 
             foreach (var entry in data.inventory)
             {

@@ -185,6 +185,7 @@ public class EntityStat : MonoBehaviour
 
 #if UNITY_EDITOR
     [ContextMenu("Reset All Stats")]
+#endif
     public void ResetAllStats()
     {
         _strengthPoints     = 0;
@@ -220,7 +221,6 @@ public class EntityStat : MonoBehaviour
         }
     }
 
-    #endif
 
     /// <summary>Permanently adds 1 point to the chosen major stat. Called by the level-up UI.</summary>
     public void AddMajorStatPoint(StatType statType)

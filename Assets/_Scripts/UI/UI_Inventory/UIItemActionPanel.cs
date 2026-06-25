@@ -144,6 +144,8 @@ public class UIItemActionPanel : MonoBehaviour
     {
         if (_currentSlot?.itemInSlot == null || _inventory == null) return;
         _inventory.DropItem(_currentSlot.itemInSlot);
+        float money = _currentSlot.itemInSlot.itemData.money;
+        EventBus<MoneyAddRewardEvent>.Raise(new MoneyAddRewardEvent(money));
         Hide();
     }
 }

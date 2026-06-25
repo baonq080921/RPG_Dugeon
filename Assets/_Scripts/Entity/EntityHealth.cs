@@ -56,12 +56,11 @@ public abstract class EntityHealth : MonoBehaviour, IHit
 
     public virtual void ReduceHP(float damage)
     {
-        if (CurrentHealth <= 0)
-            _entity.Die();
         CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
         GetComponent<IHitVFX>()?.PlayHitVFX();
         UpdateHealthBar();
-        
+        if (CurrentHealth <= 0)
+            _entity.Die();
     }
 
     /// <summary>Restores <paramref name="amount"/> HP, capped at max health.</summary>

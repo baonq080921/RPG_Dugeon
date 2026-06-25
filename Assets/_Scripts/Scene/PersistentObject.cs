@@ -13,10 +13,15 @@ namespace scene
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
+            {
                 instance = this;
-            else
                 DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
