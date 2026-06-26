@@ -18,12 +18,8 @@ namespace Base
         }
     }
 
-    /// <summary>Raised when the player gains enough XP to level up. Carries the stat sheet so the UI can apply the chosen bonus.</summary>
-    public struct PlayerLevelUpEvent : IEvent
-    {
-        public EntityStat PlayerStat { get; }
-        public PlayerLevelUpEvent(EntityStat playerStat) => PlayerStat = playerStat;
-    }
+    // PlayerLevelUpEvent moved to namespace entity (Entity/EntityEvents.cs): its payload is an
+    // EntityStat, so it lives in the entity package to keep Base independent of the entity layer.
 
     /// <summary>Raised whenever the player's XP value changes — on gain, level-up carry-over, or save restore.</summary>
     public struct PlayerXPChangedEvent : IEvent
@@ -40,6 +36,12 @@ namespace Base
     }
 
     public struct ResetStats :IEvent {}
+
+    /// <summary>
+    /// Raised by the skill-tree UI when it is reset, so each SkillBase can re-lock itself without
+    /// the player layer referencing UI types (breaks the player ↔ UI cycle).
+    /// </summary>
+    public struct SkillTreeResetEvent : IEvent { }
 
     
     #region Boosting Event:
@@ -72,33 +74,8 @@ namespace Base
     
 
     #region  UIEvent
-    public struct CraftGetInfoEvent: IEvent
-    {
-        public ItemCraftData itemCraftData;
-        public CraftGetInfoEvent(ItemCraftData itemCraftData)
-        {
-            this.itemCraftData = itemCraftData;
-        }
-    }
-
-    public struct StoreItemGetInfoEvent : IEvent
-    {
-        public ItemData itemData;
-        public StoreItemGetInfoEvent(ItemData itemData)
-        {
-            this.itemData = itemData;
-        }
-    }
-
-
-    public struct EquipEvent : IEvent
-    {
-        public ItemInventory itemInventory;
-        public EquipEvent(ItemInventory itemInventory)
-        {
-            this.itemInventory = itemInventory;
-        }
-    }
+    // Item-payload events (EquipEvent, StoreItemGetInfoEvent, CraftGetInfoEvent) live in
+    // namespace Inventory (Inventory/InventoryEvents.cs) so the Base layer does not depend on Inventory.
     //When something change in the inventory for instance looting, or some stat upgrade that effect the ui stat on inventory
     public struct OnInventoryChangedEvent:IEvent{} 
 

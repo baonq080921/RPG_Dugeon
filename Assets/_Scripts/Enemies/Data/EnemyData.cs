@@ -6,6 +6,10 @@ namespace enemy
     [CreateAssetMenu(fileName = "EnemyData", menuName = "RPG/Enemy Data")]
     public class EnemyData : ScriptableObject
     {
+        [field: Header("Identity")]
+        /// <summary>Which enemy variant this data describes. Must match the matching prefab entry on the EnemyPool.</summary>
+        [field: SerializeField] public EnemyType Type { get; private set; }
+
         [field:Header("Time stuff")]
         [field: SerializeField] public float IdleTime { get; private set; } = 2f;
         [field: SerializeField] public float AttackCooldown { get; private set; } = 1.5f;

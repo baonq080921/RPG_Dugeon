@@ -20,11 +20,6 @@ namespace player
         public override void Update()
         {
             base.Update();
-            if(Input.GetKeyDown(KeyCode.R))
-            {
-                // For testing purposes, respawn the player when R is pressed
-                stateMachine.ChangeState(player.playerIdleState);
-            }
         }
 
         public override void Exit()

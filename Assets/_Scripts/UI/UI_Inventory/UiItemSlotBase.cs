@@ -1,24 +1,26 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UiItemSlotBase : MonoBehaviour, IPointerDownHandler
+namespace UI
 {
-     [SerializeField] protected Sprite deafultSpriteSlot;
-    [field:SerializeField] protected Image image;
-
-    
-
-    protected virtual void Awake()
+    public class UiItemSlotBase : MonoBehaviour, IPointerDownHandler
     {
-        image = GetComponentInChildren<Image>();
-    }
-
-    protected virtual void Start(){}
+        [SerializeField] protected Sprite deafultSpriteSlot;
+        [field: SerializeField] protected Image image;
 
 
-    public virtual void OnPointerDown(PointerEventData eventData)
-    {
+
+        protected virtual void Awake()
+        {
+            image = GetComponentInChildren<Image>();
+        }
+
+        protected virtual void Start() { }
+
+
+        public virtual void OnPointerDown(PointerEventData eventData)
+        {
+        }
     }
 }

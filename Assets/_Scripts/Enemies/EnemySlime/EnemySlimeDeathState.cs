@@ -16,7 +16,7 @@ namespace enemy
             base.Enter();
             _enemySlime.CreateChild();
             stateTimer = 2f;
-            enemy.col.enabled = false;
+            _enemySlime.UnTargetableEnemy(true);
         }
 
         public override void Update()

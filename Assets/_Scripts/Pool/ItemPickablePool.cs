@@ -1,5 +1,6 @@
 using Base;
 using InteractiveObject;
+using Inventory;
 using UnityEngine;
 
 namespace Pool

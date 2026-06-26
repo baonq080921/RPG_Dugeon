@@ -18,6 +18,7 @@ namespace UI
 
         private SkillCooldownUI _cooldownUI;
         private Player _currentPlayer;
+        private EventBinding<SkillTreeResetEvent> _resetBinding;
 
         private void Awake()
         {
@@ -27,7 +28,8 @@ namespace UI
         private void OnEnable()
         {
             Player.ActivePlayerChanged += OnActivePlayerChanged;
-            UISkillTree.OnReset += SyncOverlay;
+            _resetBinding = new EventBinding<SkillTreeResetEvent>(SyncOverlay);
+            EventBus<SkillTreeResetEvent>.Register(_resetBinding);
             SkillBase.OnAnySkillUnlocked += SyncOverlay;
         }
 
@@ -42,7 +44,7 @@ namespace UI
         private void OnDisable()
         {
             Player.ActivePlayerChanged -= OnActivePlayerChanged;
-            UISkillTree.OnReset -= SyncOverlay;
+            EventBus<SkillTreeResetEvent>.Deregister(_resetBinding);
             SkillBase.OnAnySkillUnlocked -= SyncOverlay;
             UnsubscribeFromPlayer(_currentPlayer);
         }

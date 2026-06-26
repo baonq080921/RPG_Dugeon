@@ -1,40 +1,43 @@
 using UnityEngine;
-using enemy;
 using stateMachine;
-public class EnemyArcherMoveBackState : EnemyState
+
+namespace enemy
 {
-    private EnemyArcher _enemyArcher;
-    public EnemyArcherMoveBackState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
+    public class EnemyArcherMoveBackState : EnemyState
     {
-        _enemyArcher = enemy as EnemyArcher;
-    }
-
-    public override void Enter()
-    {
-        base.Enter();
-        stateTimer = 0.25f;
-        _enemyArcher.SetDirection(-_enemyArcher.direction);
-        _enemyArcher.Flip(_enemyArcher.direction);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        _enemyArcher.SetVelocity(new Vector2(_enemyArcher.direction * _enemyArcher.moveSpeed * _enemyArcher.enemyData.MoveMultiplier,rb.velocity.y));
-        if(!_enemyArcher.isGrounded || _enemyArcher.isTouchingWall)
+        private EnemyArcher _enemyArcher;
+        public EnemyArcherMoveBackState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
         {
-            _enemyArcher.SetVelocity(new Vector2(0.001f,rb.velocity.y));
-            stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
-            return;
+            _enemyArcher = enemy as EnemyArcher;
         }
-        if(stateTimer <= 0)
-        {
-            stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
-        }
-    }
 
-    public override void Exit()
-    {
-        base.Exit();
+        public override void Enter()
+        {
+            base.Enter();
+            stateTimer = 0.25f;
+            _enemyArcher.SetDirection(-_enemyArcher.direction);
+            _enemyArcher.Flip(_enemyArcher.direction);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            _enemyArcher.SetVelocity(new Vector2(_enemyArcher.direction * _enemyArcher.moveSpeed * _enemyArcher.enemyData.MoveMultiplier, rb.velocity.y));
+            if (!_enemyArcher.isGrounded || _enemyArcher.isTouchingWall)
+            {
+                _enemyArcher.SetVelocity(new Vector2(0.001f, rb.velocity.y));
+                stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
+                return;
+            }
+            if (stateTimer <= 0)
+            {
+                stateMachine.ChangeState(_enemyArcher.enemyArcherCombatState);
+            }
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+        }
     }
 }

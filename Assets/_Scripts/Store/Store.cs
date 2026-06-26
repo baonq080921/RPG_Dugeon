@@ -1,14 +1,18 @@
 using Base;
+using Inventory;
 using player;
 using UnityEngine;
 
-public class Store : MonoBehaviour
+namespace store
 {
-    private PlayerInventory playerInventory;
-    private void CanBuyItem()
+    public class Store : MonoBehaviour
     {
-        playerInventory = ServiceLocator.Get<Player>().GetComponent<PlayerInventory>();
-        float asset = playerInventory.Money;
-        
+        private PlayerInventory playerInventory;
+        private void CanBuyItem()
+        {
+            playerInventory = ServiceLocator.Get<Player>().GetComponent<PlayerInventory>();
+            float asset = playerInventory.Money;
+
+        }
     }
 }

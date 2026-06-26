@@ -1,301 +1,297 @@
-﻿
-
 using Base;
 using Stats;
 using UnityEngine;
-public enum EntityType
+
+namespace entity
 {
-    None,
-    PlayerNormal,
-    PlayerSpecial,
-    Enemy,
-    EnemyArcher
-}
-
-public class EntityStat : MonoBehaviour
-{
-    [SerializeField]private EntityType _entityType;
-    /// <summary>Read-only access to this entity's high-level type (player vs enemy) for systems that need to branch on it.</summary>
-    public EntityType EntityType => _entityType;
-    [SerializeField] private MajorStats _majorStats;
-    //[SerializeField] private OffensiveStats _offensiveStats;
-    [SerializeField] private DefensiveStats _defensiveStats;
-    [SerializeField] private OffensiveStats _offensiveStats;
-    private const float K = 100f; //Scaling factor for diminishing returns on armor
-    [field: SerializeField] public float StunDuration {get; private set;} = 0.3f;
-
-    private void Awake() => ResetAllStats();
-
-    public float GetHealthValue()
+    public enum EntityType
     {
-        float baseHealth = _defensiveStats.MaxHealth.GetValue();
-        float bonusHealth = _majorStats.Vitality.GetValue() * 10f;
-        float maxHealth = baseHealth + bonusHealth;
-        return maxHealth; 
+        None,
+        PlayerNormal,
+        PlayerSpecial,
+        Enemy,
+        EnemyArcher
     }
 
-
-    public float GetEnvasionValue()
+    public class EntityStat : MonoBehaviour
     {
+        [SerializeField] private EntityType _entityType;
+        /// <summary>Read-only access to this entity's high-level type (player vs enemy) for systems that need to branch on it.</summary>
+        public EntityType EntityType => _entityType;
+        [SerializeField] private MajorStats _majorStats;
+        //[SerializeField] private OffensiveStats _offensiveStats;
+        [SerializeField] private DefensiveStats _defensiveStats;
+        [SerializeField] private OffensiveStats _offensiveStats;
+        private const float K = 100f; //Scaling factor for diminishing returns on armor
+        [field: SerializeField] public float StunDuration { get; private set; } = 0.3f;
 
-        float baseEnvasion = _defensiveStats.Envasion.GetValue();
-        float bonusEnvasion = _majorStats.Agility.GetValue() * 0.5f; // with each agilty point increase they will bonus 0.5 % envasion chance
-        float totalEnvasion = baseEnvasion + bonusEnvasion;
-        float envasionCap = 85f;
-        float finalEnvasion = envasionCap < totalEnvasion ? envasionCap : totalEnvasion;
-        return finalEnvasion;
-    }
+        private void Awake() => ResetAllStats();
 
-
-    public float GetPhysicalDamageValue(out bool isCrit)
-    {
-        // Calculate damage based on offensive stats and major stats
-        float baseDamage = _offensiveStats.Damage.GetValue();
-        float bonusDamage = _majorStats.Strength.GetValue(); // with each strength point increase they will bonus 2 damage
-        // Calculate critical hit chance and power
-        float critPowerBase = _offensiveStats.CritPower.GetValue();
-        float bonusCritPower = _majorStats.Strength.GetValue() * 0.5f; // with each strength point increase they will bonus 0.5 % crit power
-
-        float criteChanceBase = _offensiveStats.CritChance.GetValue();
-        float bonusCritChance = _majorStats.Agility.GetValue() * 0.3f; // with each Agility point increase they will bonus 0.3 % crit chance
-
-        float totalDamage = baseDamage + bonusDamage;
-        float totalCritPower = critPowerBase + bonusCritPower;
-
-        float totalCritChance = criteChanceBase + bonusCritChance;
-        float critCap = 100f;
-        totalCritChance = totalCritChance > critCap ? critCap : totalCritChance;
-        float finalDamage = Random.Range(0f, 100f) < totalCritChance ? totalDamage + (totalCritPower / 100f) : totalDamage;
-        isCrit = finalDamage > totalDamage;
-        return finalDamage;
-        
-    }
-
-    public float GetElementalDamageValue(out ElementType elementType)
-    {
-        float elementalDamage = _offensiveStats.ElementalDamage.GetValue();
-        float bonusElementalDamage = _majorStats.Intelligence.GetValue(); // with each intelligence point increase they will bonus 0.5 % elemental damage
-        float totalElementalDamage = elementalDamage + bonusElementalDamage;
-
-        if(_entityType == EntityType.PlayerNormal)
+        public float GetHealthValue()
         {
-            elementType = ElementType.Electric;
-            return totalElementalDamage; // Player normal attack will only deal light damage
+            float baseHealth = _defensiveStats.MaxHealth.GetValue();
+            float bonusHealth = _majorStats.Vitality.GetValue() * 10f;
+            float maxHealth = baseHealth + bonusHealth;
+            return maxHealth;
         }
-        else if(_entityType == EntityType.EnemyArcher)
+
+
+        public float GetEnvasionValue()
         {
-            elementType = ElementType.Ice;
-            return totalElementalDamage ;
+
+            float baseEnvasion = _defensiveStats.Envasion.GetValue();
+            float bonusEnvasion = _majorStats.Agility.GetValue() * 0.5f; // with each agilty point increase they will bonus 0.5 % envasion chance
+            float totalEnvasion = baseEnvasion + bonusEnvasion;
+            float envasionCap = 85f;
+            float finalEnvasion = envasionCap < totalEnvasion ? envasionCap : totalEnvasion;
+            return finalEnvasion;
         }
-        else 
+
+
+        public float GetPhysicalDamageValue(out bool isCrit)
         {
-            elementType = ElementType.None;
-            return 0f; // Enemies do not deal elemental damage in this design
+            // Calculate damage based on offensive stats and major stats
+            float baseDamage = _offensiveStats.Damage.GetValue();
+            float bonusDamage = _majorStats.Strength.GetValue(); // with each strength point increase they will bonus 2 damage
+            // Calculate critical hit chance and power
+            float critPowerBase = _offensiveStats.CritPower.GetValue();
+            float bonusCritPower = _majorStats.Strength.GetValue() * 0.5f; // with each strength point increase they will bonus 0.5 % crit power
+
+            float criteChanceBase = _offensiveStats.CritChance.GetValue();
+            float bonusCritChance = _majorStats.Agility.GetValue() * 0.3f; // with each Agility point increase they will bonus 0.3 % crit chance
+
+            float totalDamage = baseDamage + bonusDamage;
+            float totalCritPower = critPowerBase + bonusCritPower;
+
+            float totalCritChance = criteChanceBase + bonusCritChance;
+            float critCap = 100f;
+            totalCritChance = totalCritChance > critCap ? critCap : totalCritChance;
+            float finalDamage = Random.Range(0f, 100f) < totalCritChance ? totalDamage + (totalCritPower / 100f) : totalDamage;
+            isCrit = finalDamage > totalDamage;
+            return finalDamage;
+
         }
-    }
+
+        public float GetElementalDamageValue(out ElementType elementType)
+        {
+            float elementalDamage = _offensiveStats.ElementalDamage.GetValue();
+            float bonusElementalDamage = _majorStats.Intelligence.GetValue(); // with each intelligence point increase they will bonus 0.5 % elemental damage
+            float totalElementalDamage = elementalDamage + bonusElementalDamage;
+
+            if (_entityType == EntityType.PlayerNormal)
+            {
+                elementType = ElementType.Electric;
+                return totalElementalDamage; // Player normal attack will only deal light damage
+            }
+            else if (_entityType == EntityType.EnemyArcher)
+            {
+                elementType = ElementType.Ice;
+                return totalElementalDamage;
+            }
+            else
+            {
+                elementType = ElementType.None;
+                return 0f; // Enemies do not deal elemental damage in this design
+            }
+        }
 
 
 
 
-    public float GetElementalResitanceValue()
-    {
-        float baseResitance = _defensiveStats.ElementalResitance.GetValue();
-        float bonusResitance = _majorStats.Intelligence.GetValue() * 0.5f; // with each intelligence point increase they will bonus 0.5 % elemental resitance
-        float totalResitance = baseResitance + bonusResitance;
-        float mitigation = K / (K + totalResitance); // Diminishing returns formula
-        return mitigation;
-    }
-    /// <summary>
-    /// THe higher the Migitaion the player more defensive invincible
-    /// </summary>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public float GetMigiationValue()
-    {
+        public float GetElementalResitanceValue()
+        {
+            float baseResitance = _defensiveStats.ElementalResitance.GetValue();
+            float bonusResitance = _majorStats.Intelligence.GetValue() * 0.5f; // with each intelligence point increase they will bonus 0.5 % elemental resitance
+            float totalResitance = baseResitance + bonusResitance;
+            float mitigation = K / (K + totalResitance); // Diminishing returns formula
+            return mitigation;
+        }
+        /// <summary>
+        /// THe higher the Migitaion the player more defensive invincible
+        /// </summary>
+        public float GetMigiationValue()
+        {
 
-        float baseAmor = _defensiveStats.Amor.GetValue();
-        float bonusAmor = _majorStats.Vitality.GetValue(); // with each vitality point increase they will bonus 1 armor
-        // Calculate total armor and apply diminishing returns
-        float totalAmor = baseAmor + bonusAmor;
-        float mitigation = K / (K + totalAmor); // Diminishing returns formula
-        return mitigation;
-    }
-    
-  
-    public float GetKnockBackThreshHold()
-    {
-        return _defensiveStats.KnockBackThreshHold.GetValue();
-    }
+            float baseAmor = _defensiveStats.Amor.GetValue();
+            float bonusAmor = _majorStats.Vitality.GetValue(); // with each vitality point increase they will bonus 1 armor
+            // Calculate total armor and apply diminishing returns
+            float totalAmor = baseAmor + bonusAmor;
+            float mitigation = K / (K + totalAmor); // Diminishing returns formula
+            return mitigation;
+        }
 
 
-    public float GetAttackMultiplier()
-    {
-        float baseAttackSpeed = _offensiveStats.AttackMultiplier.GetValue();
-        float bonusAttackSpeed = _majorStats.Agility.GetValue() * 0.5f; // with each Agility point increase they will bonus 0.5 % attack speed
-        float totalAttackSpeed = baseAttackSpeed + bonusAttackSpeed;
-        return totalAttackSpeed;
-    }
+        public float GetKnockBackThreshHold()
+        {
+            return _defensiveStats.KnockBackThreshHold.GetValue();
+        }
 
-    public float GetHealthRegen()
-    {
-        float maxHealth = GetHealthValue();
-        float baseRegen = _defensiveStats.HealthRegen.GetValue();
-        float regenCap = maxHealth * 0.05f;
-        return baseRegen > regenCap ? regenCap : baseRegen;
-    }
+
+        public float GetAttackMultiplier()
+        {
+            float baseAttackSpeed = _offensiveStats.AttackMultiplier.GetValue();
+            float bonusAttackSpeed = _majorStats.Agility.GetValue() * 0.5f; // with each Agility point increase they will bonus 0.5 % attack speed
+            float totalAttackSpeed = baseAttackSpeed + bonusAttackSpeed;
+            return totalAttackSpeed;
+        }
+
+        public float GetHealthRegen()
+        {
+            float maxHealth = GetHealthValue();
+            float baseRegen = _defensiveStats.HealthRegen.GetValue();
+            float regenCap = maxHealth * 0.05f;
+            return baseRegen > regenCap ? regenCap : baseRegen;
+        }
 
 
 
 
-    #region Display Values (deterministic, no randomization — caps match combat methods)
-    //This server the same as all the get but is server only for display all the stats that player define in the SO file
-    //example attack, amor, critchance etc...
-    public float GetDamageDisplayValue() => _offensiveStats.Damage.GetValue() + _majorStats.Strength.GetValue();
-    public float GetCritChanceDisplayValue()
-    {
-        float total = _offensiveStats.CritChance.GetValue() + _majorStats.Agility.GetValue() * 0.3f;
-        return total > 100f ? 100f : total;
-    }
-    public float GetCritPowerDisplayValue() => _offensiveStats.CritPower.GetValue() + _majorStats.Strength.GetValue() * 0.5f;
-    public float GetArmorDisplayValue() => _defensiveStats.Amor.GetValue() + _majorStats.Vitality.GetValue();
-    public float GetElementalDamageDisplay() => _offensiveStats.ElementalDamage.GetValue() + _majorStats.Intelligence.GetValue();
-    public float GetElementalResistanceDisplayValue() => (1f - GetElementalResitanceValue()) * 100f;
-    #endregion
+        #region Display Values (deterministic, no randomization — caps match combat methods)
+        //This server the same as all the get but is server only for display all the stats that player define in the SO file
+        //example attack, amor, critchance etc...
+        public float GetDamageDisplayValue() => _offensiveStats.Damage.GetValue() + _majorStats.Strength.GetValue();
+        public float GetCritChanceDisplayValue()
+        {
+            float total = _offensiveStats.CritChance.GetValue() + _majorStats.Agility.GetValue() * 0.3f;
+            return total > 100f ? 100f : total;
+        }
+        public float GetCritPowerDisplayValue() => _offensiveStats.CritPower.GetValue() + _majorStats.Strength.GetValue() * 0.5f;
+        public float GetArmorDisplayValue() => _defensiveStats.Amor.GetValue() + _majorStats.Vitality.GetValue();
+        public float GetElementalDamageDisplay() => _offensiveStats.ElementalDamage.GetValue() + _majorStats.Intelligence.GetValue();
+        public float GetElementalResistanceDisplayValue() => (1f - GetElementalResitanceValue()) * 100f;
+        #endregion
 
-    /// <summary>
-    /// Stats for Player Only
-    /// </summary>
-    /// <param name="statType"></param>
-    /// <returns></returns>
-    private int _strengthPoints;
-    private int _agilityPoints;
-    private int _intelligencePoints;
-    private int _vitalityPoints;
+        /// <summary>
+        /// Stats for Player Only
+        /// </summary>
+        private int _strengthPoints;
+        private int _agilityPoints;
+        private int _intelligencePoints;
+        private int _vitalityPoints;
 
-    public int GetAllocatedPoints(StatType statType) => statType switch
-    {
-        StatType.Strength     => _strengthPoints,
-        StatType.Agility      => _agilityPoints,
-        StatType.Intelligence => _intelligencePoints,
-        StatType.Vitality     => _vitalityPoints,
-        _                     => 0
-    };
+        public int GetAllocatedPoints(StatType statType) => statType switch
+        {
+            StatType.Strength => _strengthPoints,
+            StatType.Agility => _agilityPoints,
+            StatType.Intelligence => _intelligencePoints,
+            StatType.Vitality => _vitalityPoints,
+            _ => 0
+        };
 
 #if UNITY_EDITOR
-    [ContextMenu("Reset All Stats")]
+        [ContextMenu("Reset All Stats")]
 #endif
-    public void ResetAllStats()
-    {
-        _strengthPoints     = 0;
-        _agilityPoints      = 0;
-        _intelligencePoints = 0;
-        _vitalityPoints     = 0;
-
-        if (_majorStats != null)
+        public void ResetAllStats()
         {
-            _majorStats.Strength.Reset();
-            _majorStats.Agility.Reset();
-            _majorStats.Intelligence.Reset();
-            _majorStats.Vitality.Reset();
+            _strengthPoints = 0;
+            _agilityPoints = 0;
+            _intelligencePoints = 0;
+            _vitalityPoints = 0;
+
+            if (_majorStats != null)
+            {
+                _majorStats.Strength.Reset();
+                _majorStats.Agility.Reset();
+                _majorStats.Intelligence.Reset();
+                _majorStats.Vitality.Reset();
+            }
+
+            if (_offensiveStats != null)
+            {
+                _offensiveStats.Damage.Reset();
+                _offensiveStats.CritChance.Reset();
+                _offensiveStats.CritPower.Reset();
+                _offensiveStats.AttackMultiplier.Reset();
+                _offensiveStats.ElementalDamage.Reset();
+            }
+
+            if (_defensiveStats != null)
+            {
+                _defensiveStats.MaxHealth.Reset();
+                _defensiveStats.Amor.Reset();
+                _defensiveStats.Envasion.Reset();
+                _defensiveStats.ElementalResitance.Reset();
+                _defensiveStats.KnockBackThreshHold.Reset();
+                _defensiveStats.HealthRegen.Reset();
+            }
         }
 
-        if (_offensiveStats != null)
+
+        /// <summary>Permanently adds 1 point to the chosen major stat. Called by the level-up UI.</summary>
+        public void AddMajorStatPoint(StatType statType)
         {
-            _offensiveStats.Damage.Reset();
-            _offensiveStats.CritChance.Reset();
-            _offensiveStats.CritPower.Reset();
-            _offensiveStats.AttackMultiplier.Reset();
-            _offensiveStats.ElementalDamage.Reset();
+            switch (statType)
+            {
+                case StatType.Strength: StrenghLevelUp(); _strengthPoints++; return;
+                case StatType.Agility: AgilityLevelUp(); _agilityPoints++; return;
+                case StatType.Intelligence: IntelegenceLevelUp(); _intelligencePoints++; return;
+                case StatType.Vitality: VitalityLevelUp(); _vitalityPoints++; return;
+            }
         }
 
-        if (_defensiveStats != null)
+
+        private void StrenghLevelUp()
         {
-            _defensiveStats.MaxHealth.Reset();
-            _defensiveStats.Amor.Reset();
-            _defensiveStats.Envasion.Reset();
-            _defensiveStats.ElementalResitance.Reset();
-            _defensiveStats.KnockBackThreshHold.Reset();
-            _defensiveStats.HealthRegen.Reset();
+            _offensiveStats.Damage.AddModifier(1, "damage");
+            _offensiveStats.CritPower.AddModifier(0.5f, "critPower");
         }
-    }
-
-
-    /// <summary>Permanently adds 1 point to the chosen major stat. Called by the level-up UI.</summary>
-    public void AddMajorStatPoint(StatType statType)
-    {
-        switch (statType)
+        private void AgilityLevelUp()
         {
-            case StatType.Strength:     StrenghLevelUp();     _strengthPoints++;     return;
-            case StatType.Agility:      AgilityLevelUp();     _agilityPoints++;      return;
-            case StatType.Intelligence: IntelegenceLevelUp(); _intelligencePoints++; return;
-            case StatType.Vitality:     VitalityLevelUp();    _vitalityPoints++;     return;
+            _defensiveStats.Envasion.AddModifier(0.5f, "envasion");
+            _offensiveStats.CritChance.AddModifier(0.3f, "critChance");
         }
-    }
-
-
-    private void StrenghLevelUp()
-    {
-        _offensiveStats.Damage.AddModifier(1,"damage");
-        _offensiveStats.CritPower.AddModifier(0.5f,"critPower");
-    }
-    private void AgilityLevelUp()
-    {
-        _defensiveStats.Envasion.AddModifier(0.5f,"envasion");
-        _offensiveStats.CritChance.AddModifier(0.3f,"critChance");
-    }
-    private void IntelegenceLevelUp()
-    {
-        _offensiveStats.ElementalDamage.AddModifier(1,"magicPoint");
-        _defensiveStats.ElementalResitance.AddModifier(0.5f,"MagicResitance");
-    }
-
-
-    private void VitalityLevelUp()
-    {
-        _defensiveStats.MaxHealth.AddModifier(5,"healPoint");
-        _defensiveStats.Amor.AddModifier(1f,"Amor");
-    }
-
-
-    public Stat GetStatByType(StatType statType)
-    {
-        switch (statType)
+        private void IntelegenceLevelUp()
         {
-
-            case StatType.Strength: 
-                return _majorStats.Strength;
-            case StatType.Agility: 
-                return _majorStats.Agility;
-            case StatType.Intelligence: 
-                return _majorStats.Intelligence;
-            case StatType.Vitality: 
-                return _majorStats.Vitality;
-
-            case StatType.Damage: 
-                return  _offensiveStats.Damage;
-             case StatType.CritChance: 
-                return  _offensiveStats.CritChance;
-            case StatType.CritPower: 
-                return  _offensiveStats.CritPower;
-            case StatType.ElementalDamage: 
-                return  _offensiveStats.ElementalDamage;
-            case StatType.AttackMultiplier:
-                return _offensiveStats.AttackMultiplier;
-            case StatType.HealthRegen:
-                return _defensiveStats.HealthRegen;
-            case StatType.Envasion:
-                return _defensiveStats.Envasion;
-            case StatType.Armor:
-                return _defensiveStats.Amor;
-            case StatType.MaxHealth:
-                return _defensiveStats.MaxHealth;
-            case StatType.ElementalResitance:
-                return _defensiveStats.ElementalResitance;
-            case StatType.KnockBackThreshHold:
-                return _defensiveStats.KnockBackThreshHold;
+            _offensiveStats.ElementalDamage.AddModifier(1, "magicPoint");
+            _defensiveStats.ElementalResitance.AddModifier(0.5f, "MagicResitance");
         }
-        return null;
+
+
+        private void VitalityLevelUp()
+        {
+            _defensiveStats.MaxHealth.AddModifier(5, "healPoint");
+            _defensiveStats.Amor.AddModifier(1f, "Amor");
+        }
+
+
+        public Stat GetStatByType(StatType statType)
+        {
+            switch (statType)
+            {
+
+                case StatType.Strength:
+                    return _majorStats.Strength;
+                case StatType.Agility:
+                    return _majorStats.Agility;
+                case StatType.Intelligence:
+                    return _majorStats.Intelligence;
+                case StatType.Vitality:
+                    return _majorStats.Vitality;
+
+                case StatType.Damage:
+                    return _offensiveStats.Damage;
+                case StatType.CritChance:
+                    return _offensiveStats.CritChance;
+                case StatType.CritPower:
+                    return _offensiveStats.CritPower;
+                case StatType.ElementalDamage:
+                    return _offensiveStats.ElementalDamage;
+                case StatType.AttackMultiplier:
+                    return _offensiveStats.AttackMultiplier;
+                case StatType.HealthRegen:
+                    return _defensiveStats.HealthRegen;
+                case StatType.Envasion:
+                    return _defensiveStats.Envasion;
+                case StatType.Armor:
+                    return _defensiveStats.Amor;
+                case StatType.MaxHealth:
+                    return _defensiveStats.MaxHealth;
+                case StatType.ElementalResitance:
+                    return _defensiveStats.ElementalResitance;
+                case StatType.KnockBackThreshHold:
+                    return _defensiveStats.KnockBackThreshHold;
+            }
+            return null;
+        }
     }
 }

@@ -1,71 +1,74 @@
 using UnityEngine;
 
-public class UIToolTip : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private RectTransform rectTransform;
-    [SerializeField] private float _edgeGap = 8f;
-
-    private static readonly Vector3 HiddenPos = new Vector3(9999f, 9999f, 0f);
-
-    void Awake()
+    public class UIToolTip : MonoBehaviour
     {
-        rectTransform.position = HiddenPos;
-    }
+        [SerializeField] private RectTransform rectTransform;
+        [SerializeField] private float _edgeGap = 8f;
 
-    /// <summary>
-    /// Shows or hides the tooltip. When showing, animates to an edge-aware position near <paramref name="rect"/>.
-    /// </summary>
-    public virtual void ShowToolTip(bool isShow, RectTransform rect)
-    {
-        if (!isShow)
+        private static readonly Vector3 HiddenPos = new Vector3(9999f, 9999f, 0f);
+
+        void Awake()
         {
-            HideToolTip();
-            return;
+            rectTransform.position = HiddenPos;
         }
 
-        MoveToTarget(rect);
-    }
+        /// <summary>
+        /// Shows or hides the tooltip. When showing, animates to an edge-aware position near <paramref name="rect"/>.
+        /// </summary>
+        public virtual void ShowToolTip(bool isShow, RectTransform rect)
+        {
+            if (!isShow)
+            {
+                HideToolTip();
+                return;
+            }
 
-    private void MoveToTarget(RectTransform rect)
-    {
-        if (rectTransform == null || rect == null) return;
-        rectTransform.position = GetAdjustedPosition(rect);
-    }
+            MoveToTarget(rect);
+        }
 
-    /// <summary>
-    /// Returns the tooltip world position adjusted so it stays fully on screen,
-    /// flipping horizontally based on screen half and clamping vertically so it
-    /// never overflows the top or bottom edge.
-    /// </summary>
-    private Vector3 GetAdjustedPosition(RectTransform rect)
-    {
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, rect.position);
-        Vector3 targetPos = rect.position;
+        private void MoveToTarget(RectTransform rect)
+        {
+            if (rectTransform == null || rect == null) return;
+            rectTransform.position = GetAdjustedPosition(rect);
+        }
 
-        // Horizontal: flip to opposite side based on screen half
-        float horizontalOffset = (rectTransform.rect.width + rect.rect.width) * 0.5f + _edgeGap;
-        if (screenPos.x > Screen.width * 0.5f)
-            targetPos.x -= horizontalOffset;
-        else
-            targetPos.x += horizontalOffset;
+        /// <summary>
+        /// Returns the tooltip world position adjusted so it stays fully on screen,
+        /// flipping horizontally based on screen half and clamping vertically so it
+        /// never overflows the top or bottom edge.
+        /// </summary>
+        private Vector3 GetAdjustedPosition(RectTransform rect)
+        {
+            Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, rect.position);
+            Vector3 targetPos = rect.position;
 
-        // Vertical: clamp so tooltip doesn't overflow top or bottom
-        float tooltipHalfHeight = rectTransform.rect.height * 0.5f;
-        float minScreenY = tooltipHalfHeight + _edgeGap;
-        float maxScreenY = Screen.height - tooltipHalfHeight - _edgeGap;
-        float clampedScreenY = Mathf.Clamp(screenPos.y, minScreenY, maxScreenY);
+            // Horizontal: flip to opposite side based on screen half
+            float horizontalOffset = (rectTransform.rect.width + rect.rect.width) * 0.5f + _edgeGap;
+            if (screenPos.x > Screen.width * 0.5f)
+                targetPos.x -= horizontalOffset;
+            else
+                targetPos.x += horizontalOffset;
 
-        // Convert the clamped screen Y back to world space
-        Vector2 clampedScreenPos = new Vector2(screenPos.x, clampedScreenY);
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, clampedScreenPos, null, out Vector3 clampedWorldPos);
-        targetPos.y = clampedWorldPos.y;
+            // Vertical: clamp so tooltip doesn't overflow top or bottom
+            float tooltipHalfHeight = rectTransform.rect.height * 0.5f;
+            float minScreenY = tooltipHalfHeight + _edgeGap;
+            float maxScreenY = Screen.height - tooltipHalfHeight - _edgeGap;
+            float clampedScreenY = Mathf.Clamp(screenPos.y, minScreenY, maxScreenY);
 
-        return targetPos;
-    }
+            // Convert the clamped screen Y back to world space
+            Vector2 clampedScreenPos = new Vector2(screenPos.x, clampedScreenY);
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, clampedScreenPos, null, out Vector3 clampedWorldPos);
+            targetPos.y = clampedWorldPos.y;
 
-    private void HideToolTip()
-    {
-        if (rectTransform == null) return;
-        rectTransform.position = HiddenPos;
+            return targetPos;
+        }
+
+        private void HideToolTip()
+        {
+            if (rectTransform == null) return;
+            rectTransform.position = HiddenPos;
+        }
     }
 }

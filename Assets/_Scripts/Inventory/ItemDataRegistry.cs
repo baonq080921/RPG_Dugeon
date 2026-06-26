@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Save
+namespace Inventory
 {
     /// <summary>
     /// Maps every <see cref="ItemData.ItemId"/> to its ScriptableObject at runtime.
     /// Place the generated asset at Assets/Resources/ItemDataRegistry.asset so it can
     /// be loaded without Addressables.
     /// </summary>
-    [CreateAssetMenu(fileName = "ItemDataRegistry", menuName = "RPG/Save/ItemDataRegistry")]
+    [CreateAssetMenu(fileName = "ItemDataRegistry", menuName = "RPG/Inventory/ItemDataRegistry")]
     public class ItemDataRegistry : ScriptableObject
     {
         [SerializeField] private List<ItemData> _items = new List<ItemData>();
@@ -75,7 +75,7 @@ namespace Save
         }
 #endif
 
-        /// <summary>Builds the lookup dictionary. Called once by <see cref="SaveManager"/> on startup.</summary>
+        /// <summary>Builds the lookup dictionary. Called once by PlayerPersistence on Awake.</summary>
         public void Initialize()
         {
             _map = new Dictionary<string, ItemData>();

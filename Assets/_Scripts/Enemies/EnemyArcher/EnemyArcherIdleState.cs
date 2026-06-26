@@ -1,35 +1,37 @@
-using enemy;
 using stateMachine;
 using UnityEngine;
 
-public class EnemyArcherIdleState : EnemyState
+namespace enemy
 {
-    private EnemyArcher _enemyArcher;
-    public EnemyArcherIdleState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
+    public class EnemyArcherIdleState : EnemyState
     {
-        _enemyArcher = enemy as EnemyArcher;
+        private EnemyArcher _enemyArcher;
+        public EnemyArcherIdleState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
+        {
+            _enemyArcher = enemy as EnemyArcher;
+        }
+
+
+        public override void Enter()
+        {
+            base.Enter();
+            _enemyArcher.SetVelocity(Vector2.zero);
+        }
+
+
+        public override void Update()
+        {
+            base.Update();
+            if (_enemyArcher.IsPlayerDetected())
+                stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+        }
+
+
     }
-
-
-    public override void Enter()
-    {
-        base.Enter();
-        _enemyArcher.SetVelocity(Vector2.zero);
-    }
-
-
-    public override void Update()
-    {
-        base.Update();
-        if(_enemyArcher.IsPlayerDetected())
-            stateMachine.ChangeState(_enemyArcher.enemyMoveState);
-     
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-    }
-
-
 }

@@ -1,12 +1,15 @@
 using Base;
-using NPC;
 using UnityEngine;
-public class NPCShop : Npc
+
+namespace NPC
 {
-    
-    public override void OnInteract()
+    public class NPCShop : Npc
     {
-        base.OnInteract();
-        EventBus<StoreCallEvent>.Raise(new StoreCallEvent());
+
+        public override void OnInteract()
+        {
+            base.OnInteract();
+            EventBus<StoreCallEvent>.Raise(new StoreCallEvent());
+        }
     }
 }

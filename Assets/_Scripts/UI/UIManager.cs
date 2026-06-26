@@ -1,41 +1,49 @@
 using Base;
+using Interfaces;
 using player;
-using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
+namespace UI
 {
-    public UISkillToolTip uISkillToolTip;
-    public UISkillTree uISkillTree;
-    public UI_Inventory uIInventory;
-    public UICanvasChange uICanvasChange;
-
-    private void Awake()
+    public class UIManager : MonoBehaviour
     {
-        if (ServiceLocator.Get<UIManager>() != null) return;
+        public UISkillToolTip uISkillToolTip;
+        public UISkillTree uISkillTree;
+        public UI_Inventory uIInventory;
+        public UICanvasChange uICanvasChange;
 
-        if (uISkillToolTip == null)
-            uISkillToolTip = GetComponentInChildren<UISkillToolTip>();
-        if (uISkillTree == null)
-            uISkillTree = GetComponentInChildren<UISkillTree>();
-        if(uIInventory == null)
-            uIInventory = GetComponentInChildren<UI_Inventory>();
-        if(uICanvasChange == null)
-            uICanvasChange = GetComponentInChildren<UICanvasChange>();
-        ServiceLocator.Register(this);
+        private void Awake()
+        {
+            if (ServiceLocator.Get<UIManager>() != null) return;
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+            if (uISkillToolTip == null)
+                uISkillToolTip = GetComponentInChildren<UISkillToolTip>();
+            if (uISkillTree == null)
+                uISkillTree = GetComponentInChildren<UISkillTree>();
+            if (uIInventory == null)
+                uIInventory = GetComponentInChildren<UI_Inventory>();
+            if (uICanvasChange == null)
+                uICanvasChange = GetComponentInChildren<UICanvasChange>();
+            ServiceLocator.Register(this);
 
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
+            // Expose the skill tree behind ISkillTreeState so the persistence (player) layer can
+            // save/restore unlocked nodes without referencing UI types (breaks player ↔ UI).
+            if (uISkillTree != null)
+                ServiceLocator.Register<ISkillTreeState>(uISkillTree);
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        bool hasPlayer = FindObjectOfType<Player>() != null;
-        gameObject.SetActive(hasPlayer);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            bool hasPlayer = FindObjectOfType<Player>() != null;
+            gameObject.SetActive(hasPlayer);
+        }
     }
 }

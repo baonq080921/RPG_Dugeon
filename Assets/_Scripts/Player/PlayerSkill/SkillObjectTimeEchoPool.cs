@@ -1,7 +1,7 @@
 using Base;
 using UnityEngine;
 
-namespace Pool
+namespace player
 {
     /// <summary>
     /// Manages two <see cref="ObjectPool{T}"/> instances — one for the default echo prefab

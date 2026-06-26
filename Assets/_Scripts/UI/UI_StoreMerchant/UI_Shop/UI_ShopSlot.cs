@@ -1,26 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using Base;
+using Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ShopSlot : MonoBehaviour, IPointerDownHandler
+namespace UI
 {
-    public ItemData itemData;
-    [SerializeField] private Image _image;
+    public class UI_ShopSlot : MonoBehaviour, IPointerDownHandler
+    {
+        public ItemData itemData;
+        [SerializeField] private Image _image;
 
-    void Awake()
-    {
-        _image = GetComponentInChildren<Image>();
-    }
-    void Start()
-    {
-        _image.sprite = itemData.Sprite;
-    }
+        void Awake()
+        {
+            _image = GetComponentInChildren<Image>();
+        }
+        void Start()
+        {
+            _image.sprite = itemData.Sprite;
+        }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        EventBus<StoreItemGetInfoEvent>.Raise(new StoreItemGetInfoEvent(itemData));
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            EventBus<StoreItemGetInfoEvent>.Raise(new StoreItemGetInfoEvent(itemData));
+        }
     }
 }

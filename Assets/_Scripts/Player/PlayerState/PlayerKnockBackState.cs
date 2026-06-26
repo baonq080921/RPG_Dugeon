@@ -1,3 +1,4 @@
+using entity;
 using stateMachine;
 using UnityEngine;
 namespace player

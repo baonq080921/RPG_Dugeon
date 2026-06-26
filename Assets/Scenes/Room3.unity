@@ -4730,6 +4730,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3607858365617138029, guid: 7f29f2d73641420449289861ff763c82, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3672419819144503979, guid: 7f29f2d73641420449289861ff763c82, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4781,6 +4785,14 @@ PrefabInstance:
     - target: {fileID: 6719049403392532424, guid: 7f29f2d73641420449289861ff763c82, type: 3}
       propertyPath: m_Name
       value: PlayerPrefabs
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405364080011966041, guid: 7f29f2d73641420449289861ff763c82, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405364080011966041, guid: 7f29f2d73641420449289861ff763c82, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -41773,7 +41785,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &6827380650037768866
 GameObject:
   m_ObjectHideFlags: 0
@@ -41793,7 +41805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &6827380650312248715
 GameObject:
   m_ObjectHideFlags: 0
@@ -41813,7 +41825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &7165584578942719960
 GameObject:
   m_ObjectHideFlags: 0
@@ -42014,7 +42026,7 @@ MonoBehaviour:
   currentHealth: 1
   _goldDropAmount: 0
   _animator: {fileID: 6010290392597989973}
-  _sceneEntityId: f3cf320e-1c3f-4615-9413-6292bee3332e
+  _sceneEntityId: 4e99162d-3c31-479f-98a7-0593a6e63556
   _skillPointReward: 5
   _triggerQuestEvent: 1
 --- !u!114 &7867381126870088347
@@ -42032,7 +42044,7 @@ MonoBehaviour:
   currentHealth: 1
   _goldDropAmount: 0
   _animator: {fileID: 6010290392161037278}
-  _sceneEntityId: f3cf320e-1c3f-4615-9413-6292bee3332e
+  _sceneEntityId: abacc93e-8ade-459b-aea1-c866e31b7ed5
   _skillPointReward: 5
   _triggerQuestEvent: 1
 --- !u!114 &7867381128257356857
@@ -42050,7 +42062,7 @@ MonoBehaviour:
   currentHealth: 1
   _goldDropAmount: 0
   _animator: {fileID: 6010290393414096252}
-  _sceneEntityId: f3cf320e-1c3f-4615-9413-6292bee3332e
+  _sceneEntityId: 6a0be918-00fd-41de-9bcd-a4294556def1
   _skillPointReward: 5
   _triggerQuestEvent: 1
 --- !u!114 &7956168755841894835

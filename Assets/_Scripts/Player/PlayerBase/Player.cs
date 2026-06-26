@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using Base;
+using entity;
+using Inventory;
 using Pool;
 using stateMachine;
 using UnityEngine;
@@ -12,7 +14,7 @@ namespace player
     /// Override <see cref="CreateStates"/> in a subclass to swap individual states for a
     /// different character without touching any shared logic.
     /// </summary>
-    public class Player : Entity
+    public class Player : Entity, IItemEffectTarget
     {
         [field: SerializeField] public CharacterData Data { get; private set; }
         /// <inheritdoc/>
@@ -82,9 +84,27 @@ namespace player
         //PLayer References
         public PlayerHealth playerHealth {get; private set;}
         public PlayerCombat playerCombat {get; private set;}
-        public PlayerVfx playerVfx {get; private set;}
         public PlayerLevel playerLevel {get ; private set;}
         public PlayerInventory playerInventory {get; private set;}
+
+        // --- IItemEffectTarget: lets Inventory item effects act on the player through an entity-level
+        // abstraction, so the Inventory package never references the player package. ---
+        Entity IItemEffectTarget.Entity => this;
+        event Action IItemEffectTarget.OnAttacking
+        {
+            add    => playerCombat.OnPlayerAttacking += value;
+            remove => playerCombat.OnPlayerAttacking -= value;
+        }
+        event Action<Transform> IItemEffectTarget.OnHitEnemy
+        {
+            add    => playerCombat.OnPlayerHitEnemy += value;
+            remove => playerCombat.OnPlayerHitEnemy -= value;
+        }
+        event Action IItemEffectTarget.OnTookDamage
+        {
+            add    => playerHealth.OnPlayerTalkingDamage += value;
+            remove => playerHealth.OnPlayerTalkingDamage -= value;
+        }
 
         protected override void Awake()
         {
@@ -93,7 +113,6 @@ namespace player
             SkillButtonHandler = GetComponent<SkillButtonHandler>();
             playerHealth = GetComponent<PlayerHealth>();
             playerCombat = GetComponent<PlayerCombat>();
-            playerVfx = GetComponent<PlayerVfx>();
             playerLevel = GetComponent<PlayerLevel>();
             playerInventory = GetComponent<PlayerInventory>();
             input = new PlayerInputSet();

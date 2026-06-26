@@ -1,47 +1,49 @@
 using UnityEngine;
-using enemy;
-using Unity.VisualScripting;
+using stateMachine;
 
-public class EnemyArcherCombatState : EnemyState
+namespace enemy
 {
-
-    private EnemyArcher _enemyArcher;
-    public EnemyArcherCombatState(Enemy enemy, stateMachine.StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
+    public class EnemyArcherCombatState : EnemyState
     {
-        _enemyArcher = enemy as EnemyArcher;
-    }
 
-    public override void Enter()
-    {
-        base.Enter();
-        _enemyArcher.SetVelocity(Vector2.zero);
-        _enemyArcher.FacePlayer();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        if (_enemyArcher.IsInAttackRange())
+        private EnemyArcher _enemyArcher;
+        public EnemyArcherCombatState(Enemy enemy, StateMachine stateMachine, string animBoolName) : base(enemy, stateMachine, animBoolName)
         {
-            if (_enemyArcher.CanAttack())
+            _enemyArcher = enemy as EnemyArcher;
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+            _enemyArcher.SetVelocity(Vector2.zero);
+            _enemyArcher.FacePlayer();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (_enemyArcher.IsInAttackRange())
             {
-                
-                stateMachine.ChangeState(_enemyArcher.enemyAttackState);
-                return;
+                if (_enemyArcher.CanAttack())
+                {
+
+                    stateMachine.ChangeState(_enemyArcher.enemyAttackState);
+                    return;
+                }
+                else
+                {
+                    stateMachine.ChangeState(_enemyArcher.enemyIdleState);
+                    return;
+                }
             }
             else
-            {
-                stateMachine.ChangeState(_enemyArcher.enemyIdleState);
-                return;
-            }
+                stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+
+
         }
-        else 
-            stateMachine.ChangeState(_enemyArcher.enemyMoveState);
-            
-        
-    }
-    public override void Exit()
-    {
-        base.Exit();
+        public override void Exit()
+        {
+            base.Exit();
+        }
     }
 }

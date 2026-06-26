@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Base;
+using entity;
 using Interfaces;
 using UnityEngine;
 
@@ -11,11 +12,9 @@ namespace player
         public event Action OnPlayerAttacking;
         /// <summary>Fired for each enemy the player's attack lands on.</summary>
         public event Action<Transform> OnPlayerHitEnemy;
-        private Player _player;
         protected override void Awake()
         {
             base.Awake();
-            _player = GetComponent<Player>();
         }
 
         public override void PerformedAttack()

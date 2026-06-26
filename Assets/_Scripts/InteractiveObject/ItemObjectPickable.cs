@@ -1,5 +1,6 @@
 using Base;
 using Interfaces;
+using Inventory;
 using UnityEngine;
 namespace InteractiveObject
 {

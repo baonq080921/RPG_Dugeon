@@ -1,4 +1,5 @@
 using Base;
+using entity;
 using UnityEngine;
 namespace player
 {

@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Base;
 using enemy;
+using Inventory;
 using player;
 using TMPro;
 using UnityEngine;

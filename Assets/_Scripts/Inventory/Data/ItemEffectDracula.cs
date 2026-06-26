@@ -1,42 +1,46 @@
-using player;
+using entity;
 using UnityEngine;
 
-/// <summary>Dracula item effect: heals the player on attack and applies a HP drain DoT to each hit enemy.</summary>
-[CreateAssetMenu(fileName = "ItemEffectDracula", menuName = "RPG/ItemEffectDraculaData", order = 1)]
-public class ItemEffectDracula : ItemEffectData
+namespace Inventory
 {
-    [field: SerializeField] public float HealAmountPercent { get; private set; } = 0.15f;
-    [field: SerializeField] public float DotDuration { get; private set; } = 2f;
-    [field: SerializeField] public float DotDamagePerTick { get; private set; } = 2f;
-    [field: SerializeField] public float DotTickInterval { get; private set; } = 0.5f;
-
-    protected override void ExecuteEffect()
+    /// <summary>Dracula item effect: heals the player on attack and applies a HP drain DoT to each hit enemy.</summary>
+    [CreateAssetMenu(fileName = "ItemEffectDracula", menuName = "RPG/ItemEffectDraculaData", order = 1)]
+    public class ItemEffectDracula : ItemEffectData
     {
-        base.ExecuteEffect();
-        float damage = player.entityStat.GetPhysicalDamageValue(out bool _);
-        player.playerHealth.HealHP(damage * HealAmountPercent);
-    }
+        [field: SerializeField] public float HealAmountPercent { get; private set; } = 0.15f;
+        [field: SerializeField] public float DotDuration { get; private set; } = 2f;
+        [field: SerializeField] public float DotDamagePerTick { get; private set; } = 2f;
+        [field: SerializeField] public float DotTickInterval { get; private set; } = 0.5f;
 
-    private void ApplyDotToEnemy(Transform enemyTransform)
-    {
-        EntityStatusHandler statusHandler = enemyTransform.GetComponent<EntityStatusHandler>();
-        if (statusHandler == null) return;
-        statusHandler.ApplyDraculaDoT(DotDamagePerTick, DotDuration, DotTickInterval,ElementType.Fire);
-    }
+        protected override void ExecuteEffect()
+        {
+            base.ExecuteEffect();
+            float damage = target.Entity.entityStat.GetPhysicalDamageValue(out bool _);
+            target.Entity.entityHealth.HealHP(damage * HealAmountPercent);
+        }
 
-    /// <inheritdoc/>
-    public override void Subscribe(Player character)
-    {
-        player = character;
-        player.playerCombat.OnPlayerAttacking += ExecuteEffect;
-        player.playerCombat.OnPlayerHitEnemy += ApplyDotToEnemy;
-    }
+        private void ApplyDotToEnemy(Transform enemyTransform)
+        {
+            EntityStatusHandler statusHandler = enemyTransform.GetComponent<EntityStatusHandler>();
+            if (statusHandler == null) return;
+            statusHandler.ApplyDraculaDoT(DotDamagePerTick, DotDuration, DotTickInterval, ElementType.Fire);
+        }
 
-    /// <inheritdoc/>
-    public override void Unsubscribe(Player character)
-    {
-        player.playerCombat.OnPlayerAttacking -= ExecuteEffect;
-        player.playerCombat.OnPlayerHitEnemy -= ApplyDotToEnemy;
-        player = null;
+        /// <inheritdoc/>
+        public override void Subscribe(IItemEffectTarget target)
+        {
+            this.target = target;
+            target.OnAttacking += ExecuteEffect;
+            target.OnHitEnemy += ApplyDotToEnemy;
+        }
+
+        /// <inheritdoc/>
+        public override void Unsubscribe(IItemEffectTarget target)
+        {
+            if (this.target == null) return;
+            this.target.OnAttacking -= ExecuteEffect;
+            this.target.OnHitEnemy -= ApplyDotToEnemy;
+            this.target = null;
+        }
     }
 }

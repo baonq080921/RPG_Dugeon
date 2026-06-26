@@ -1,5 +1,6 @@
 using System.Text;
 using Base;
+using Inventory;
 using player;
 using TMPro;
 using UnityEngine;

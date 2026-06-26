@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Base;
 using TMPro;
+using UI;
 using UnityEngine;
 
 namespace NPC

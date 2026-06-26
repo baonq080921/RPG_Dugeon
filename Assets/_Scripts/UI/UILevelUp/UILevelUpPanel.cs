@@ -1,4 +1,5 @@
 using Base;
+using entity;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

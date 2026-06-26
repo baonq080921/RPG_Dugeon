@@ -1,6 +1,8 @@
 using System;
 using Base;
+using entity;
 using Interfaces;
+using Inventory;
 using UnityEngine;
 
 namespace enemy

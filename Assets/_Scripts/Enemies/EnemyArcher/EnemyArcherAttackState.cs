@@ -1,46 +1,47 @@
 using UnityEngine;
-using enemy;
 using stateMachine;
-using System.IO;
 
-/// <summary>
-/// Locks the archer in place while the attack animation plays, then returns to <see cref="EnemyArcherCombatState"/>.
-/// </summary>
-public class EnemyArcherAttackState : EnemyState
+namespace enemy
 {
-    private EnemyArcher _enemyArcher;
-
-    public EnemyArcherAttackState(Enemy enemy, StateMachine stateMachine, string animBoolName)
-        : base(enemy, stateMachine, animBoolName)
+    /// <summary>
+    /// Locks the archer in place while the attack animation plays, then returns to <see cref="EnemyArcherCombatState"/>.
+    /// </summary>
+    public class EnemyArcherAttackState : EnemyState
     {
-        _enemyArcher = enemy as EnemyArcher;
-    }
+        private EnemyArcher _enemyArcher;
 
-    public override void Enter()
-    {
-        base.Enter();
-        enemy.SetVelocity(Vector2.zero);
-        animator.SetFloat("AttackMultplier", enemy.attackSpeed);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        _enemyArcher.FacePlayer();
-        if (!_enemyArcher.IsInAttackRange())
+        public EnemyArcherAttackState(Enemy enemy, StateMachine stateMachine, string animBoolName)
+            : base(enemy, stateMachine, animBoolName)
         {
-            stateMachine.ChangeState(_enemyArcher.enemyMoveState);
-            return;
+            _enemyArcher = enemy as EnemyArcher;
         }
-        if (isTriggered)
-        {
-            stateMachine.ChangeState(_enemyArcher.enemyArcherMoveBackState);
-        }
-    }
 
-    public override void Exit()
-    {
-        base.Exit();
-        _enemyArcher.StartAttackCooldown();
+        public override void Enter()
+        {
+            base.Enter();
+            enemy.SetVelocity(Vector2.zero);
+            animator.SetFloat("AttackMultplier", enemy.attackSpeed);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            _enemyArcher.FacePlayer();
+            if (!_enemyArcher.IsInAttackRange())
+            {
+                stateMachine.ChangeState(_enemyArcher.enemyMoveState);
+                return;
+            }
+            if (isTriggered)
+            {
+                stateMachine.ChangeState(_enemyArcher.enemyArcherMoveBackState);
+            }
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            _enemyArcher.StartAttackCooldown();
+        }
     }
 }

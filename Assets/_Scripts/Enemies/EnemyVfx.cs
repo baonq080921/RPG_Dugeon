@@ -1,3 +1,4 @@
+using entity;
 using Interfaces;
 using UnityEngine;
 namespace enemy

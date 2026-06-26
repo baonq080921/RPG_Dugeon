@@ -1,11 +1,14 @@
+using Inventory;
 using UnityEngine;
 
-
-public class ItemCraft
+namespace store
 {
-    [field:SerializeField] public ItemCraftData itemCraftData{get; private set;}
-    public ItemCraft(ItemCraftData itemCraftData)
+    public class ItemCraft
     {
-        this.itemCraftData = itemCraftData;
+        [field: SerializeField] public ItemCraftData itemCraftData { get; private set; }
+        public ItemCraft(ItemCraftData itemCraftData)
+        {
+            this.itemCraftData = itemCraftData;
+        }
     }
 }

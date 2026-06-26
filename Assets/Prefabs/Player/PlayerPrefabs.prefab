@@ -1015,6 +1015,53 @@ MonoBehaviour:
   _defaultCapacity: 5
   _maxSize: 20
   _prefab: {fileID: 3350323447212580221, guid: b953731a92a233f4093f3ddf724043e1, type: 3}
+--- !u!1 &4842363151232437796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8063497806166657182}
+  - component: {fileID: 1217379576704433104}
+  m_Layer: 0
+  m_Name: ElectriEffectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8063497806166657182
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842363151232437796}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5337258794919646074}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1217379576704433104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842363151232437796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12d6b11ccd875f4dae8fd4a4add2fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultCapacity: 5
+  _maxSize: 20
+  _prefab: {fileID: 3827376031247736286, guid: 4205389ab85a13046ad637f3b40a1149, type: 3}
 --- !u!1 &4854571968962977683
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,6 +1670,7 @@ Transform:
   - {fileID: 8604032969226806116}
   - {fileID: 1684434597779902165}
   - {fileID: 3731088277740347232}
+  - {fileID: 8063497806166657182}
   - {fileID: 3571103411010905073}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1868,6 +1916,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!114 &8811670791700289444
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -95,6 +95,23 @@ namespace Base
         }
 
         /// <summary>
+        /// Registers an externally-created, currently-active instance as managed by this pool.
+        /// Use when pre-existing instances (e.g. scene-placed objects) should be recycled through the
+        /// pool on <see cref="Release"/> instead of being instantiated fresh. The instance is counted
+        /// as active until it is released.
+        /// </summary>
+        /// <param name="item">The already-active instance to bring under pool management.</param>
+        public void Adopt(T item)
+        {
+            if (_isDisposed)
+                throw new ObjectDisposedException(GetType().Name);
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            _countAll++;
+        }
+
+        /// <summary>
         /// Returns an instance back to the pool. If the pool is at capacity the instance is destroyed instead.
         /// </summary>
         public void Release(T item)

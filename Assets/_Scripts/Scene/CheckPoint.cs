@@ -1,5 +1,3 @@
-
-
 using System.Collections;
 using Base;
 using player;
@@ -7,19 +5,22 @@ using Pool;
 using Save;
 using UnityEngine;
 
-public class CheckPoint : MonoBehaviour
+namespace scene
 {
-
-    void OnTriggerEnter2D(Collider2D collision)
+    public class CheckPoint : MonoBehaviour
     {
-        if (!collision.TryGetComponent<Player>(out var player)) return;
-        StartCoroutine(SaveNextFrame(player));
-    }
 
-    private IEnumerator SaveNextFrame(Player player)
-    {
-        yield return null;
-        ServiceLocator.Get<SaveManager>().Save();
-        ServiceLocator.Get<PoolManager>().levelupPool.Spawn(player.transform);
+        void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!collision.TryGetComponent<Player>(out var player)) return;
+            StartCoroutine(SaveNextFrame(player));
+        }
+
+        private IEnumerator SaveNextFrame(Player player)
+        {
+            yield return null;
+            ServiceLocator.Get<SaveManager>().Save();
+            ServiceLocator.Get<PoolManager>().levelupPool.Spawn(player.transform);
+        }
     }
 }

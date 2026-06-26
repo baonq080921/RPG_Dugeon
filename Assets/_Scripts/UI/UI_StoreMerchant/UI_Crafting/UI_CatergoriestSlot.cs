@@ -1,4 +1,5 @@
 using Base;
+using Inventory;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

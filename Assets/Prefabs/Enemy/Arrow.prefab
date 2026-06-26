@@ -74,7 +74,7 @@ TrailRenderer:
   m_SortingLayerID: 1113845855
   m_SortingLayer: 2
   m_SortingOrder: -2
-  m_Time: 0.4
+  m_Time: 0.2
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -142,7 +142,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_MaskInteraction: 0
-  m_Autodestruct: 0
+  m_Autodestruct: 1
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
 --- !u!1 &2754848556509156751
@@ -199,6 +199,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _animator: {fileID: 0}
+  _lifetime: 6
 --- !u!50 &9023533579983261847
 Rigidbody2D:
   serializedVersion: 4

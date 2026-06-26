@@ -1,5 +1,6 @@
 using System.Collections;
 using Base;
+using entity;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace enemy

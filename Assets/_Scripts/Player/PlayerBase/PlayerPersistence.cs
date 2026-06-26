@@ -1,7 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Base;
+using entity;
+using Interfaces;
+using Inventory;
 using Save;
 using UnityEngine;
 
@@ -52,9 +56,13 @@ namespace player
             if (inventory != null)
                 GetInventoryData(inventory, data);
 
-            var skillTree = ServiceLocator.Get<UIManager>()?.uISkillTree;
-            if (skillTree != null)
-                GetSkillTreeData(inventory, data, skillTree);
+            var skillTreeState = ServiceLocator.Get<ISkillTreeState>();
+            if (skillTreeState != null)
+            {
+                data.skillTree.skillPoints = inventory?.SkillPoints ?? 0f;
+                foreach (var key in skillTreeState.GetUnlockedNodeKeys())
+                    data.skillTree.nodes.Add(new NodeSaveEntry { nodeKey = key });
+            }
         }
 
         /// <inheritdoc/>
@@ -119,43 +127,11 @@ namespace player
 
             EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
 
-            var uiSkillTree = ServiceLocator.Get<UIManager>()?.uISkillTree;
-            if (uiSkillTree != null)
-            {
-                var allNodes = uiSkillTree.GetComponentsInChildren<UITreeNode>(true);
-                foreach (var node in allNodes)
-                    node.ResetNode();
-
-                inventory.SetSkillPoints(data.skillTree.skillPoints);
-
-                var nodeMap = new Dictionary<string, UITreeNode>();
-                foreach (var node in allNodes)
-                    if (node.skillTreeData != null)
-                        nodeMap[node.skillTreeData.name] = node;
-
-                foreach (var entry in data.skillTree.nodes)
-                {
-                    if (nodeMap.TryGetValue(entry.nodeKey, out var node))
-                        node.RestoreUnlocked();
-                    else
-                        Debug.LogWarning($"[PlayerPersistence] Unknown skill tree node '{entry.nodeKey}' — skipped.");
-                }
-
-                foreach (var handler in uiSkillTree.GetComponentsInChildren<UIConnectedHandler>())
-                    handler.RefreshLineColors();
-            }
+            inventory.SetSkillPoints(data.skillTree.skillPoints);
+            ServiceLocator.Get<ISkillTreeState>()
+                ?.RestoreUnlockedNodes(data.skillTree.nodes.Select(n => n.nodeKey));
 
             yield return null;
-        }
-
-        private static void GetSkillTreeData(PlayerInventory inventory, PlayerSaveData data, UISkillTree skillTree)
-        {
-            data.skillTree.skillPoints = inventory?.SkillPoints ?? 0f;
-            foreach (var node in skillTree.GetComponentsInChildren<UITreeNode>(true))
-            {
-                if (node.skillTreeData == null || !node.isUnlocked) continue;
-                data.skillTree.nodes.Add(new NodeSaveEntry { nodeKey = node.skillTreeData.name });
-            }
         }
 
         private static void GetInventoryData(PlayerInventory inventory, PlayerSaveData data)

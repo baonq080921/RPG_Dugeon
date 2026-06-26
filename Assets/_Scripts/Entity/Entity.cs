@@ -5,190 +5,194 @@ using Base;
 using System.Collections;
 using System;
 
-/// <summary>
-/// Base class for all game entities (players and enemies).
-/// Implements <see cref="IHit"/> so any entity can receive damage via the interface.
-/// Subclasses must supply <see cref="MaxHealth"/> and <see cref="Damage"/> from their ScriptableObject data.
-/// </summary>
-public abstract class Entity : MonoBehaviour
+namespace entity
 {
-
-    public StateMachine stateMachine {get; private set;}
-    public Animator animator {get; private set;}
-
-    public Rigidbody2D rb {get; private set;}
-    public Collider2D col {get; private set;}
-    [SerializeField] protected LayerMask _whatIsGround;
-    [SerializeField] protected LayerMask _whatIsWall;
-    [SerializeField] protected Transform _groundCheckPoint;
-    
-
-    public bool isDead{get; protected set;} = false;
-    [Space]
-    [Range(0,1f)]
-    [SerializeField] protected float _groundCheckRadius = 0.1f;
-
-    [Space]
-    [Range(0,10f)]
-    [SerializeField] protected float _wallCheckDistance = 0.5f;
-
-
-    public float direction {get; protected set;} = 1f; // 1 for right, -1 for left
-    public void SetDirection(float dir) => direction = dir;
-
-    public bool isGrounded{get; protected set;}
-    public bool isTouchingWall {get; protected set;}
-    private Vector3 _originalScale;
-    public abstract LayerMask LayerMask { get; }
-    /// <summary>Whether attacks from this entity apply knockback to the target.</summary>
-    public event Action OnFlip;
-    [SerializeField] private bool _flipHealthBar = true;
-    private Coroutine _knockBackCoroutine;
-    public bool IsKnocked { get; private set; }
-    public bool IsShocked { get; private set; } 
-    [SerializeField] private Vector2 _knockBackPowerLight;
-    [SerializeField] private Vector2 _knockBackPowerHeavy;
-    private Coroutine _shockCoroutine;
-
-
-    public EntityStat entityStat { get; private set; }
-    public EntityHealth entityHealth{get; private set;}
-    public EntityVfx entityVfx{get; private set;}
-    public EntityCombat entityCombat {get; private set;}
-    
-
-    protected virtual void Awake()
+    /// <summary>
+    /// Base class for all game entities (players and enemies).
+    /// Implements <see cref="IHit"/> so any entity can receive damage via the interface.
+    /// Subclasses must supply <see cref="MaxHealth"/> and <see cref="Damage"/> from their ScriptableObject data.
+    /// </summary>
+    public abstract class Entity : MonoBehaviour
     {
-        stateMachine = new StateMachine();
-        animator = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-        _originalScale = transform.localScale;
-        col = GetComponent<Collider2D>();
-        entityStat = GetComponent<EntityStat>();
-        entityHealth = GetComponent<EntityHealth>();
-        entityVfx = GetComponent<EntityVfx>();
-        entityCombat = GetComponent<EntityCombat>();
-    }
 
-    protected virtual void Start()
-    {
-    }
+        public StateMachine stateMachine { get; private set; }
+        public Animator animator { get; private set; }
+
+        public Rigidbody2D rb { get; private set; }
+        public Collider2D col { get; private set; }
+        [SerializeField] protected LayerMask _whatIsGround;
+        [SerializeField] protected LayerMask _whatIsWall;
+        [SerializeField] protected Transform _groundCheckPoint;
 
 
+        public bool isDead { get; protected set; } = false;
+        [Space]
+        [Range(0, 1f)]
+        [SerializeField] protected float _groundCheckRadius = 0.1f;
 
-    protected virtual void Update()
-    {
-        stateMachine.currentState.Update();
-        CheckGrounded();
-        CheckWall();
-    }
-
-    public void Flip(float direction)
-    {
-        transform.localScale = new Vector3(_originalScale.x * direction, _originalScale.y, _originalScale.z) ;
-        if(_flipHealthBar)
-            OnFlip?.Invoke();
-    }
-
-    public virtual void SetVelocity(Vector2 velocity)
-    {
-        if (IsKnocked || IsShocked) return;
-        rb.velocity = velocity;
-    }
-
-    /// <summary>Freezes the entity in place for <paramref name="duration"/> seconds, then restores movement.</summary>
-    public void Shock(float duration)
-    {
-        if (_shockCoroutine != null)
-            StopCoroutine(_shockCoroutine);
-        _shockCoroutine = StartCoroutine(ShockCo(duration));
-    }
-
-    private IEnumerator ShockCo(float duration)
-    {
-        IsShocked = true;
-        rb.velocity = Vector2.zero;
-        yield return new WaitForSeconds(duration);
-        IsShocked = false;
-        _shockCoroutine = null;
-    }
+        [Space]
+        [Range(0, 10f)]
+        [SerializeField] protected float _wallCheckDistance = 0.5f;
 
 
-    public void CheckGrounded()
-    {
-        isGrounded = Physics2D.OverlapCircle(_groundCheckPoint.position, _groundCheckRadius, _whatIsGround);
-    }
-    public void CheckWall()
-    {
-        isTouchingWall = Physics2D.Raycast(transform.position, Vector2.right * direction, _wallCheckDistance, _whatIsWall);
-    }
+        public float direction { get; protected set; } = 1f; // 1 for right, -1 for left
+        public void SetDirection(float dir) => direction = dir;
 
-    public void TriggerAnimationEvent()
-    {
-        stateMachine.currentState.TriggerAnimation();
-    }
-
-    public virtual void Die() =>isDead = true;
-    public void ResetDie() => isDead = false;
-
-    public virtual void ApplyEffect(float scaleFactor, ElementType elementType)
-    {
-    }
-    public virtual void ResetEffect(){}
+        public bool isGrounded { get; protected set; }
+        public bool isTouchingWall { get; protected set; }
+        private Vector3 _originalScale;
+        public abstract LayerMask LayerMask { get; }
+        /// <summary>Whether attacks from this entity apply knockback to the target.</summary>
+        public event Action OnFlip;
+        [SerializeField] private bool _flipHealthBar = true;
+        private Coroutine _knockBackCoroutine;
+        public bool IsKnocked { get; private set; }
+        public bool IsShocked { get; private set; }
+        [SerializeField] private Vector2 _knockBackPowerLight;
+        [SerializeField] private Vector2 _knockBackPowerHeavy;
+        private Coroutine _shockCoroutine;
 
 
-
-    public virtual void ApplyKnockBack(float damage)
-    {
-        float ratio = damage / entityHealth.CurrentHealth;
-        // Heavy when hit is a  bigger fraction of max health, light otherwise
-        Vector2 power = ratio < entityStat.GetKnockBackThreshHold()
-            ?  _knockBackPowerLight
-            :_knockBackPowerHeavy;
-        // Negate x so the enemy is pushed away from the player (enemy faces toward player)
-        Vector2 knockBack = new Vector2(power.x * - direction, power.y);
-        ReciveKnockBack(knockBack,entityStat.StunDuration);
-    }
-
-    public virtual void UnTargetableEnemy(bool canTarget){}
+        public EntityStat entityStat { get; private set; }
+        public EntityHealth entityHealth { get; private set; }
+        public EntityVfx entityVfx { get; private set; }
+        public EntityCombat entityCombat { get; private set; }
 
 
-
-    private void ReciveKnockBack(Vector2 knockBack, float duration)
-    {
-        if(_knockBackCoroutine != null)
-            StopCoroutine(_knockBackCoroutine);
-        _knockBackCoroutine = StartCoroutine(KnockBackCo(knockBack, duration));
-    }
-
-    private IEnumerator KnockBackCo(Vector2 knockBack, float duration)
-    {
-        IsKnocked = true;
-        rb.velocity =  knockBack;
-        yield return new WaitForSeconds(duration);
-        IsKnocked = false;
-        rb.velocity =  Vector2.zero;
-    }
-
-    /// <summary>Cancels any active knockback coroutine and clears the knocked state.</summary>
-    protected void ResetKnockbackState()
-    {
-        if (_knockBackCoroutine != null)
-            StopCoroutine(_knockBackCoroutine);
-        IsKnocked = false;
-    }
-
-
-    protected virtual void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position,_wallCheckDistance * Vector2.right * direction + (Vector2)transform.position);
-        if(isGrounded){
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
-            return;
+        protected virtual void Awake()
+        {
+            stateMachine = new StateMachine();
+            animator = GetComponentInChildren<Animator>();
+            rb = GetComponent<Rigidbody2D>();
+            _originalScale = transform.localScale;
+            col = GetComponent<Collider2D>();
+            entityStat = GetComponent<EntityStat>();
+            entityHealth = GetComponent<EntityHealth>();
+            entityVfx = GetComponent<EntityVfx>();
+            entityCombat = GetComponent<EntityCombat>();
         }
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);           
-    }    
+
+        protected virtual void Start()
+        {
+        }
+
+
+
+        protected virtual void Update()
+        {
+            stateMachine.currentState.Update();
+            CheckGrounded();
+            CheckWall();
+        }
+
+        public void Flip(float direction)
+        {
+            transform.localScale = new Vector3(_originalScale.x * direction, _originalScale.y, _originalScale.z);
+            if (_flipHealthBar)
+                OnFlip?.Invoke();
+        }
+
+        public virtual void SetVelocity(Vector2 velocity)
+        {
+            if (IsKnocked || IsShocked) return;
+            rb.velocity = velocity;
+        }
+
+        /// <summary>Freezes the entity in place for <paramref name="duration"/> seconds, then restores movement.</summary>
+        public void Shock(float duration)
+        {
+            if (_shockCoroutine != null)
+                StopCoroutine(_shockCoroutine);
+            _shockCoroutine = StartCoroutine(ShockCo(duration));
+        }
+
+        private IEnumerator ShockCo(float duration)
+        {
+            IsShocked = true;
+            rb.velocity = Vector2.zero;
+            yield return new WaitForSeconds(duration);
+            IsShocked = false;
+            _shockCoroutine = null;
+        }
+
+
+        public void CheckGrounded()
+        {
+            isGrounded = Physics2D.OverlapCircle(_groundCheckPoint.position, _groundCheckRadius, _whatIsGround);
+        }
+        public void CheckWall()
+        {
+            isTouchingWall = Physics2D.Raycast(transform.position, Vector2.right * direction, _wallCheckDistance, _whatIsWall);
+        }
+
+        public void TriggerAnimationEvent()
+        {
+            stateMachine.currentState.TriggerAnimation();
+        }
+
+        public virtual void Die() => isDead = true;
+        public void ResetDie() => isDead = false;
+
+        public virtual void ApplyEffect(float scaleFactor, ElementType elementType)
+        {
+        }
+        public virtual void ResetEffect() { }
+
+
+
+        public virtual void ApplyKnockBack(float damage)
+        {
+            float ratio = damage / entityHealth.CurrentHealth;
+            // Heavy when hit is a  bigger fraction of max health, light otherwise
+            Vector2 power = ratio < entityStat.GetKnockBackThreshHold()
+                ? _knockBackPowerLight
+                : _knockBackPowerHeavy;
+            // Negate x so the enemy is pushed away from the player (enemy faces toward player)
+            Vector2 knockBack = new Vector2(power.x * -direction, power.y);
+            ReciveKnockBack(knockBack, entityStat.StunDuration);
+        }
+
+        public virtual void UnTargetableEnemy(bool canTarget) { }
+
+
+
+        private void ReciveKnockBack(Vector2 knockBack, float duration)
+        {
+            if (_knockBackCoroutine != null)
+                StopCoroutine(_knockBackCoroutine);
+            _knockBackCoroutine = StartCoroutine(KnockBackCo(knockBack, duration));
+        }
+
+        private IEnumerator KnockBackCo(Vector2 knockBack, float duration)
+        {
+            IsKnocked = true;
+            rb.velocity = knockBack;
+            yield return new WaitForSeconds(duration);
+            IsKnocked = false;
+            rb.velocity = Vector2.zero;
+        }
+
+        /// <summary>Cancels any active knockback coroutine and clears the knocked state.</summary>
+        protected void ResetKnockbackState()
+        {
+            if (_knockBackCoroutine != null)
+                StopCoroutine(_knockBackCoroutine);
+            IsKnocked = false;
+        }
+
+
+        protected virtual void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position, _wallCheckDistance * Vector2.right * direction + (Vector2)transform.position);
+            if (isGrounded)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
+                return;
+            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(_groundCheckPoint.position, _groundCheckRadius);
+        }
+    }
 }

@@ -1,11 +1,13 @@
-using enemy;
 using UnityEngine;
 
-public class BossAnimationEvent : EnemyAnimationEvent 
+namespace enemy
 {
-    [SerializeField] private EnemyDeathRippler _enemyDeathRippler;
-    public void SetTeleportTrigger()
+    public class BossAnimationEvent : EnemyAnimationEvent
     {
-        _enemyDeathRippler.SetTeleportTriggered(true);
+        [SerializeField] private EnemyDeathRippler _enemyDeathRippler;
+        public void SetTeleportTrigger()
+        {
+            _enemyDeathRippler.SetTeleportTriggered(true);
+        }
     }
 }

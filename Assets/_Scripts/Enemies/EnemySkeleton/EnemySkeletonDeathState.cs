@@ -15,7 +15,7 @@ namespace enemy
             base.Enter();
             enemy.SetVelocity(new Vector2(3f,10f));
             stateTimer = 2f;
-            enemy.col.enabled = false;
+            _enemySkeleton.UnTargetableEnemy(true);
         }
 
         public override void Update()

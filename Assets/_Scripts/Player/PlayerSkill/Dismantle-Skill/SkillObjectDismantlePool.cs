@@ -1,7 +1,7 @@
 using Base;
 using UnityEngine;
 
-namespace Pool
+namespace player
 {
     /// <summary>
     /// Manages a single <see cref="ObjectPool{T}"/> for <see cref="SkillObjectDismantle"/> instances.

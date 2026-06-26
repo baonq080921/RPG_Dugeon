@@ -1,12 +1,12 @@
-using System;
 using Base;
 using UnityEngine;
 
-namespace Pool
+namespace enemy
 {
     /// <summary>
     /// Place this component on the <see cref="EnemyArcher"/> prefab.
-    /// Each archer owns its own pool — no global dependency on <see cref="PoolManager"/>.
+    /// Each archer owns its own pool of arrow projectiles, built on <see cref="ObjectPool{T}"/>.
+    /// Lives in the enemy package (not Pool) so the enemy layer never depends on the Pool package.
     /// </summary>
     public class ArcherArrowPool : MonoBehaviour
     {

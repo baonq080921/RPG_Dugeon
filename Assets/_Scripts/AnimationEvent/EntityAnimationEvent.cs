@@ -1,8 +1,8 @@
+using entity;
 using UnityEngine;
 
-// Shared base for entity animation events. Lives in the global namespace (like Entity / EntityCombat)
-// so both player and enemy animation events can derive from it without the enemy namespace
-// having to depend on the player namespace.
+// Shared base for entity animation events. Kept in the global namespace so both player and enemy
+// animation events can derive from it without the enemy namespace depending on the player namespace.
 public class EntityAnimationEvent : MonoBehaviour
 {
     private Entity _enity;

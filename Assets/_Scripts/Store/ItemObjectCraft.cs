@@ -1,12 +1,16 @@
 using InteractiveObject;
+using Inventory;
 using UnityEngine;
 
-public class ItemObjectCraft : ItemObjectPickable
+namespace store
 {
-    public ItemCraftData itemCraftData;
-
-    void Awake()
+    public class ItemObjectCraft : ItemObjectPickable
     {
-        
+        public ItemCraftData itemCraftData;
+
+        void Awake()
+        {
+
+        }
     }
 }

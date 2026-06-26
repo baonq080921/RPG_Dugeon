@@ -1,4 +1,5 @@
 using System;
+using Base;
 using UnityEngine;
 namespace player
 {
@@ -23,16 +24,19 @@ namespace player
         /// <summary>Raised whenever any skill transitions from locked to unlocked.</summary>
         public static event Action OnAnySkillUnlocked;
 
+        private EventBinding<SkillTreeResetEvent> _resetBinding;
+
         protected virtual void Awake(){}
 
         protected virtual void OnEnable()
         {
-            UISkillTree.OnReset += ResetSkill;
+            _resetBinding = new EventBinding<SkillTreeResetEvent>(ResetSkill);
+            EventBus<SkillTreeResetEvent>.Register(_resetBinding);
         }
 
         protected virtual void OnDisable()
         {
-            UISkillTree.OnReset -= ResetSkill;
+            EventBus<SkillTreeResetEvent>.Deregister(_resetBinding);
         }
 
         /// <summary>Opens the activation gate for this skill.</summary>

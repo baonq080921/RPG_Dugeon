@@ -3681,6 +3681,67 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &800079208244631795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1501100836900972579}
+  - component: {fileID: 6590903222483992859}
+  m_Layer: 0
+  m_Name: EnemyPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1501100836900972579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800079208244631795}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1412.3441, y: 189.30782, z: -0.7565419}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2655409392537441963}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6590903222483992859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800079208244631795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd3f95938de471e4baf897e34d0de385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entries:
+  - <Type>k__BackingField: 0
+    <Prefab>k__BackingField: {fileID: 8111688798215530155, guid: 2646b16465420ef46b08b24a40878324, type: 3}
+    <DefaultCapacity>k__BackingField: 5
+    <MaxSize>k__BackingField: 20
+  - <Type>k__BackingField: 1
+    <Prefab>k__BackingField: {fileID: 8111688798215530155, guid: 2646b16465420ef46b08b24a40878324, type: 3}
+    <DefaultCapacity>k__BackingField: 5
+    <MaxSize>k__BackingField: 20
+  - <Type>k__BackingField: 2
+    <Prefab>k__BackingField: {fileID: 4724684595318538197, guid: cca53d3425491924cbcd73232ca2fbf5, type: 3}
+    <DefaultCapacity>k__BackingField: 5
+    <MaxSize>k__BackingField: 20
+  - <Type>k__BackingField: 3
+    <Prefab>k__BackingField: {fileID: 7473320679413637895, guid: 18cffd3be9c518b419d82dccef7ad0b8, type: 3}
+    <DefaultCapacity>k__BackingField: 1
+    <MaxSize>k__BackingField: 1
 --- !u!1 &802419766758363527
 GameObject:
   m_ObjectHideFlags: 0
@@ -15802,6 +15863,7 @@ Transform:
   - {fileID: 6629635804179626670}
   - {fileID: 403496385318245799}
   - {fileID: 2924345863521382318}
+  - {fileID: 1501100836900972579}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3094024701088060009
@@ -31479,6 +31541,7 @@ MonoBehaviour:
   hitEffectPool: {fileID: 0}
   sliceEffectPool: {fileID: 0}
   damagePopupPool: {fileID: 0}
+  electricEffectPool: {fileID: 0}
 --- !u!1 &6166642093955302679
 GameObject:
   m_ObjectHideFlags: 0
@@ -32490,7 +32553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 3.271, y: -30.26007}
+  m_AnchoredPosition: {x: 3.271, y: -30.26001}
   m_SizeDelta: {x: 653.536, y: 125.2045}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &9115210874671660297
