@@ -28,6 +28,9 @@ namespace enemy
         [field: Header("Level & Experience")]
         [field: SerializeField] public int Level { get; private set; } = 1;
         [field: SerializeField] public float BaseExp { get; private set; } = 50f;
+        [field:Header("Gold/Money & SkillPoint")]
+        [field:SerializeField] public float SkillPoint {get; private set;} = 1f;
+        [field:SerializeField] public float Gold {get; private set; } = 10f;
 
         [field: Header("Detection")]
         [field: SerializeField] public float minDistanceRetreat { get; private set; } = 1f;

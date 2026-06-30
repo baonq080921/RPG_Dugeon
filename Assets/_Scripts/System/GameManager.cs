@@ -1,24 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using Base;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IGameState
 {
     public bool IsPause { get; private set; }
     private Coroutine _endGameCoroutine;
+    private EventBinding<EndGameEvent> _eventEndGameBinding;
 
     void Awake()
     {
-        if (ServiceLocator.Get<GameManager>() != null)
+        if (ServiceLocator.Get<IGameState>() != null)
         {
             Destroy(gameObject);
             return;
         }
 
         Application.targetFrameRate = 60;
-        ServiceLocator.Register<GameManager>(this);
+        ServiceLocator.Register<IGameState>(this);
+    }
+    void OnEnable()
+    {
+        _eventEndGameBinding = new EventBinding<EndGameEvent>(EndGame);
+        EventBus<EndGameEvent>.Register(_eventEndGameBinding);
+    }
+
+    void OnDisable()
+    {
+        EventBus<EndGameEvent>.Deregister(_eventEndGameBinding);    
     }
 
     /// <summary>
@@ -43,7 +55,11 @@ public class GameManager : MonoBehaviour
     IEnumerator EndGameCoroutine()
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("EndGameScene");
+        var transition = scene.SceneTransitionManager.Instance;
+        if (transition != null)
+            transition.FadeToScene("EndGame");
+        else
+            SceneManager.LoadScene("EndGame");
     }
 
 }

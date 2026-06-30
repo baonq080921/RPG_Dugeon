@@ -10,7 +10,7 @@ public class UI_CarftIngerdientSlot : MonoBehaviour
     private ItemTypes _itemTypes;
     public void UpdateUiSlot(RequirementItem requirementItem , float amount = 0)
     {
-        _slotImage.sprite = requirementItem != null ? requirementItem.sprite : _spriteDefault;
+        _slotImage.sprite = requirementItem != null ? requirementItem.itemData.Sprite : _spriteDefault;
         _amountText.text = amount != 0 ? amount.ToString():"";
     }
     

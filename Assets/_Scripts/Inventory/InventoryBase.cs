@@ -71,23 +71,22 @@ public class InventoryBase : MonoBehaviour
     public void ConsumeByType(ItemTypes itemType, int amount)
     {
         int remaining = amount;
-        for (int i = itemInventoriesList.Count - 1; i >= 0 && remaining > 0; i--)
+        for(int i = 0 ; i < itemInventoriesList.Count; i++)
         {
+            if(remaining  == 0) break;
             ItemInventory item = itemInventoriesList[i];
-            if (item.itemData.ItemType != itemType) continue;
-
+            if(item.itemData.ItemType != itemType) continue;
             int toConsume = Mathf.Min(remaining, item.stackSize);
             remaining -= toConsume;
-            for (int j = 0; j < toConsume; j++)
+            for(int j = 0; j < toConsume; j++)
             {
-                if (item.stackSize > 1)
+                if(item.stackSize > 1)
                     item.RemoveStackSize();
                 else
-                {
-                    itemInventoriesList.RemoveAt(i);
-                    break;
-                }
+                    itemInventoriesList.Remove(item);
+                    
             }
+
         }
         EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
     }

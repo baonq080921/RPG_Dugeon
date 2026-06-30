@@ -1,7 +1,7 @@
 using Base;
-using Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Interfaces;
 
 namespace Quest
 {
@@ -16,16 +16,16 @@ namespace Quest
 
         public QuestData Quest => _quest;
         public bool IsQuestComplete { get; private set; }
-        private SaveManager _saveManager;
+        private ISaveService  _saveService;
         private void Start()
         {
             if (_quest == null) return;
 
             string sceneName = SceneManager.GetActiveScene().name;
-            _saveManager = ServiceLocator.Get<SaveManager>();
+            _saveService = ServiceLocator.Get<ISaveService>();
 
 
-            if (_saveManager != null && _saveManager.IsQuestComplete(sceneName))
+            if (_saveService != null && _saveService.IsQuestComplete(sceneName))
             {
                 IsQuestComplete = true;
                 EventBus<QuestCompletedEvent>.Raise(new QuestCompletedEvent(_quest));
@@ -34,7 +34,7 @@ namespace Quest
 
             _quest.Reset();
 
-            int savedProgress = _saveManager?.GetQuestProgress(sceneName) ?? 0;
+            int savedProgress = _saveService?.GetQuestProgress(sceneName) ?? 0;
             if (savedProgress > 0)
                 _quest.RestoreProgress(savedProgress);
 
@@ -58,7 +58,7 @@ namespace Quest
             string sceneName = SceneManager.GetActiveScene().name;
             Debug.Log(sceneName);
             Debug.Log(_quest.CurrentProgress);
-            ServiceLocator.Get<SaveManager>()?.SetQuestProgress(sceneName, _quest.CurrentProgress);
+            ServiceLocator.Get<ISaveService>()?.SetQuestProgress(sceneName, _quest.CurrentProgress);
             EventBus<QuestProgressEvent>.Raise(new QuestProgressEvent(_quest));
         }
 
@@ -70,7 +70,7 @@ namespace Quest
             _quest.OnQuestCompleted  -= OnComplete;
 
             string sceneName = SceneManager.GetActiveScene().name;
-            var saveManager = ServiceLocator.Get<SaveManager>();
+            var saveManager = ServiceLocator.Get<ISaveService>();
             saveManager?.MarkQuestComplete(sceneName);
             saveManager?.Save();
 

@@ -1,36 +1,31 @@
 using System;
 using UnityEngine;
+
 namespace Base
 {
+    #region InGameEvent
     /// <summary>Raised when the player's health reaches zero and the death state is entered.</summary>
     public struct PlayerDiedEvent : IEvent { }
-    public struct PlayerCheckPointEvent:IEvent{}
+    public struct PlayerCheckPointEvent : IEvent { }
 
     /// <summary>Raised when an enemy's health reaches zero. Carries the enemy's level and base XP for the reward formula.</summary>
-    public struct EnemyDiedEvent : IEvent
+    public struct OnEnemyDiedEvent : IEvent
     {
         public int EnemyLevel { get; }
         public float BaseExp   { get; }
-        public EnemyDiedEvent(int enemyLevel, float baseExp)
+        public OnEnemyDiedEvent(int enemyLevel, float baseExp)
         {
             EnemyLevel = enemyLevel;
             BaseExp    = baseExp;
         }
     }
 
-    /// <summary>Raised when the player gains enough XP to level up. Carries the stat sheet so the UI can apply the chosen bonus.</summary>
-    public struct PlayerLevelUpEvent : IEvent
-    {
-        public EntityStat PlayerStat { get; }
-        public PlayerLevelUpEvent(EntityStat playerStat) => PlayerStat = playerStat;
-    }
-
     /// <summary>Raised whenever the player's XP value changes — on gain, level-up carry-over, or save restore.</summary>
     public struct PlayerXPChangedEvent : IEvent
     {
-        public float CurrentExp    { get; }
+        public float CurrentExp     { get; }
         public float ExpToNextLevel { get; }
-        public int   Level         { get; }
+        public int   Level          { get; }
         public PlayerXPChangedEvent(float currentExp, float expToNextLevel, int level)
         {
             CurrentExp     = currentExp;
@@ -39,71 +34,34 @@ namespace Base
         }
     }
 
-    public struct ResetStats :IEvent {}
+    public struct ResetStats : IEvent { }
+    public struct EndGameEvent : IEvent { }
+    #endregion
 
-    
-    #region Boosting Event:
-
+    #region Boosting Event
     public struct PlayerAddHealthAmountEvent : IEvent
     {
         public float Amount { get; }
-
         public PlayerAddHealthAmountEvent(float amount)
         {
             Amount = amount;
         }
     }
 
-     public struct PlayerBoostingAmountEvent : IEvent
+    public struct PlayerBoostingAmountEvent : IEvent
     {
         public float Amount { get; }
-
         public PlayerBoostingAmountEvent(float amount)
         {
             Amount = amount;
         }
     }
-
     #endregion
 
-    
+    #region UIEvent
+    public struct OnInventoryChangedEvent : IEvent { }
 
-    /// <summary>Raised when the player deals damage to an enemy, so a floating damage number can be spawned at the hit location.</summary>
-    
-
-    #region  UIEvent
-    public struct CraftGetInfoEvent: IEvent
-    {
-        public ItemCraftData itemCraftData;
-        public CraftGetInfoEvent(ItemCraftData itemCraftData)
-        {
-            this.itemCraftData = itemCraftData;
-        }
-    }
-
-    public struct StoreItemGetInfoEvent : IEvent
-    {
-        public ItemData itemData;
-        public StoreItemGetInfoEvent(ItemData itemData)
-        {
-            this.itemData = itemData;
-        }
-    }
-
-
-    public struct EquipEvent : IEvent
-    {
-        public ItemInventory itemInventory;
-        public EquipEvent(ItemInventory itemInventory)
-        {
-            this.itemInventory = itemInventory;
-        }
-    }
-    //When something change in the inventory for instance looting, or some stat upgrade that effect the ui stat on inventory
-    public struct OnInventoryChangedEvent:IEvent{} 
-
-    //When you open store
-    public struct OnToggleButtonUIEvent:IEvent
+    public struct OnToggleButtonUIEvent : IEvent
     {
         public bool isShow;
         public OnToggleButtonUIEvent(bool isShow)
@@ -112,59 +70,26 @@ namespace Base
         }
     }
 
+    public struct CraftStoreCallEvent : IEvent { }
+    public struct StoreCallEvent : IEvent { }
 
-
-    //Call to Open the craft store
-    public struct CraftStoreCallEvent:IEvent{}
-    // Call to Open the store 
-    public struct StoreCallEvent: IEvent{}
-    /// <summary>
-    /// Raised when we want to Alert some Message
-    /// </summary> <summary>
-    /// 
-    /// </summary>
+    /// <summary>Raised when we want to alert some message.</summary>
     public struct AlertNotiEvent : IEvent
     {
-        public string alertMessage{get; private set;}
+        public string alertMessage { get; private set; }
         public Vector2 position;
         public Color color;
         public AlertNotiEvent(String message, Vector2 position, Color color = default)
         {
-            alertMessage = message;
-            this.position = position;
-            this.color = color;
+            alertMessage   = message;
+            this.position  = position;
+            this.color     = color;
         }
     }
-
     #endregion
 
-
-
-
-    #region Quest Event:
-    /// <summary>Raised when a scene's quest begins tracking.</summary>
-    public struct QuestStartedEvent : IEvent
-    {
-        public Quest.QuestData Quest { get; }
-        public QuestStartedEvent(Quest.QuestData quest) => Quest = quest;
-    }
-
-    /// <summary>Raised each time quest progress increments.</summary>
-    public struct QuestProgressEvent : IEvent
-    {
-        public Quest.QuestData Quest { get; }
-        public QuestProgressEvent(Quest.QuestData quest) => Quest = quest;
-    }
-
-    /// <summary>Raised when the quest target is met.</summary>
-    public struct QuestCompletedEvent : IEvent
-    {
-        public Quest.QuestData Quest { get; }
-        public QuestCompletedEvent(Quest.QuestData quest) => Quest = quest;
-    }
-
-    /// <summary>Raised when the player rescues (interacts with) a <see cref="NPC.RescuableNpc"/>.</summary>
-    /// CAn share this event for all the object that have same behaviour collect something.
+    #region Quest Event
+    /// <summary>Raised when the player rescues (interacts with) a rescuable NPC.</summary>
     public struct NpcRescuedEvent : IEvent { }
 
     /// <summary>Raised by any object that wants to grant the player skill points (chests, quest rewards, etc.).</summary>
@@ -176,11 +101,9 @@ namespace Base
 
     public struct MoneyAddRewardEvent : IEvent
     {
-        public float Amount{get;}
-        public  MoneyAddRewardEvent(float amount) => Amount = amount;
+        public float Amount { get; }
+        public MoneyAddRewardEvent(float amount) => Amount = amount;
     }
-
-
     #endregion
 
     /// <summary>Raised when the player enters a new camera zone, carrying the new bounding shape.</summary>
@@ -197,8 +120,6 @@ namespace Base
         public GamePauseChangedEvent(bool isPause) => IsPause = isPause;
     }
 
-
-
     public struct TargetGotHitEvent : IEvent
     {
         public Transform target;
@@ -210,19 +131,19 @@ namespace Base
         }
     }
 
-
+    /// <summary>Raised by SaveManager after scene states are restored so SceneEntityManager can re-apply persistence.</summary>
+    public struct SceneStateRestoredEvent : IEvent { }
 
     public struct DamagePopupEvent : IEvent
     {
         public Vector3 WorldPosition { get; }
-        public float Damage { get; }
-        public bool IsCrit { get; }
-
+        public float Damage          { get; }
+        public bool IsCrit           { get; }
         public DamagePopupEvent(Vector3 worldPosition, float damage, bool isCrit)
         {
             WorldPosition = worldPosition;
-            Damage = damage;
-            IsCrit = isCrit;
+            Damage        = damage;
+            IsCrit        = isCrit;
         }
     }
 }

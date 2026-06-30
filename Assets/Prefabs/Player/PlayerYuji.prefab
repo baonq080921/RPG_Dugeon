@@ -697,6 +697,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
+  _iceDuration: 3
 --- !u!114 &8354573864380385515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,8 +753,8 @@ MonoBehaviour:
     equipItem:
       <itemData>k__BackingField: {fileID: 0}
       <stackSize>k__BackingField: 0
-  _startingSkillPoints: 40
-  _startingMoney: 100
+  _startingSkillPoints: 3
+  _startingMoney: 50
 --- !u!114 &682538086431341969
 MonoBehaviour:
   m_ObjectHideFlags: 0

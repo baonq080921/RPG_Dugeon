@@ -51,7 +51,7 @@ public class SkillObjectDismantle : SkillProjectileBase
 
         if (_willReturnOnHit && !_isReturning)
         {
-            Debug.Log("Hit enemy return");
+            // Debug.Log("Hit enemy return");
             FlipDirection();
             _player.SkillButtonHandler.ReduceSkillCoolDown(_skillBaseDefinition.CDAmountPercent,(int)ButtonSkillName.Dismantle);
             // ServiceLocator.Get<SkillButtonHandler>().ReduceSkillCoolDown(_skillBaseDefinition.CDAmountPercent,(int)ButtonSkillName.Dismantle);

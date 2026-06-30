@@ -1,5 +1,7 @@
 using Base;
 using DG.Tweening;
+using Interfaces;
+using player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,7 +64,7 @@ namespace UI
             if (_levelText != null && _playerLevel != null)
                 _levelText.text = $"Level {_playerLevel.Level}!\nChoose a stat to upgrade";
 
-            ServiceLocator.Get<GameManager>().SetPause(true);
+            ServiceLocator.Get<IGameState>().SetPause(true);
 
             _panelRect.anchoredPosition = _originalPosition;
             DOTween.Kill(_canvasGroup);
@@ -81,7 +83,7 @@ namespace UI
                 {
                     _canvasGroup.blocksRaycasts = false;
                     _panelRect.anchoredPosition = _hiddenPosition;
-                    ServiceLocator.Get<GameManager>().SetPause(false);
+                    ServiceLocator.Get<IGameState>().SetPause(false);
                     EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
                         EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
                 });

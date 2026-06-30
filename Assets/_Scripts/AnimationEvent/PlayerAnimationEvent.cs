@@ -15,5 +15,6 @@ namespace player
         public void SetTriggerFallAnimation() => _player.playerJumpAttackState.TriggerFallState();
 
         public void SetDiedAnimationEvent() => _player.RaiseDeadEvent();
+        public void SetTriggerLastAttackInCombo() => EventBus<PlayerLastAttackEvent>.Raise(new PlayerLastAttackEvent());
     }
 }

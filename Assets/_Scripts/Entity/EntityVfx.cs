@@ -23,6 +23,7 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
     [SerializeField] private Color _electricHitColor;
     [SerializeField]private Color _iceHitColor;
     [SerializeField]private Color _fireColor;
+    [SerializeField]private Color _draknessColor;
     [SerializeField] private float _statusBlinkInterval = 0.15f;
     private Color defaultHitColor;
     private EntityCombat _entityCombat;
@@ -88,14 +89,19 @@ public abstract class EntityVfx : MonoBehaviour,IHitVFX
             statusColor = _electricHitColor;
             PlayEffectStatusCoroutine(duration,statusColor);
         }
-        if(elementType == ElementType.Ice)
+        else if(elementType == ElementType.Ice)
         {
             statusColor =_iceHitColor;
             PlayEffectStatusCoroutine(duration,statusColor);
         }
-        if(elementType == ElementType.Fire)
+        else if(elementType == ElementType.Fire)
         {
             statusColor = _fireColor;
+            PlayEffectStatusCoroutine(duration,statusColor);
+        }
+        else if(elementType == ElementType.Darkness)
+        {
+            statusColor = _draknessColor;
             PlayEffectStatusCoroutine(duration,statusColor);
         }
     }

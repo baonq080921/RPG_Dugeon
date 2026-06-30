@@ -13,10 +13,13 @@ namespace scene
 
         private void Awake()
         {
+            // Persistence is handled at the prefab root by GameBootstrapper (Object.DontDestroyOnLoad
+            // on the instantiated PERSISTENTOBJECT root), so children are kept automatically.
+            // This component only guards against duplicates; it must NOT call DontDestroyOnLoad
+            // itself because it lives on a child GameObject (Unity ignores it and warns).
             if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {

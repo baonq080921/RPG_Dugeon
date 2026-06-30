@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
 using Base;
-using stateMachine;
-using UI;
+using Interfaces;
 using UnityEngine;
 
 namespace player
@@ -129,8 +128,9 @@ namespace player
             SkillButtonHandler.RegisterState((int)ButtonSkillName.Domain,playerDomainExpasionState);
             }
 
-       private void OnEnable()
+       protected override void OnEnable()
         {
+            base.OnEnable();
             ActivePlayer = this;
             ActivePlayerChanged?.Invoke(this);
             input.Enable();
@@ -150,8 +150,9 @@ namespace player
             EventBus<PlayerBoostingAmountEvent>.Register(_eventBoostingBinding);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             if (ActivePlayer == this) ActivePlayer = null;
             input.Disable();
             EventBus<GamePauseChangedEvent>.Deregister(_pauseBinding);
@@ -229,7 +230,7 @@ namespace player
 
         protected override void Update()
         {
-            if (ServiceLocator.Get<GameManager>()?.IsPause ?? false) return;
+            if (ServiceLocator.Get<IGameState>()?.IsPause ?? false) return;
             base.Update();
             TickAttackCooldown();
             TickAirAttackCooldown();

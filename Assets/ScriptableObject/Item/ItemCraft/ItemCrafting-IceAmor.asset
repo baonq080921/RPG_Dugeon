@@ -21,6 +21,8 @@ MonoBehaviour:
   <itemRare>k__BackingField: 129
   <rareCap>k__BackingField: 100
   <dropChance>k__BackingField: 87.2
+  <money>k__BackingField: 0
+  <describleItem>k__BackingField: 
   modifiers:
   - statType: 3
     value: 4
@@ -29,15 +31,11 @@ MonoBehaviour:
   - statType: 4
     value: 1
   requirementItems:
-  - itemTypes: 2
+  - itemData: {fileID: 11400000, guid: e60c681fbc3273744a6bf145037c6e78, type: 2}
     amount: 1
-    sprite: {fileID: 1309138316, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  - itemTypes: 3
+  - itemData: {fileID: 11400000, guid: 410e3825f8d358b4885fe0cb63571382, type: 2}
     amount: 2
-    sprite: {fileID: 1111445979, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  - itemTypes: 21
+  - itemData: {fileID: 11400000, guid: 3b973c18f7e8c644aa6ba88365d1ca3d, type: 2}
     amount: 1
-    sprite: {fileID: -191828619, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  - itemTypes: 18
-    amount: 1
-    sprite: {fileID: -622386729, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  - itemData: {fileID: 11400000, guid: 3e29785f89479c84db20de082a819674, type: 2}
+    amount: 2

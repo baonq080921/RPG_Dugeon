@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using Base;
 using enemy;
 using player;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace enemy
 {
     /// <summary>Boss enemy with its own dedicated state set.</summary>
@@ -14,6 +16,7 @@ namespace enemy
         public EnemyDeathRipplerTeleportState enemyDeathRipplerTeleportState { get; private set; }
         public EnemyDeathRipplerTeleportBackState enemyDeathRipplerTeleportBackState { get; private set; }
         public EnemyDeathRipplerUltimateState enemyDeathRipplerUltimateState {get; private set;}
+        public EnemyDeathRipplerSpecialLastState enemyDeathRipplerSpecialLastState {get ; private set;}
         private float _offsetY = 2;
         [SerializeField] private float _chanceToTeleport = 0.25f;
         private float _defaultChanceTeleport;
@@ -24,12 +27,26 @@ namespace enemy
         public bool HasAggro { get; private set; }
         private Vector3? _overrideTeleportPoint;
         private Coroutine _specialAttackCoroutine;
+        private Coroutine _specialLastAttackCoroutine;
+
         [SerializeField] private EnemyDeathRipplerUlt _enemyDeathRipplerUltPrefab;
         public bool canUlt {get; private set;}
         private float _ultCoolDownTimer;
         [SerializeField] private float _ultSpawnOffSet ; 
         private Player _player;
-    
+
+
+        [Header("SpecialLast Attack")]
+        [SerializeField] public List<Enemy> enemies;       
+        private readonly List<Enemy> _spawnedLastEnemies = new List<Enemy>();
+        private bool _lastEnemiesSpawned;
+
+        /// <summary>True once every minion summoned by the last attack has been defeated.</summary>
+        public bool AreLastEnemiesDefeated => _lastEnemiesSpawned && _spawnedLastEnemies.Count == 0;
+
+        public bool isLastAttackAttempt { get; set; } = false;
+        private EventBinding<EnemyDiedForBossEvent> _eventBinding;
+        [SerializeField] private Canvas _HealthCanvas;
         protected override void Awake()
         {
             base.Awake();
@@ -37,6 +54,7 @@ namespace enemy
             _ultCoolDownTimer = enemyData.SkillCoolDown;
             canUlt = false;
         }
+
         protected override void InitializeStates()
         {
             enemyIdleState = new EnemyDeathRipplerIdleState(this, stateMachine, "Idle");
@@ -48,12 +66,34 @@ namespace enemy
             enemyDeathRipplerTeleportState = new EnemyDeathRipplerTeleportState(this, stateMachine, "CanTelePort");
             enemyDeathRipplerTeleportBackState = new EnemyDeathRipplerTeleportBackState(this, stateMachine, "CanTelePort");
             enemyDeathRipplerUltimateState = new EnemyDeathRipplerUltimateState(this, stateMachine,"canUlt");
+            enemyDeathRipplerSpecialLastState = new EnemyDeathRipplerSpecialLastState(this,stateMachine,"canPerformLastAttack");
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            _eventBinding = new EventBinding<EnemyDiedForBossEvent>(MarkEnemyChildOfBossDied);
+            EventBus<EnemyDiedForBossEvent>.Register(_eventBinding);
+
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            EventBus<EnemyDiedForBossEvent>.Deregister(_eventBinding);
+        }
+
+        private void MarkEnemyChildOfBossDied(EnemyDiedForBossEvent e)
+        {
+            // Remove the dying clone from the live list, not from the prefab template list.
+            if(!_spawnedLastEnemies.Contains(e.enemy)) return;
+            _spawnedLastEnemies.Remove(e.enemy);
         }
 
         protected override void Update()
         {
             base.Update();
-            if (Input.GetKeyDown(KeyCode.M))
+            if (Keyboard.current != null && Keyboard.current.mKey.wasPressedThisFrame)
             {
                 transform.position = FindTeleportPoint();
             }
@@ -90,6 +130,28 @@ namespace enemy
 
         }
 
+        public void SpecialLastAttack()
+        {
+            if(_specialLastAttackCoroutine != null) StopCoroutine(_specialLastAttackCoroutine);
+            _specialLastAttackCoroutine = StartCoroutine(SpecialLastAttackCoroutine());
+        }
+        IEnumerator SpecialLastAttackCoroutine()
+        {
+            _spawnedLastEnemies.Clear();
+            _lastEnemiesSpawned = false;
+            foreach(var enemy in enemies)
+            {
+                if(DetectedPlayer == null) break;
+                var enemyChild = Instantiate(enemy);
+                enemyChild.transform.position = DetectedPlayer.transform.position;
+                _spawnedLastEnemies.Add(enemyChild);
+                yield return new WaitForSeconds(0.2f);
+            }
+            // Set only after spawning so the state does not see an empty list and bail out early.
+            _lastEnemiesSpawned = true;
+            _specialLastAttackCoroutine = null;
+        }
+
         IEnumerator SpecialAttackCoroutine()
         {
             _player = ServiceLocator.Get<Player>();
@@ -100,8 +162,8 @@ namespace enemy
                 var offset = _player.direction > 0 ? _ultSpawnOffSet : _ultSpawnOffSet * _player.direction;
                 ult.transform.position = new Vector3(_player.transform.position.x + offset,_player.transform.position.y + _offsetY);
                 yield return new WaitForSeconds(enemyData.SkillSpawnInterval);
-
             }
+            
         }
 
 
@@ -144,6 +206,8 @@ namespace enemy
                 _overrideTeleportPoint = ray.point + new Vector2(0, _offsetY);
         }
 
+
+        //Find Place to TelePort
         public Vector3 FindTeleportPoint()
         {
             if (_overrideTeleportPoint.HasValue) // check if we caculate the land point
@@ -164,6 +228,10 @@ namespace enemy
                     return ray.point + new Vector2(0, _offsetY);
             }
             return transform.position;
+        }
+        public void ToggleHealthCanvas(bool isOpen)
+        {
+            _HealthCanvas.gameObject.SetActive(isOpen);
         }
     }
 }

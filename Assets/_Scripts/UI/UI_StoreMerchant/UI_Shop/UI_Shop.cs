@@ -1,4 +1,5 @@
 using Base;
+using Interfaces;
 using player;
 using TMPro;
 using Unity.VisualScripting;
@@ -61,12 +62,12 @@ public class UI_Shop : MonoBehaviour
         UpdateDisplay(_playerInventory.Money);
         _rectTransform.anchoredPosition = _originalPosition;
         EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
-        ServiceLocator.Get<GameManager>().SetPause(true);
+        ServiceLocator.Get<IGameState>().SetPause(true);
     }
     public void CloseStoreUI()
     {
         _rectTransform.anchoredPosition = _hiddentPosition;
         EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(false));
-        ServiceLocator.Get<GameManager>().SetPause(false);
+        ServiceLocator.Get<IGameState>().SetPause(false);
     }
 }

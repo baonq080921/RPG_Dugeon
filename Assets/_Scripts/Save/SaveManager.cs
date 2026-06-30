@@ -1,9 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Base;
-using player;
+using Interfaces;
+using SaveData;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,15 +14,16 @@ namespace Save
     /// Also holds an in-memory <see cref="_transitionSnapshot"/> so the
     /// <see cref="scene.SceneTransitionManager"/> can restore player state after a
     /// portal scene load without needing to touch disk again.
+    /// Player-specific restoration is delegated to <see cref="IIPlayerPersistent"/> so
+    /// this layer never references player types directly.
     /// </summary>
-    public class SaveManager : MonoBehaviour
+    public class SaveManager : MonoBehaviour, ISaveService
     {
         private static string SavePath =>
             Path.Combine(Application.persistentDataPath, "save.json");
 
-        private ItemDataRegistry _registry;
-        private PlayerSaveData   _pendingLoad;
-        private PlayerSaveData   _transitionSnapshot;
+        private PlayerSaveData _pendingLoad;
+        private PlayerSaveData _transitionSnapshot;
         private readonly HashSet<string> _completedQuestScenes = new();
         private readonly Dictionary<string, SceneStateData> _sceneStates = new();
         private readonly Dictionary<string, int> _questProgress = new();
@@ -32,13 +33,8 @@ namespace Save
 
         private void Awake()
         {
-            _registry = Resources.Load<ItemDataRegistry>("ItemDataRegistry");
-            if (_registry == null)
-                Debug.LogError("[SaveManager] ItemDataRegistry not found in Resources.");
-            else
-                _registry.Initialize();
-
             ServiceLocator.Register<SaveManager>(this);
+            ServiceLocator.Register<ISaveService>(this);
         }
 
         // -------------------------------------------------------------------------
@@ -48,13 +44,13 @@ namespace Save
         /// <summary>Writes current player state to disk.</summary>
         public void Save()
         {
-            var player = FindObjectOfType<Player>();
-            if (player == null)
+            var playerPersistent = ServiceLocator.Get<IIPlayerPersistent>();
+            if (playerPersistent == null)
             {
-                Debug.LogWarning("[SaveManager] Save called but Player not found in scene.");
+                Debug.LogWarning("[SaveManager] Save called but IIPlayerPersistent not registered.");
                 return;
             }
-            WriteToDisk(BuildSaveData(player));
+            WriteToDisk(BuildSaveData(playerPersistent));
         }
 
         /// <summary>
@@ -62,88 +58,26 @@ namespace Save
         /// Captures player state to memory so it can be restored in the new scene.
         /// Does NOT write to disk — save only happens at checkpoints or manual saves.
         /// </summary>
-        public void SnapshotForTransition(Player player)
+        public void SnapshotForTransition(IIPlayerPersistent iPlayerPersistent)
         {
-            _transitionSnapshot = BuildSaveData(player);
+            _transitionSnapshot = BuildSaveData(iPlayerPersistent);
         }
 
-        private PlayerSaveData BuildSaveData(Player player)
+        private PlayerSaveData BuildSaveData(IIPlayerPersistent iPlayerPersistent)
         {
-            var inventory   = player.GetComponent<PlayerInventory>();
-            var playerLevel = player.GetComponent<PlayerLevel>();
-
-            var playerStat = player.GetComponent<EntityStat>();
-            var data = new PlayerSaveData
-            {
-                sceneName         = SceneManager.GetActiveScene().name,
-                posX              = player.transform.position.x,
-                posY              = player.transform.position.y,
-                currentHealth     = player.playerHealth.CurrentHealth,
-                currentExp        = playerLevel != null ? playerLevel.CurrentExp     : 0f,
-                currentLevel      = playerLevel != null ? playerLevel.Level          : 1,
-                expToNextLevel    = playerLevel != null ? playerLevel.ExpToNextLevel : 0f,
-                strengthPoints     = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Strength)     : 0,
-                agilityPoints      = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Agility)      : 0,
-                intelligencePoints = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Intelligence) : 0,
-                vitalityPoints     = playerStat != null ? playerStat.GetAllocatedPoints(StatType.Vitality)     : 0,
-                currentGolds       = inventory  != null? inventory.Money : 0,
-            };
-
-            if (inventory != null)
-            {
-                GetInventoryData(inventory, data);
-            }
-
-            var skillTree = ServiceLocator.Get<UIManager>()?.uISkillTree;
-            if (skillTree != null)
-            {
-                GetSkillTreeData(inventory, data, skillTree);
-            }
+            var playerCurrentData = iPlayerPersistent.GetPlayerData();
 
             foreach (var sceneName in _completedQuestScenes)
-                data.completedQuestScenes.Add(sceneName);
+                playerCurrentData.completedQuestScenes.Add(sceneName);
 
             foreach (var state in _sceneStates.Values)
-                data.sceneStates.Add(state);
+                playerCurrentData.sceneStates.Add(state);
 
             foreach (var kvp in _questProgress)
-                data.questProgress.Add(new QuestProgressEntry { sceneName = kvp.Key, progress = kvp.Value });
+                playerCurrentData.questProgress.Add(new QuestProgressEntry { sceneName = kvp.Key, progress = kvp.Value });
 
-            return data;
+            return playerCurrentData;
         }
-
-        private static void GetSkillTreeData(PlayerInventory inventory, PlayerSaveData data, UISkillTree skillTree)
-        {
-            data.skillTree.skillPoints = inventory?.SkillPoints ?? 0f;
-            foreach (var node in skillTree.GetComponentsInChildren<UITreeNode>(true))
-            {
-                if (node.skillTreeData == null || !node.isUnlocked) continue;
-                data.skillTree.nodes.Add(new NodeSaveEntry { nodeKey = node.skillTreeData.name });
-            }
-        }
-
-
-        private static void GetInventoryData(PlayerInventory inventory, PlayerSaveData data)
-        {
-            foreach (var item in inventory.itemInventoriesList)
-            {
-                if (item?.itemData == null) continue;
-                data.inventory.Add(new ItemSaveEntry
-                {
-                    itemId = item.itemData.ItemId,
-                    stackSize = item.stackSize,
-                });
-            }
-            foreach (var slot in inventory.equipList)
-            {
-                data.equipment.Add(new EquipSaveEntry
-                {
-                    slotType = slot.slotType.ToString(),
-                    itemId = slot.HasItem() ? slot.equipItem.itemData.ItemId : string.Empty,
-                });
-            }
-        }
-
 
         private void WriteToDisk(PlayerSaveData data)
         {
@@ -152,21 +86,17 @@ namespace Save
         }
 
         // -------------------------------------------------------------------------
-        // Restore after portal transition (no scene load, no position restore)
+        // Restore after portal transition
         // -------------------------------------------------------------------------
 
         /// <summary>
         /// Called by <see cref="scene.SceneTransitionManager"/> after the new scene finishes loading.
-        /// Applies the in-memory snapshot to <paramref name="player"/> — everything except position
-        /// (position is handled by the spawn point).
+        /// Applies the in-memory snapshot — everything except position (handled by the spawn point).
         /// </summary>
-        public IEnumerator RestoreAfterTransition(Player player)
+        public IEnumerator RestoreAfterTransition()
         {
             if (_transitionSnapshot == null) yield break;
-            var inventory = player.GetComponent<PlayerInventory>();
-            if (inventory == null) yield break;
-
-            yield return StartCoroutine(ApplyData(_transitionSnapshot, player, inventory, restorePosition: false));
+            yield return StartCoroutine(ApplyData(_transitionSnapshot, restorePosition: false));
             _transitionSnapshot = null;
             Debug.Log("[SaveManager] Transition restore complete.");
         }
@@ -196,12 +126,11 @@ namespace Save
             => _questProgress.TryGetValue(sceneName, out var p) ? p : 0;
 
         // -------------------------------------------------------------------------
-        // Scene state (persisted to disk — restored on Continue, cleared on New Game)
+        // Scene state
         // -------------------------------------------------------------------------
 
         /// <summary>
         /// Clears all saved progress and loads <paramref name="startSceneName"/> fresh.
-        /// Call this when the player chooses New Game from the main menu.
         /// </summary>
         public void StartNewGame(string startSceneName)
         {
@@ -213,7 +142,7 @@ namespace Save
             SceneManager.LoadScene(startSceneName);
         }
 
-        /// <summary>Records that the entity with <paramref name="entityId"/> has been permanently changed in <paramref name="sceneName"/> this session.</summary>
+        /// <summary>Records that the entity with <paramref name="entityId"/> has been permanently changed in <paramref name="sceneName"/>.</summary>
         public void MarkEntityPersisted(string sceneName, string entityId)
         {
             EnsureSceneState(sceneName).persistedEntityIds.Add(entityId);
@@ -222,6 +151,10 @@ namespace Save
         /// <summary>Returns the state data for <paramref name="sceneName"/>, or null if no entities have been interacted with yet.</summary>
         public SceneStateData GetSceneState(string sceneName)
             => _sceneStates.TryGetValue(sceneName, out var data) ? data : null;
+
+        /// <inheritdoc/>
+        public bool IsEntityPersisted(string sceneName, string entityId)
+            => _sceneStates.TryGetValue(sceneName, out var state) && state.persistedEntityIds.Contains(entityId);
 
         private SceneStateData EnsureSceneState(string sceneName)
         {
@@ -242,10 +175,25 @@ namespace Save
                 return;
             }
 
-            _pendingLoad = JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(SavePath));
+            // Deserialization can throw on a corrupted/partially-written save file
+            // (power loss while saving, disk error). Guard it so a bad file is
+            // treated as "no save" instead of crashing the game.
+            try
+            {
+                _pendingLoad = JsonUtility.FromJson<PlayerSaveData>(File.ReadAllText(SavePath));
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[SaveManager] Failed to parse save file, treating as no save: {e.Message}");
+                return;
+            }
 
-            // Pre-populate quest data before the scene loads so SceneQuestController.Start()
-            // reads the correct saved values instead of 0.
+            if (_pendingLoad == null)
+            {
+                Debug.LogWarning("[SaveManager] Save file deserialized to null; aborting load.");
+                return;
+            }
+
             _completedQuestScenes.Clear();
             foreach (var s in _pendingLoad.completedQuestScenes)
                 _completedQuestScenes.Add(s);
@@ -268,16 +216,7 @@ namespace Save
         private IEnumerator ApplyAfterFullLoad()
         {
             yield return null; // wait for Awake/Start in new scene
-
-            var player    = FindObjectOfType<Player>();
-            var inventory = player?.GetComponent<PlayerInventory>();
-            if (player == null || inventory == null)
-            {
-                Debug.LogError("[SaveManager] Load failed: Player / PlayerInventory not found after scene load.");
-                yield break;
-            }
-
-            yield return StartCoroutine(ApplyData(_pendingLoad, player, inventory, restorePosition: true));
+            yield return StartCoroutine(ApplyData(_pendingLoad, restorePosition: true));
             _pendingLoad = null;
             Debug.Log("[SaveManager] Full load complete.");
         }
@@ -286,84 +225,18 @@ namespace Save
         // Shared restore logic
         // -------------------------------------------------------------------------
 
-        private IEnumerator ApplyData(PlayerSaveData data, Player player, PlayerInventory inventory, bool restorePosition)
+        private IEnumerator ApplyData(PlayerSaveData data, bool restorePosition)
         {
-            if (restorePosition)
-                player.transform.position = new Vector2(data.posX, data.posY);
-
-            player.playerHealth.RestoreHealth(data.currentHealth);
-            player.playerLevel.RestoreExp(data);
-
-            inventory.ClearAllInventory();
-            inventory.SetMoney(data.currentGolds);
-
-            foreach (var entry in data.inventory)
+            var playerPersistent = ServiceLocator.Get<IIPlayerPersistent>();
+            if (playerPersistent == null)
             {
-                if (string.IsNullOrEmpty(entry.itemId)) continue;
-                var itemData = _registry?.Get(entry.itemId);
-                if (itemData == null)
-                {
-                    Debug.LogWarning($"[SaveManager] Unknown itemId '{entry.itemId}' — skipped.");
-                    continue;
-                }
-                var item = new ItemInventory(itemData);
-                inventory.itemInventoriesList.Add(item);
-                for (int i = 1; i < entry.stackSize; i++)
-                    item.AddStack();
+                Debug.LogError("[SaveManager] IIPlayerPersistent not found — restore aborted.");
+                yield break;
             }
 
-            var playerStat = player.GetComponent<EntityStat>();
-            playerStat.ResetAllStats();
-            for (int i = 0; i < data.strengthPoints;     i++) playerStat.AddMajorStatPoint(StatType.Strength);
-            for (int i = 0; i < data.agilityPoints;      i++) playerStat.AddMajorStatPoint(StatType.Agility);
-            for (int i = 0; i < data.intelligencePoints; i++) playerStat.AddMajorStatPoint(StatType.Intelligence);
-            for (int i = 0; i < data.vitalityPoints;     i++) playerStat.AddMajorStatPoint(StatType.Vitality);
-            foreach (var entry in data.equipment)
-            {
-                if (string.IsNullOrEmpty(entry.itemId)) continue;
-                var itemData = _registry?.Get(entry.itemId);
-                if (itemData == null)
-                {
-                    Debug.LogWarning($"[SaveManager] Unknown equipped itemId '{entry.itemId}' — skipped.");
-                    continue;
-                }
-                if (!Enum.TryParse(entry.slotType, out EquipSlotType slotType)) continue;
-                var slot = inventory.equipList.Find(s => s.slotType == slotType);
-                if (slot == null) continue;
+            yield return StartCoroutine(playerPersistent.RestoreFromSaveData(data, restorePosition));
 
-                var item = new ItemInventory(itemData);
-                slot.equipItem = item;
-                item.AddModifiers(playerStat);
-                item.AddItemEffect(player);
-            }
-
-            EventBus<OnInventoryChangedEvent>.Raise(new OnInventoryChangedEvent());
-
-            var uiSkillTree = ServiceLocator.Get<UIManager>()?.uISkillTree;
-            if (uiSkillTree != null)
-            {
-                var allNodes = uiSkillTree.GetComponentsInChildren<UITreeNode>(true);
-                foreach (var node in allNodes)
-                    node.ResetNode();
-
-                inventory.SetSkillPoints(data.skillTree.skillPoints);
-
-                var nodeMap = new Dictionary<string, UITreeNode>();
-                foreach (var node in allNodes)
-                    if (node.skillTreeData != null)
-                        nodeMap[node.skillTreeData.name] = node;
-
-                foreach (var entry in data.skillTree.nodes)
-                {
-                    if (nodeMap.TryGetValue(entry.nodeKey, out var node))
-                        node.RestoreUnlocked();
-                    else
-                        Debug.LogWarning($"[SaveManager] Unknown skill tree node '{entry.nodeKey}' — skipped.");
-                }
-
-                foreach (var handler in uiSkillTree.GetComponentsInChildren<UIConnectedHandler>())
-                    handler.RefreshLineColors();
-            }
+            EventBus<SkillTreeRestoreEvent>.Raise(new SkillTreeRestoreEvent(data.skillTree, data.skillPoints));
 
             _completedQuestScenes.Clear();
             foreach (var sceneName in data.completedQuestScenes)
@@ -377,15 +250,10 @@ namespace Save
             _questProgress.Clear();
             foreach (var entry in data.questProgress)
                 if (!string.IsNullOrEmpty(entry.sceneName))
-                {
                     _questProgress[entry.sceneName] = entry.progress;
-                    Debug.Log("Scene Name"+ entry.sceneName + "progress "+ entry.progress);
-                }
 
-            // SceneEntityManager.Start() ran before _sceneStates was restored, so apply now.
-            FindObjectOfType<scene.SceneEntityManager>()?.ApplySceneState();
-
-            yield return null;
+            // SceneEntityManager.Start() ran before _sceneStates was restored; notify it to re-apply now.
+            EventBus<SceneStateRestoredEvent>.Raise(new SceneStateRestoredEvent());
         }
     }
 }

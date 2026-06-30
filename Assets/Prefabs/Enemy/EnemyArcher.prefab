@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 3932429248069661851}
   - component: {fileID: 4799959618566767314}
   - component: {fileID: 2308894244992075555}
-  - component: {fileID: 1550798183399274507}
   - component: {fileID: 4724684595318538197}
   - component: {fileID: 5907542189135602107}
+  - component: {fileID: 4892026542559172203}
   m_Layer: 6
   m_Name: EnemyArcher
   m_TagString: Enemy
@@ -195,21 +195,6 @@ MonoBehaviour:
   _maxiumCharge: 1
   _shockDuration: 0.5
   _iceDuration: 3
---- !u!114 &1550798183399274507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032484600882267570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fe25f09c19c84448239722930b9053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dropDataList: {fileID: 11400000, guid: 3f6e29191b235074aa472f2b36a9fe9a, type: 2}
-  maxRarity: 1200
-  maxDropOut: 2
 --- !u!114 &4724684595318538197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +240,21 @@ MonoBehaviour:
   _arrowIcePrefab: {fileID: 5471187393564023696, guid: 1903d08d62b600e40b9fd2095d9866c0, type: 3}
   _defaultCapacity: 20
   _maxSize: 50
+--- !u!114 &4892026542559172203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032484600882267570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3bb59953996d44bbfedc754979181e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dropDataList: {fileID: 11400000, guid: 3f6e29191b235074aa472f2b36a9fe9a, type: 2}
+  maxRarity: 1200
+  maxDropOut: 3
 --- !u!1 &3472643015412623818
 GameObject:
   m_ObjectHideFlags: 0

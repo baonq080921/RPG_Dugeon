@@ -124,7 +124,7 @@ MonoBehaviour:
   _rb: {fileID: 0}
   _whatisTarget:
     serializedVersion: 2
-    m_Bits: 392
+    m_Bits: 256
   _animator: {fileID: 0}
   _damageScale: 1.6
   _lifetime: 6

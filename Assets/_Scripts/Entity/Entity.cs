@@ -75,6 +75,15 @@ public abstract class Entity : MonoBehaviour
     }
 
 
+    protected virtual void OnEnable() 
+    {
+        
+    }
+
+    protected virtual  void OnDisable()
+    {
+        
+    }
 
     protected virtual void Update()
     {

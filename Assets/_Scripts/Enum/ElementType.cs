@@ -4,5 +4,6 @@ public enum ElementType:byte
     Fire,
     Electric,
     Ice,
-    Earth
+    Earth,
+    Darkness
 }

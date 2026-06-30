@@ -20,14 +20,13 @@ namespace enemy
         public override void Enter()
         {
             base.Enter();
-            float randomValue = Random.Range(0f,1f);
             if (enemy.ShouldEnemyRetreat())
             {
                 if(_enemyDeathRippler.ShouldTelePort()) // teleport to the back of the player
                 {
                     stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerTeleportBackState);
                 }
-                enemy.Flip(enemy.direction);
+                enemy.FacePlayer();
                 rb.velocity = new Vector2(enemy.enemyData.AttackVelocityRetreat.x * -enemy.direction, enemy.enemyData.AttackVelocityRetreat.y);
                 return;
             }
@@ -39,6 +38,12 @@ namespace enemy
         {
             base.Update();
             enemy.FacePlayer();
+            if(_enemyDeathRippler.entityHealth.CurrentHealth/_enemyDeathRippler.entityStat.GetHealthValue() < 0.3f 
+                && !_enemyDeathRippler.isLastAttackAttempt)
+            {
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerSpecialLastState);
+                return;
+            }
             if (!isTriggered) return;
 
             if (enemy.IsPlayerDetected())

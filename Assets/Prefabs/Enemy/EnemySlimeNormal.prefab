@@ -299,8 +299,8 @@ GameObject:
   - component: {fileID: 417843981919031256}
   - component: {fileID: 6112950273618936067}
   - component: {fileID: 3626068505191810250}
-  - component: {fileID: 568208166654378167}
   - component: {fileID: 4804339272714230027}
+  - component: {fileID: 2930015387141511588}
   m_Layer: 6
   m_Name: EnemySlimeNormal
   m_TagString: Enemy
@@ -376,7 +376,7 @@ MonoBehaviour:
   _groundCheckPoint: {fileID: 408820343994346796}
   _groundCheckRadius: 0.1
   _wallCheckDistance: 1
-  <CanKnockBackOnHit>k__BackingField: 1
+  _flipHealthBar: 1
   _knockBackPowerLight: {x: 1, y: 2}
   _knockBackPowerHeavy: {x: 2, y: 2}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 4c9d3a49c0dac5c4aae987e129d162f3, type: 2}
@@ -405,6 +405,7 @@ MonoBehaviour:
   _scaleElementalFactor: 1
   _electricStatusDuration: 2
   _electricBuildUpCharge: 1
+  _damagePopupOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &9159566936631035541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,21 +472,7 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
---- !u!114 &568208166654378167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559404807143362823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fe25f09c19c84448239722930b9053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dropDataList: {fileID: 0}
-  maxRarity: 1200
-  maxDropOut: 3
+  _iceDuration: 3
 --- !u!61 &4804339272714230027
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -531,6 +518,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5643475, y: 0.9097049}
   m_EdgeRadius: 0
+--- !u!114 &2930015387141511588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559404807143362823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3bb59953996d44bbfedc754979181e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dropDataList: {fileID: 0}
+  maxRarity: 1200
+  maxDropOut: 3
 --- !u!1 &1979724691769958815
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +902,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295a512a3ac3e0649b830e9e176eaac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flipWithEntity: 1
   _slider: {fileID: 3824179334043897176}
 --- !u!1 &7277382557655053033
 GameObject:

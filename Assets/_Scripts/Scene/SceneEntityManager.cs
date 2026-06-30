@@ -1,7 +1,6 @@
 using System.Linq;
 using Base;
 using Interfaces;
-using Save;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,16 +15,28 @@ namespace scene
     {
         private IScenePersistable[] _persistables;
         private string _sceneName;
-        private SaveManager _saveManager;
+        private ISaveService _saveService;
+        private EventBinding<SceneStateRestoredEvent> _sceneStateRestoredBinding;
 
         private void Awake()
         {
             _sceneName = SceneManager.GetActiveScene().name;
         }
 
+        private void OnEnable()
+        {
+            _sceneStateRestoredBinding = new EventBinding<SceneStateRestoredEvent>(ApplySceneState);
+            EventBus<SceneStateRestoredEvent>.Register(_sceneStateRestoredBinding);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<SceneStateRestoredEvent>.Deregister(_sceneStateRestoredBinding);
+        }
+
         private void Start()
         {
-            _saveManager = ServiceLocator.Get<SaveManager>();
+            _saveService = ServiceLocator.Get<ISaveService>();
             _persistables = FindObjectsOfType<MonoBehaviour>()
                 .OfType<IScenePersistable>()
                 .ToArray();
@@ -36,24 +47,14 @@ namespace scene
             ApplySceneState();
         }
 
-        /// <summary>
-        /// Restores all entities already marked as persisted in the saved scene state.
-        /// Called from <see cref="Start"/> for portal transitions and directly by
-        /// <see cref="SaveManager"/> after a full load to fix the timing gap.
-        /// </summary>
-        public void ApplySceneState()
+        private void ApplySceneState()
         {
-            if (_persistables == null) return;
-            var sceneState = _saveManager?.GetSceneState(_sceneName);
-            Debug.Log($"[SceneEntityManager] ApplySceneState on {_sceneName}: sceneState={(sceneState == null ? "NULL" : string.Join(", ", sceneState.persistedEntityIds))}");
-            if (sceneState == null) return;
+            if (_persistables == null || _saveService == null) return;
 
             foreach (var persistable in _persistables)
             {
                 if (persistable == null) continue;
-                bool found = sceneState.persistedEntityIds.Contains(persistable.SceneEntityId);
-                Debug.Log($"[SceneEntityManager]   {persistable.GetType().Name} id={persistable.SceneEntityId} → restore={found}");
-                if (found)
+                if (_saveService.IsEntityPersisted(_sceneName, persistable.SceneEntityId))
                     persistable.RestoreState();
             }
         }
@@ -67,7 +68,7 @@ namespace scene
                 persistable.OnPersisted += () =>
                 {
                     Debug.Log($"[SceneEntityManager] OnPersisted fired: {persistable.GetType().Name} id={id} in {_sceneName}");
-                    _saveManager?.MarkEntityPersisted(_sceneName, id);
+                    _saveService?.MarkEntityPersisted(_sceneName, id);
                 };
             }
         }

@@ -40,6 +40,10 @@ public abstract class EntityHealth : MonoBehaviour, IHit
         {
             return false ;
         }
+        // Guard against negative input: a negative value would turn ReduceHP's
+        // subtraction into healing and raise HP above its maximum. Clamp to 0.
+        damage = Mathf.Max(0f, damage);
+        elementalDamage = Mathf.Max(0f, elementalDamage);
         float finalDamge;
         float finalElementalDamage;
         finalDamge = damage * _entityStat.GetMigiationValue();

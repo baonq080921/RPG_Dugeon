@@ -1,7 +1,6 @@
 using System;
 using Base;
 using Interfaces;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace enemy
@@ -55,13 +54,11 @@ namespace enemy
         public float moveSpeed{get; private set;}
         public float attackSpeed {get; private set;}
 
-        private EntityDrop _entityDrop;
-        protected EntityCombat entityCombat;
+        private EnemyDrop _enemyDrop;
         protected override void Awake()
         {
             base.Awake();
-            _entityDrop = GetComponent<EntityDrop>();
-            entityCombat = GetComponent<EntityCombat>();
+            _enemyDrop = GetComponent<EnemyDrop>();
             InitializeStates();
         }
 
@@ -153,7 +150,7 @@ namespace enemy
 
         public bool ShouldEnemyRetreat()
         {
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, new Vector2(direction, 0), enemyData.minDistanceRetreat, enemyData.WhatIsPlayer);
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(new Vector2(transform.position.x,transform.position.y-0.8f), new Vector2(direction, 0), enemyData.minDistanceRetreat, enemyData.WhatIsPlayer);
             Collider2D collider2D = raycastHit2D.collider;
             if(collider2D == null) return false;
 
@@ -180,9 +177,11 @@ namespace enemy
         public override void Die()
         {
             isDead = true;
-            _entityDrop.DropItems();
-            EventBus<EnemyDiedEvent>.Raise(new EnemyDiedEvent(enemyData.Level, enemyData.BaseExp));
+            _enemyDrop.DropItems();
+            _enemyDrop.DropGoldAndSkillPoint();
+            EventBus<OnEnemyDiedEvent>.Raise(new OnEnemyDiedEvent(enemyData.Level, enemyData.BaseExp));
             RaiseOnPersisted();
+            EventBus<EnemyDiedForBossEvent>.Raise(new EnemyDiedForBossEvent(this));
         }
 
         /// <inheritdoc/>
@@ -223,7 +222,7 @@ namespace enemy
             Gizmos.DrawWireSphere(transform.position, enemyData.AttackRange);
 
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y));
+            Gizmos.DrawLine(new Vector2(transform.position.x, transform.position.y -0.8f), new Vector3(transform.position.x + (direction * enemyData.minDistanceRetreat), transform.position.y -0.8f));
         }
 
         /// <summary>

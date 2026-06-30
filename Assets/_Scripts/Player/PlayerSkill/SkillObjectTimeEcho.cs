@@ -108,6 +108,7 @@ public class SkillObjectTimeEcho : SkillObject_Base
     public void TimeEchoSideKickAttack(Transform spawnTransform = null, float damage = 0f)
     {
         SpawnTimeEcho(spawnTransform);
+        _isMultiAttack = true;
         DetectEnemiesInRange();
     }
 

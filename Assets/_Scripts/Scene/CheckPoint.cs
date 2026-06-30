@@ -2,8 +2,8 @@
 
 using System.Collections;
 using Base;
+using Interfaces;
 using player;
-using Save;
 using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
@@ -20,7 +20,7 @@ public class CheckPoint : MonoBehaviour
     private IEnumerator SaveNextFrame(Player player)
     {
         yield return null;
-        ServiceLocator.Get<SaveManager>().Save();
+        ServiceLocator.Get<ISaveService>()?.Save();
         ServiceLocator.Get<PoolManager>().levelupPool.Spawn(player.transform);
     }
 }

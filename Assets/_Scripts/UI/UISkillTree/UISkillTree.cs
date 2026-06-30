@@ -1,22 +1,35 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Base;
 using player;
+using SaveData;
 using TMPro;
 using UnityEngine;
 
-public class UISkillTree : MonoBehaviour
+public class UISkillTree : MonoBehaviour, ITreeNodePersistent
 {
     public static event Action OnReset;
 
     private PlayerInventory _playerInventory;
+    private EventBinding<SkillTreeRestoreEvent> _restoreBinding;
     [SerializeField] private TextMeshProUGUI _skillPointTmp;
 
     public float SkillPoints => _playerInventory?.SkillPoints ?? 0f;
+
+    void Awake()
+    {
+        ServiceLocator.Register<ITreeNodePersistent>(this);
+    }
 
     private void OnEnable()
     {
         Player.ActivePlayerChanged += OnPlayerChanged;
         if (Player.ActivePlayer != null)
             OnPlayerChanged(Player.ActivePlayer);
+
+        _restoreBinding = new EventBinding<SkillTreeRestoreEvent>(OnRestoreSkillTree);
+        EventBus<SkillTreeRestoreEvent>.Register(_restoreBinding);
     }
 
     private void OnDisable()
@@ -24,6 +37,8 @@ public class UISkillTree : MonoBehaviour
         Player.ActivePlayerChanged -= OnPlayerChanged;
         if (_playerInventory != null)
             _playerInventory.OnSkillPointsChanged -= UpdateSkillPointText;
+
+        EventBus<SkillTreeRestoreEvent>.Deregister(_restoreBinding);
     }
 
     private void Start() => UpdateSkillPointText(SkillPoints);
@@ -58,6 +73,31 @@ public class UISkillTree : MonoBehaviour
             handler.ArrangeChildNodes();
     }
 
+    private void OnRestoreSkillTree(SkillTreeRestoreEvent e)
+    {
+        var allNodes = GetComponentsInChildren<UITreeNode>(true);
+        foreach (var node in allNodes)
+            node.ResetNode();
+
+        RestoreSkillPoints(e.SkillPoints);
+
+        var nodeMap = new Dictionary<string, UITreeNode>();
+        foreach (var node in allNodes)
+            if (node.skillTreeData != null)
+                nodeMap[node.skillTreeData.name] = node;
+
+        foreach (var entry in e.SkillTree.nodes)
+        {
+            if (nodeMap.TryGetValue(entry.nodeKey, out var node))
+                node.RestoreUnlocked();
+            else
+                Debug.LogWarning($"[UISkillTree] Unknown skill tree node '{entry.nodeKey}' — skipped.");
+        }
+
+        foreach (var handler in GetComponentsInChildren<UIConnectedHandler>(true))
+            handler.RefreshLineColors();
+    }
+
     [ContextMenu("Reset Skill Tree")]
     public void ResetSkillTree()
     {
@@ -72,4 +112,10 @@ public class UISkillTree : MonoBehaviour
         foreach (var handler in GetComponentsInChildren<UIConnectedHandler>(true))
             handler.RefreshLineColors();
     }
+
+    public List<UITreeNode> GetUINodesInSkillTree()
+    {
+        return transform.GetComponentsInChildren<UITreeNode>().ToList();
+    }
 }
+

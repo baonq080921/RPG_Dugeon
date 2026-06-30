@@ -5,6 +5,7 @@ using enemy;
 using player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace UI
@@ -67,9 +68,20 @@ namespace UI
         {
             var camera = ServiceLocator.Get<Helper>().mainCam;
             _currentItem = e.itemData;
-            _rectTf.anchoredPosition = camera.ScreenToWorldPoint(Input.mousePosition);
+            _rectTf.anchoredPosition = camera.ScreenToWorldPoint(GetPointerPosition());
             _shopSlotsCanvasGroup.blocksRaycasts = false;
             UpdateDisplay();
+        }
+
+        /// <summary>
+        /// Returns the current pointer (mouse or touch) screen position via the Input System.
+        /// Falls back to the screen center when no pointer device is available.
+        /// </summary>
+        private Vector2 GetPointerPosition()
+        {
+            if (Pointer.current != null)
+                return Pointer.current.position.ReadValue();
+            return new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
         }
 
         private void HideTheStoreItemInfo()
@@ -107,7 +119,7 @@ namespace UI
         public void TryBuyItem()
         {
             if (_currentItem == null || _playerInventory == null) return;
-            var mousePos = ServiceLocator.Get<Helper>().mainCam.ScreenToWorldPoint(Input.mousePosition);
+            var mousePos = ServiceLocator.Get<Helper>().mainCam.ScreenToWorldPoint(GetPointerPosition());
 
             if (!_playerInventory.CanSpendMoney(_currentItem.money))
             {

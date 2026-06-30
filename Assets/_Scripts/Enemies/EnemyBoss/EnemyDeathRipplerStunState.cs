@@ -5,8 +5,12 @@ namespace enemy
     /// <summary>Stun/hit state specific to <see cref="EnemyDeathRippler"/>.</summary>
     public class EnemyDeathRipplerStunState : EnemyState
     {
+        private EnemyDeathRippler _enemyDeathRippler;
         public EnemyDeathRipplerStunState(Enemy enemy, StateMachine stateMachine, string animBoolName)
-            : base(enemy, stateMachine, animBoolName) { }
+            : base(enemy, stateMachine, animBoolName)
+        {
+            _enemyDeathRippler = enemy as EnemyDeathRippler;
+        }
 
         public override void Enter()
         {
@@ -21,8 +25,13 @@ namespace enemy
         public override void Update()
         {
             base.Update();
+            if(_enemyDeathRippler.entityHealth.CurrentHealth/_enemyDeathRippler.entityStat.GetHealthValue() < 0.3f 
+                && !_enemyDeathRippler.isLastAttackAttempt)
+            {
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerSpecialLastState);
+                return;
+            }
             if (stateTimer > 0f) return;
-
             if (enemy.IsPlayerDetected())
                 stateMachine.ChangeState(enemy.enemyChaseState);
             else

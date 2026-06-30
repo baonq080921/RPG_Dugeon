@@ -17,10 +17,15 @@ MonoBehaviour:
   <ItemType>k__BackingField: 14
   <EquipSlot>k__BackingField: 5
   <Sprite>k__BackingField: {fileID: 21300000, guid: e5e85c7e9da5b7e4491200e925001011, type: 3}
-  <itemEffectData>k__BackingField: {fileID: 0}
+  <itemEffectData>k__BackingField: {fileID: 11400000, guid: 2f78e46c0bbb2b844af2bf39d5270347, type: 2}
   <itemRare>k__BackingField: 939
   <rareCap>k__BackingField: 65
   <dropChance>k__BackingField: 6.2
+  <money>k__BackingField: 0
+  <describleItem>k__BackingField: 'Forged in the depths of the underworld.Born from
+    infernal fire and hatred.A brutal axe fueled by demonic power.
+
+'
   modifiers:
   - statType: 0
     value: 5
@@ -29,15 +34,13 @@ MonoBehaviour:
   - statType: 5
     value: 1
   requirementItems:
-  - itemTypes: 7
+  - itemData: {fileID: 11400000, guid: 26f9e02a7172e3442b1c0a352e49bacf, type: 2}
     amount: 2
-    sprite: {fileID: -160538566, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  - itemTypes: 1
+  - itemData: {fileID: 11400000, guid: c785817a433965c40931dbf6ae72390c, type: 2}
     amount: 1
-    sprite: {fileID: -1313181836, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  - itemTypes: 4
+  - itemData: {fileID: 11400000, guid: c659fc2718098e048ab3953bd2123d71, type: 2}
     amount: 1
-    sprite: {fileID: 1620092268, guid: ea579985398cb78419263c314ad25d62, type: 3}
-  - itemTypes: 10
+  - itemData: {fileID: 11400000, guid: e60c681fbc3273744a6bf145037c6e78, type: 2}
     amount: 1
-    sprite: {fileID: -1169576556, guid: ea579985398cb78419263c314ad25d62, type: 3}
+  - itemData: {fileID: 11400000, guid: 71f4944675f98964eaf432067a497ed7, type: 2}
+    amount: 2

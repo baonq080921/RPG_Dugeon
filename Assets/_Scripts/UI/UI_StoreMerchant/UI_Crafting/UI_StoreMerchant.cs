@@ -1,5 +1,6 @@
 using Base;
 using DG.Tweening;
+using Interfaces;
 using player;
 using TMPro;
 using UnityEngine;
@@ -45,11 +46,15 @@ namespace UI
             _inventorySlots = _inventoryGrid.GetComponentsInChildren<UIItemSlot>();
             _carftIngerdientSlots = GetComponentsInChildren<UI_CarftIngerdientSlot>();
             _storeRectTf.anchoredPosition = _hiddentPosition;
-            _craftButton.onClick.AddListener(TryCraft);
         }
 
         private void OnEnable()
         {
+            // Added here (not in Awake) so it stays paired with the RemoveListener in
+            // OnDisable. UIManager toggles this UI off in player-less scenes (Intro/Menu);
+            // an Awake-only add would be lost on the first disable and never restored.
+            _craftButton.onClick.AddListener(TryCraft);
+
             Player.ActivePlayerChanged += OnPlayerChanged;
             if (Player.ActivePlayer != null)
                 OnPlayerChanged(Player.ActivePlayer);
@@ -78,18 +83,18 @@ namespace UI
             UpdateCraftIngerdientSlotDisplay();
         }
 
-        private void TryCraft()
+        public void TryCraft()
         {
             if (_currentCraftData == null) return;
-
+            //Check item in player inventory have enough that have enough amount for the requirement item
             foreach (RequirementItem req in _currentCraftData.requirementItems)
             {
-                if (_playerInventory.GetCountByType(req.itemTypes) < (int)req.amount)
+                if (_playerInventory.GetCountByType(req.itemData.ItemType) < (int)req.amount)
                     return;
             }
-
+            //Consume Item in the Inventory
             foreach (RequirementItem req in _currentCraftData.requirementItems)
-                _playerInventory.ConsumeByType(req.itemTypes, (int)req.amount);
+                _playerInventory.ConsumeByType(req.itemData.ItemType, (int)req.amount);
 
             Vector3 spawnPos = _playerInventory.transform.position +new Vector3(5f,0f,0f); 
             ItemObjectPickable spawned = Instantiate(_itemPickablePrefab, spawnPos, Quaternion.identity);
@@ -133,14 +138,14 @@ namespace UI
 
         private void ShowStoreUI()
         {
-            ServiceLocator.Get<GameManager>().SetPause(true);
+            ServiceLocator.Get<IGameState>().SetPause(true);
             _storeRectTf.DOAnchorPos(_originalPosition, 0.25f).SetUpdate(true).SetEase(Ease.InQuad);
             EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(true));
         }
 
         public void HideStoreUI()
         {
-            ServiceLocator.Get<GameManager>().SetPause(false);
+            ServiceLocator.Get<IGameState>().SetPause(false);
             _storeRectTf.DOAnchorPos(_hiddentPosition, 0.25f).SetUpdate(true).SetEase(Ease.OutQuad);
             EventBus<OnToggleButtonUIEvent>.Raise(new OnToggleButtonUIEvent(false));
         }

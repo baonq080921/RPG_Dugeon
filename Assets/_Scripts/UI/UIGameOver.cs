@@ -1,5 +1,5 @@
 using Base;
-using Save;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,19 +17,18 @@ public class UIGameOver : MonoBehaviour
     [SerializeField] private string _mainMenuSceneName = "MainMenu";
     [SerializeField] private string _firstSceneName = "Room0";
 
-    private SaveManager _saveManager;
+    private ISaveService _saveService;
     private EventBinding<PlayerDiedEvent> _diedBinding;
 
     private void Start()
     {
-        _saveManager = ServiceLocator.Get<SaveManager>();
+        _saveService = ServiceLocator.Get<ISaveService>();
         _panel.SetActive(false);
 
         _exitButton.onClick.AddListener(OnExitClicked);
         _backToCheckpointButton.onClick.AddListener(OnBackToCheckpointClicked);
         _newGameButton.onClick.AddListener(OnNewGameClicked);
-
-        _backToCheckpointButton.interactable = _saveManager != null && _saveManager.HasSave();
+        _backToCheckpointButton.interactable = _saveService != null && _saveService.HasSave();
     }
 
     private void OnEnable()
@@ -46,12 +45,14 @@ public class UIGameOver : MonoBehaviour
     private void ShowPanel()
     {
         _panel.SetActive(true);
-        ServiceLocator.Get<GameManager>()?.SetPause(true);
+        _backToCheckpointButton.interactable = _saveService != null && _saveService.HasSave(); // recheck if player can backToCheckPoint
+        ServiceLocator.Get<IGameState>()?.SetPause(true);
+
     }
     private void HidePanel()
     {
         _panel.SetActive(false);
-        ServiceLocator.Get<GameManager>()?.SetPause(false);
+        ServiceLocator.Get<IGameState>()?.SetPause(false);
 
     }
     /// <summary>Assign to the Exit button OnClick event.</summary>
@@ -64,16 +65,16 @@ public class UIGameOver : MonoBehaviour
     /// <summary>Assign to the Back To Checkpoint button OnClick event.</summary>
     public void OnBackToCheckpointClicked()
     {
-        if (_saveManager == null || !_saveManager.HasSave()) return;
+        if (_saveService == null || !_saveService.HasSave()) return;
         HidePanel();
-        _saveManager.Load();
+        _saveService.Load();
     }
 
     /// <summary>Assign to the New Game button OnClick event.</summary>
     public void OnNewGameClicked()
     {
-        if (_saveManager == null) return;
+        if (_saveService == null) return;
             HidePanel();
-        _saveManager.StartNewGame(_firstSceneName);
+        _saveService.StartNewGame(_firstSceneName);
     }
 }

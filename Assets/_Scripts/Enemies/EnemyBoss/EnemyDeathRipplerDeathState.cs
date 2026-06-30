@@ -1,3 +1,4 @@
+using Base;
 using stateMachine;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace enemy
             enemy.col.enabled = false;
             enemy.SetVelocity(Vector2.zero);
             stateTimer = 2f;
+            EventBus<EndGameEvent>.Raise(new EndGameEvent());
         }
 
         public override void Update()

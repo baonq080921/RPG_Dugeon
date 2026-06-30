@@ -1,12 +1,11 @@
 using Base;
-using Save;
 using UnityEngine;
 
 namespace player
 {
     /// <summary>
     /// Tracks player level and experience. Attach to the Player GameObject alongside other player components.
-    /// Listens for <see cref="EnemyDiedEvent"/> and applies the XP formula:
+    /// Listens for <see cref="OnEnemyDiedEvent"/> and applies the XP formula:
     /// FinalXP = BaseXP * Clamp(1 - (PlayerLevel - EnemyLevel) * 0.05, 0.1, 1)
     /// Raises <see cref="PlayerLevelUpEvent"/> on each level up so the UI can prompt a major-stat choice.
     /// </summary>
@@ -21,7 +20,7 @@ namespace player
 
         private EntityStat _stat;
         private EntityVfx _entityVfx;
-        private EventBinding<EnemyDiedEvent> _enemyDiedBinding;
+        private EventBinding<OnEnemyDiedEvent> _enemyDiedBinding;
 
         private void Awake()
         {
@@ -32,16 +31,16 @@ namespace player
 
         private void OnEnable()
         {
-            _enemyDiedBinding = new EventBinding<EnemyDiedEvent>(OnEnemyDied);
-            EventBus<EnemyDiedEvent>.Register(_enemyDiedBinding);
+            _enemyDiedBinding = new EventBinding<OnEnemyDiedEvent>(OnEnemyDied);
+            EventBus<OnEnemyDiedEvent>.Register(_enemyDiedBinding);
         }
 
         private void OnDisable()
         {
-            EventBus<EnemyDiedEvent>.Deregister(_enemyDiedBinding);
+            EventBus<OnEnemyDiedEvent>.Deregister(_enemyDiedBinding);
         }
 
-        private void OnEnemyDied(EnemyDiedEvent e)
+        private void OnEnemyDied(OnEnemyDiedEvent e)
         {
             float finalXP = e.BaseExp * Mathf.Clamp(1f - (Level - e.EnemyLevel) * 0.05f, 0.1f, 1f);
             AddExp(finalXP);
@@ -77,11 +76,11 @@ namespace player
         }
 
 
-        public void RestoreExp(PlayerSaveData data)
+        public void RestoreExp(float currentExp, int level, float expToNextLevel)
         {
-            CurrentExp     = data.currentExp;
-            Level          = data.currentLevel;
-            ExpToNextLevel = data.expToNextLevel;
+            CurrentExp     = currentExp;
+            Level          = level;
+            ExpToNextLevel = expToNextLevel;
             EventBus<PlayerXPChangedEvent>.Raise(new PlayerXPChangedEvent(CurrentExp, ExpToNextLevel, Level));
         }
     }

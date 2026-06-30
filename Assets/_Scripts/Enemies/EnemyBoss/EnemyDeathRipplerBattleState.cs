@@ -27,13 +27,21 @@ namespace enemy
         {
             base.Update();
             enemy.FacePlayer();
+            if(_enemyDeathRippler.entityHealth.CurrentHealth/_enemyDeathRippler.entityStat.GetHealthValue() < 0.3f 
+                && !_enemyDeathRippler.isLastAttackAttempt)
+            {
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerSpecialLastState);
+                return;
+            }
             if(enemy.IsInAttackRange() && enemy.IsPlayerDetected())
             {
                 stateMachine.ChangeState(_enemyDeathRippler.enemyAttackState);
+                return;
             }
             else
             {
                 stateMachine.ChangeState(_enemyDeathRippler.enemyChaseState);
+                return;
             }
         }
 

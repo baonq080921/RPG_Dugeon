@@ -21,6 +21,12 @@ public class EnemyDeathRipplerUltimateState : EnemyState
     public override void Update()
     {
         base.Update();
+         if(_enemyDeathRippler.entityHealth.CurrentHealth/_enemyDeathRippler.entityStat.GetHealthValue() < 0.3f 
+                && !_enemyDeathRippler.isLastAttackAttempt)
+        {
+            stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerSpecialLastState);
+            return;
+        }
         if (stateTimer <= 0)
             stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerBattleState);
     }

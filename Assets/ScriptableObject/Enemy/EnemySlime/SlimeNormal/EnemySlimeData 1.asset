@@ -13,16 +13,23 @@ MonoBehaviour:
   m_Name: EnemySlimeData 1
   m_EditorClassIdentifier: 
   <IdleTime>k__BackingField: 2
+  <AttackCooldown>k__BackingField: 1.5
+  <SkillCoolDown>k__BackingField: 0
+  <SkillDuration>k__BackingField: 0
+  <SkillSpawnInterval>k__BackingField: 0.1
+  <SkillDamageFactor>k__BackingField: 1
   <AttackVelocityRetreat>k__BackingField: {x: 0, y: 0}
   <MoveSpeed>k__BackingField: 6
   <MoveMultiplier>k__BackingField: 1.5
   <JumpForce>k__BackingField: 10
   <Level>k__BackingField: 1
   <BaseExp>k__BackingField: 25
+  <SkillPoint>k__BackingField: 5
+  <Gold>k__BackingField: 10
   <minDistanceRetreat>k__BackingField: 1.5
   <DetectionRange>k__BackingField: 9
   <AttackRange>k__BackingField: 3
   <WhatIsPlayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 256
   <Material>k__BackingField: {fileID: 2100000, guid: b3f1139abae8ade42a6b46a18dddf8f5, type: 2}

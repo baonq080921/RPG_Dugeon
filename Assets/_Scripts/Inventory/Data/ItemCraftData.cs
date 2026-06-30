@@ -11,7 +11,6 @@ public class ItemCraftData : EquipmentData
 [System.Serializable]
 public class RequirementItem
 {
-    public ItemTypes itemTypes;
+    public ItemData itemData;
     public float amount;
-    public Sprite sprite;
 }

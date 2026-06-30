@@ -42,7 +42,7 @@ public class SkillObject_Base : MonoBehaviour
                 Debug.Log($"Damaging enemy {hit.name} for {damage} damage.");
                 Transform target = appliesKnockback ? hit.transform : null;
                 health?.TakeDamage(damage, 0, ElementType.None, target);
-                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(target.position,damage,isCrit));
+                EventBus<DamagePopupEvent>.Raise(new DamagePopupEvent(hit.transform.position,damage,isCrit));
             }
         }
     }

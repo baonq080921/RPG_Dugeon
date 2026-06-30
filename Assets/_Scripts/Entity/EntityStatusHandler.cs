@@ -37,7 +37,7 @@ public class EntityStatusHandler : MonoBehaviour
     public void ApplyElectricEffect(float duration,float damage, float charge)
     {
         _currentCharge =_currentCharge + charge;
-        Debug.Log($"Current Charge: {_currentCharge}/{_maxiumCharge}");
+        // Debug.Log($"Current Charge: {_currentCharge}/{_maxiumCharge}");
         if(_currentCharge >=_maxiumCharge)
         {
             DoElectricStrike(damage);
@@ -72,10 +72,13 @@ public class EntityStatusHandler : MonoBehaviour
 
     private void DoElectricStrike(float damage)
     {
-        Instantiate(_electricEffectPrefab, transform.position, Quaternion.identity);
+        var go =  Instantiate(_electricEffectPrefab, transform.position, Quaternion.identity);
+        var electricEffect = go.GetComponent<ElectricEffect>();
+        electricEffect.DamageTargetInRadius(_entity.entityStat.GetElementalDamageValue(out _));
         _entityHealth.ReduceHP(damage);
         _entity.Shock(_shockDuration);
         _entityVfx.UpdateStatusEffectVFX(ElementType.Electric, _shockDuration);
+        Destroy(go,2f);
     }
     #endregion
 

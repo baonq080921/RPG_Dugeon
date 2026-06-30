@@ -15,24 +15,18 @@ MonoBehaviour:
   <KnockBackThreshHold>k__BackingField:
     statType: 9
     baseValue: 0.5
-    value: 0.5
   <MaxHealth>k__BackingField:
     statType: 10
-    baseValue: 1000
-    value: 300
+    baseValue: 3000
   <Envasion>k__BackingField:
     statType: 11
-    baseValue: 10
-    value: 10
+    baseValue: 3
   <Amor>k__BackingField:
     statType: 3
-    baseValue: 90
-    value: 90
+    baseValue: 5
   <ElementalResitance>k__BackingField:
     statType: 4
-    baseValue: 90
-    value: 0
+    baseValue: 0
   <HealthRegen>k__BackingField:
     statType: 12
-    baseValue: 0
-    value: 0
+    baseValue: 2

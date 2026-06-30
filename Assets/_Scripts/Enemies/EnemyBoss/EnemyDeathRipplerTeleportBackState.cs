@@ -29,6 +29,12 @@ namespace enemy
         public override void Update()
         {
             stateTimer -= Time.deltaTime;
+            if(_enemyDeathRippler.entityHealth.CurrentHealth/_enemyDeathRippler.entityStat.GetHealthValue() < 0.3f 
+                && !_enemyDeathRippler.isLastAttackAttempt)
+            {
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerSpecialLastState);
+                return;
+            }
 
             if (_enemyDeathRippler.IsTeleportTriggered)
             {

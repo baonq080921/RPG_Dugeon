@@ -88,9 +88,9 @@ namespace UI
             foreach (RequirementItem item in requirementItems)
             {
                 int required = (int)item.amount;
-                int playerAmount = GetInventoryCountByType(item.itemTypes);
+                int playerAmount = GetInventoryCountByType(item.itemData.ItemType);
                 string color = playerAmount >= required ? "green" : "red";
-                sb.AppendLine($"<color={color}>{item.itemTypes} {playerAmount}/{required}</color>");
+                sb.AppendLine($"<color={color}>{item.itemData.ItemType} {playerAmount}/{required}</color>");
             }
             return sb.ToString().TrimEnd();
         }

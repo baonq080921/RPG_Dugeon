@@ -157,7 +157,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 5179602589270128291}
   - component: {fileID: 6744811344588141195}
   - component: {fileID: 7327615203435138959}
-  - component: {fileID: 5585975108613622482}
+  - component: {fileID: 3845402655299658661}
   m_Layer: 6
   m_Name: EnemyRippler
   m_TagString: Enemy
@@ -686,9 +686,15 @@ MonoBehaviour:
   _sceneEntityId: a2801f3e-35a5-434c-a5b2-6ec0f8526187
   _chanceToTeleport: 0.25
   _aeraCollider: {fileID: 0}
-  _teleportBehindOffset: 2
+  _teleportBehindOffset: 1
   _enemyDeathRipplerUltPrefab: {fileID: 8581316846714365907, guid: 47859b4cda7b6894d84c337988740c29, type: 3}
   _ultSpawnOffSet: 1.2
+  enemies:
+  - {fileID: 4724684595318538197, guid: cca53d3425491924cbcd73232ca2fbf5, type: 3}
+  - {fileID: 8111688798215530155, guid: 2646b16465420ef46b08b24a40878324, type: 3}
+  - {fileID: 4724684595318538197, guid: cca53d3425491924cbcd73232ca2fbf5, type: 3}
+  - {fileID: 8111688798215530155, guid: 2646b16465420ef46b08b24a40878324, type: 3}
+  _HealthCanvas: {fileID: 634004044650030913}
 --- !u!114 &5946186239078372710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,7 +780,8 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
---- !u!114 &5585975108613622482
+  _iceDuration: 3
+--- !u!114 &3845402655299658661
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -783,12 +790,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5669296915051863815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fe25f09c19c84448239722930b9053, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f3bb59953996d44bbfedc754979181e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dropDataList: {fileID: 11400000, guid: 3f6e29191b235074aa472f2b36a9fe9a, type: 2}
+  _dropDataList: {fileID: 0}
   maxRarity: 1200
-  maxDropOut: 2
+  maxDropOut: 3
 --- !u!1 &6919520487209667812
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,8 +854,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.9716981, g: 0.050418302, b: 0.050418302, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 0, b: 0.9769964, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -977,7 +984,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -0.24}
+  m_AnchoredPosition: {x: 0, y: -0.011}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &634004044650030913

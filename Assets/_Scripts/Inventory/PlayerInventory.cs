@@ -5,6 +5,7 @@ using DG.Tweening;
 using player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInventory : InventoryBase {
 
@@ -109,10 +110,21 @@ public class PlayerInventory : InventoryBase {
     public void TryToEquipEvent(EquipEvent equipEvent) => TryEquipItem(equipEvent.itemInventory);
 
 
+    /// <summary>
+    /// Returns the current pointer (mouse or touch) screen position via the Input System.
+    /// Falls back to the screen center when no pointer device is available.
+    /// </summary>
+    private Vector2 GetPointerPosition()
+    {
+        if (Pointer.current != null)
+            return Pointer.current.position.ReadValue();
+        return new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+    }
+
     private void TryEquipItem(ItemInventory item)
     {
         if (item == null || item.itemData == null) return;
-        var worldPos = ServiceLocator.Get<Helper>().mainCam.WorldToScreenPoint(Input.mousePosition);
+        var worldPos = ServiceLocator.Get<Helper>().mainCam.WorldToScreenPoint(GetPointerPosition());
 
         if (item.itemData.EquipSlot == EquipSlotType.None)
         {

@@ -1,5 +1,5 @@
 using Base;
-using Save;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,28 +14,28 @@ public class UIMainMenu : MonoBehaviour
     [SerializeField] private Button _continueButton;
     [SerializeField] private string _firstSceneName = "Room1";
 
-    private SaveManager _saveManager;
+    private ISaveService _saveService;
 
     private void Start()
     {
-        _saveManager = ServiceLocator.Get<SaveManager>();
+        _saveService = ServiceLocator.Get<ISaveService>();
 
         // Grey out Continue if there is nothing saved yet.
         if (_continueButton != null)
-            _continueButton.interactable = _saveManager != null && _saveManager.HasSave();
+            _continueButton.interactable = _saveService != null && _saveService.HasSave();
     }
 
     /// <summary>Assign to the New Game button OnClick event.</summary>
     public void OnNewGameClicked()
     {
-        if (_saveManager == null) return;
-        _saveManager.StartNewGame(_firstSceneName);
+        if (_saveService == null) return;
+        _saveService.StartNewGame(_firstSceneName);
     }
 
     /// <summary>Assign to the Continue button OnClick event.</summary>
     public void OnContinueClicked()
     {
-        if (_saveManager == null || !_saveManager.HasSave()) return;
-        _saveManager.Load();
+        if (_saveService == null || !_saveService.HasSave()) return;
+        _saveService.Load();
     }
 }

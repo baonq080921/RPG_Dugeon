@@ -25,6 +25,12 @@ namespace enemy
         public override void Update()
         {
             base.Update();
+            if(_enemyDeathRippler.entityHealth.CurrentHealth/_enemyDeathRippler.entityStat.GetHealthValue() < 0.3f 
+                && !_enemyDeathRippler.isLastAttackAttempt)
+            {
+                stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerSpecialLastState);
+                return;
+            }
             if (_enemyDeathRippler.IsInAttackRange())
             {
                 stateMachine.ChangeState(_enemyDeathRippler.enemyDeathRipplerBattleState);

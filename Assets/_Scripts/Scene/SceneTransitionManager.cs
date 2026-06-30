@@ -1,6 +1,7 @@
 using System.Collections;
 using Base;
 using DG.Tweening;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,6 +46,32 @@ namespace scene
             StartCoroutine(TransitionRoutine(sceneName));
         }
 
+        /// <summary>
+        /// Fades the screen to black, loads <paramref name="sceneName"/>, then fades back in.
+        /// Performs no player-spawn or save logic; used for flows such as ending the game
+        /// where there is no player to reposition.
+        /// </summary>
+        public void FadeToScene(string sceneName)
+        {
+            if (IsTransitioning) return;
+            StartCoroutine(FadeToSceneRoutine(sceneName));
+        }
+
+        private IEnumerator FadeToSceneRoutine(string sceneName)
+        {
+            IsTransitioning = true;
+            _fadeCanvasGroup.blocksRaycasts = true;
+
+            yield return StartCoroutine(Fade(1f));
+
+            yield return SceneManager.LoadSceneAsync(sceneName);
+
+            yield return StartCoroutine(Fade(0f));
+
+            _fadeCanvasGroup.blocksRaycasts = false;
+            IsTransitioning = false;
+        }
+
         private IEnumerator TransitionRoutine(string sceneName)
         {
             IsTransitioning = true;
@@ -53,18 +80,17 @@ namespace scene
             yield return StartCoroutine(Fade(1f));
 
             // Snapshot before the old scene is destroyed
-            var saveManager = ServiceLocator.Get<Save.SaveManager>();
-            var leavingPlayer = FindObjectOfType<player.Player>();
-            if (leavingPlayer != null && saveManager != null)
-                saveManager.SnapshotForTransition(leavingPlayer);
+            var saveService      = ServiceLocator.Get<ISaveService>();
+            var playerPersistent = ServiceLocator.Get<IIPlayerPersistent>();
+            if (playerPersistent != null && saveService != null)
+                saveService.SnapshotForTransition(playerPersistent);
 
             yield return SceneManager.LoadSceneAsync(sceneName);
 
             // Position first, then restore all other state
             MovePlayerToSpawn();
-            var arrivingPlayer = FindObjectOfType<player.Player>();
-            if (arrivingPlayer != null && saveManager != null && saveManager.HasTransitionSnapshot)
-                yield return StartCoroutine(saveManager.RestoreAfterTransition(arrivingPlayer));
+            if (saveService != null && saveService.HasTransitionSnapshot)
+                yield return StartCoroutine(saveService.RestoreAfterTransition());
 
             yield return StartCoroutine(Fade(0f));
 

@@ -331,7 +331,6 @@ GameObject:
   - component: {fileID: 2026795453249399184}
   - component: {fileID: 4008104041803651349}
   - component: {fileID: 8810746949735955290}
-  - component: {fileID: 3035495005034988031}
   m_Layer: 0
   m_Name: UIFloating_Panel
   m_TagString: Untagged
@@ -398,18 +397,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3035495005034988031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3804847356014646246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e534f776876a746833fe3e02ccce42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7920913565323239538
 GameObject:
   m_ObjectHideFlags: 0

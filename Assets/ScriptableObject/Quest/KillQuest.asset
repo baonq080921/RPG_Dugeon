@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <QuestName>k__BackingField: KillingQuest
   <QuestDescription>k__BackingField: Kill Enemy To Pass to next scene
-  <RequiredKillCount>k__BackingField: 5
+  <RequiredKillCount>k__BackingField: 6
+  _currentKillCount: 0

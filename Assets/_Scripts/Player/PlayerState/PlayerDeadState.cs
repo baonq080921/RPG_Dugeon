@@ -1,5 +1,6 @@
 using stateMachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace player
 {
     public class PlayerDeadState : PlayerState
@@ -20,7 +21,7 @@ namespace player
         public override void Update()
         {
             base.Update();
-            if(Input.GetKeyDown(KeyCode.R))
+            if(Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame)
             {
                 // For testing purposes, respawn the player when R is pressed
                 stateMachine.ChangeState(player.playerIdleState);

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7354767259791781552}
   - component: {fileID: 5564956290498198079}
   - component: {fileID: 7551090623127373101}
-  - component: {fileID: 791021159877816175}
+  - component: {fileID: 5452901723704352940}
   m_Layer: 6
   m_Name: EnemySkeleton
   m_TagString: Enemy
@@ -128,7 +128,7 @@ MonoBehaviour:
   _groundCheckPoint: {fileID: 2070010645352594027}
   _groundCheckRadius: 0.1
   _wallCheckDistance: 1
-  <CanKnockBackOnHit>k__BackingField: 1
+  _flipHealthBar: 1
   _knockBackPowerLight: {x: 2, y: 3}
   _knockBackPowerHeavy: {x: 6, y: 5}
   <enemyData>k__BackingField: {fileID: 11400000, guid: 58074875e7c5a4e41964ce02729a9ab8, type: 2}
@@ -151,6 +151,7 @@ MonoBehaviour:
   _scaleElementalFactor: 1
   _electricStatusDuration: 2
   _electricBuildUpCharge: 0.5
+  _damagePopupOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &8770260422999710528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +218,8 @@ MonoBehaviour:
   _currentCharge: 0
   _maxiumCharge: 1
   _shockDuration: 0.5
---- !u!114 &791021159877816175
+  _iceDuration: 3
+--- !u!114 &5452901723704352940
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,12 +228,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 89301603013905286}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fe25f09c19c84448239722930b9053, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f3bb59953996d44bbfedc754979181e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _dropDataList: {fileID: 11400000, guid: 3f6e29191b235074aa472f2b36a9fe9a, type: 2}
   maxRarity: 1200
-  maxDropOut: 2
+  maxDropOut: 3
 --- !u!1 &2789665869308449548
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,5 +1050,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295a512a3ac3e0649b830e9e176eaac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _flipWithEntity: 1
   _slider: {fileID: 359417997529720408}

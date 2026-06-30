@@ -1,9 +1,10 @@
 using player;
 using UnityEngine;
 
-/// <summary>Base ScriptableObject for item effects that trigger on game events.</summary>
-public class ItemEffectData : ScriptableObject
+[CreateAssetMenu(fileName = "ItemEffectData", menuName = "ItemEffectData", order = 0)]
+public class ItemEffectData : ScriptableObject 
 {
+    
     protected Player player;
     [field:TextArea]
     [field:SerializeField] public string effectInfo{get ;private set;}

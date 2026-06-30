@@ -31,7 +31,7 @@ namespace Base
           item.gameObject.SetActive(true);
           OnGet(item);
         },
-        actionOnRelease: item => { OnRelease(item); item.gameObject.SetActive(false); },
+        actionOnRelease: item => { OnRelease(item); item.gameObject.SetActive(false); item.transform.SetParent(transform);},
         actionOnDestroy: item => { if ((Object)(object)item != null) Destroy(item.gameObject); },
         collectionCheck: CollectionCheck,
         defaultCapacity: _defaultCapacity,

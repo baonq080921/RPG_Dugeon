@@ -24,10 +24,12 @@ MonoBehaviour:
   <JumpForce>k__BackingField: 10
   <Level>k__BackingField: 1
   <BaseExp>k__BackingField: 20
+  <SkillPoint>k__BackingField: 5
+  <Gold>k__BackingField: 20
   <minDistanceRetreat>k__BackingField: 1.5
   <DetectionRange>k__BackingField: 15
   <AttackRange>k__BackingField: 12
   <WhatIsPlayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 256
   <Material>k__BackingField: {fileID: 2100000, guid: b3f1139abae8ade42a6b46a18dddf8f5, type: 2}

@@ -4,7 +4,7 @@ namespace Base
 {
     /// <summary>
     /// Global type-safe event bus. Each event type <typeparamref name="T"/> has its own
-    /// isolated channel — raising <c>PlayerDiedEvent</c> never touches <c>EnemyDiedEvent</c> listeners.
+    /// isolated channel — raising <c>PlayerDiedEvent</c> never touches <c>OnEnemyDiedEvent</c> listeners.
     /// </summary>
     /// <typeparam name="T">An <see cref="IEvent"/> struct that carries the event payload.</typeparam>
     /// <example>
