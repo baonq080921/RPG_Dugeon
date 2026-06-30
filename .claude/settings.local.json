@@ -24,7 +24,30 @@
       "Read(//c/Users/Admin/Pictures/Screenshots/**)",
       "Read(//c/Users/Admin/Desktop/**)",
       "mcp__UnityMCP__manage_build",
-      "mcp__UnityMCP__manage_editor"
+      "mcp__UnityMCP__manage_editor",
+      "Bash(mkdir -p Assets/_Scripts/Bootstrap)",
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "Bash(awk -F/ '{print $1}')",
+      "Bash(python *)",
+      "Bash(ffmpeg -version)",
+      "Bash(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,profile,width,height,pix_fmt,avg_frame_rate -of default=noprint_wrappers=1 \"D:/Unity/RPG_Dugeon/Assets/Video/Intro.mp4\")",
+      "PowerShell($ff = Get-Command ffmpeg -ErrorAction SilentlyContinue; if \\($ff\\) { \"ffmpeg: $\\($ff.Source\\)\" } else { \"ffmpeg NOT in PATH\" }; $wg = Get-Command winget -ErrorAction SilentlyContinue; if \\($wg\\) { \"winget available\" } else { \"winget NOT available\" })",
+      "PowerShell(winget install *)",
+      "PowerShell($candidates = @\\(\"$env:LOCALAPPDATA\\\\Microsoft\\\\WinGet\\\\Links\\\\ffmpeg.exe\"\\); $found = Get-ChildItem \"$env:LOCALAPPDATA\\\\Microsoft\\\\WinGet\\\\Packages\" -Recurse -Filter ffmpeg.exe -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName; $candidates += $found; $candidates | Where-Object { $_ -and \\(Test-Path $_\\) } | ForEach-Object { \"$_\" })",
+      "PowerShell($ff = \"C:\\\\Users\\\\Admin\\\\AppData\\\\Local\\\\Microsoft\\\\WinGet\\\\Packages\\\\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\\\\ffmpeg-8.1.1-full_build\\\\bin\"; & \"$ff\\\\ffprobe.exe\" -v error -select_streams v:0 -show_entries stream=codec_name,profile,width,height,pix_fmt,avg_frame_rate \"D:\\\\Unity\\\\RPG_Dugeon\\\\Assets\\\\Video\\\\Intro.mp4\")",
+      "PowerShell($f = Get-Command ffmpeg -ErrorAction SilentlyContinue; if \\($f\\) { $f.Source } else { \"ffmpeg NOT in PATH\" }; $p = Get-Command ffprobe -ErrorAction SilentlyContinue; if \\($p\\) { $p.Source } else { \"ffprobe NOT in PATH\" })",
+      "Bash(find Docs -type f)",
+      "Bash(ls .claude/plans/)",
+      "Bash(xargs -n1 basename)",
+      "Bash(grep -v \"//\")",
+      "Bash(grep -vE \"private|//\")",
+      "mcp__claude_ai_Excalidraw__read_me",
+      "mcp__claude_ai_Excalidraw__create_view",
+      "mcp__claude_ai_Excalidraw__read_checkpoint",
+      "mcp__claude_ai_Excalidraw__export_to_excalidraw",
+      "mcp__UnityMCP__run_tests",
+      "mcp__UnityMCP__get_test_job"
     ]
   }
 }

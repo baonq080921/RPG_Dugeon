@@ -1,684 +1,222 @@
-# ARCHITECTURE DESIGN
-# RPG Dungeon — Software Architecture Document
-
-**Phiên bản:** 1.0  
-**Ngày:** 19/06/2026  
-**Engine:** Unity (Universal Render Pipeline)  
-**Nền tảng:** Mobile — Android / iOS
+# RPG Dungeon — Package Dependency Reference
+**Cập nhật:** 2026-06-28 | **Engine:** Unity URP | **Platform:** Mobile Android/iOS
 
 ---
 
-## MỤC LỤC
+## 1. Layer Model (Intended)
 
-1. [Kiến trúc tổng thể](#1-kiến-trúc-tổng-thể)
-2. [Package Diagram — Cấu trúc thư mục & Namespace](#2-package-diagram--cấu-trúc-thư-mục--namespace)
-3. [Package Dependency Diagram](#3-package-dependency-diagram)
-4. [Class Diagram — Chi tiết từng package](#4-class-diagram--chi-tiết-từng-package)
+```
+L0  Foundation   Base · Interfaces · stateMachine · Enum(global)
+L1  Data         SaveData · Stats
+L2  Save         Save
+L3  Domain       entity · Effect · Inventory
+L4  Core         player · enemy
+L5  Systems      Pool · scene · Quest
+L6  World        InteractiveObject · Trap · NPC · store
+L7  Presentation UI · AnimationEvent
+L8  Composition  Bootstrap · System · BackGround · Sound
+```
+
+> Quy tắc: mọi cạnh phụ thuộc phải đi **xuống** (số layer cao → số layer thấp).  
+> Cạnh đi ngược chiều = **back-edge** = vi phạm.
 
 ---
 
-## 1. KIẾN TRÚC TỔNG THỂ
+## 2. Package Catalog
 
-### Loại kiến trúc
-Project sử dụng **Layered Architecture (4 tầng)** kết hợp **Event-Driven Communication**, không theo MVC/MVP thuần túy do đặc thù của Unity engine (MonoBehaviour vừa là logic vừa là component trên GameObject).
+| Package (folder) | Namespace | Trách nhiệm chính | Types tiêu biểu |
+|---|---|---|---|
+| `Base/` | `Base` | Core utils, EventBus, ServiceLocator, ObjectPool | `EventBus<T>`, `EventBinding<T>`, `IEvent`, `ServiceLocator`, `ObjectPool<T>`, `GameBootstrapper`, `GameEvents` |
+| `Interfaces/` | `Interfaces` | Cross-cutting contracts | `IHit`, `IHitVFX`, `ICollectable`, `IInteractable`, `ICounterable`, `IScenePersistable`, `ITreeNodePersistent`, `ISaveService`, `ISkillTreeState` |
+| `StateMachine/` | `stateMachine` | Generic FSM | `StateMachine`, `EntityState` |
+| `Enum/` | _(global)_ | Shared enums | `ElementType`, `ItemTypes`, `EquipSlotType`, `EnemyType`, `SkillType`, `ButtonSkillName` |
+| `Stats/` | `Stats` | Stat ScriptableObjects | `Stat`, `MajorStats`, `OffensiveStats`, `DefensiveStats`, `StatType` |
+| `SaveData/` | `SaveData` | Pure DTO structs + restore events | `PlayerSaveData`, `ItemSaveEntry`, `EquipSaveEntry`, `NodeSaveEntry`, `SceneStateData`, `QuestProgressEntry`, `SkillTreeSaveData`, `SkillTreeRestoreEvent` |
+| `Save/` | `Save` | Persistence orchestration (IO only) | `SaveManager`, `SaveBootstrapper`, `IIPlayerPersistent` (global ns) |
+| `Entity/` | _(global)_ | Shared entity base | `Entity`, `EntityStat`, `EntityHealth`, `EntityCombat`, `EntityVfx`, `EntityStatusHandler`, `IItemEffectTarget` |
+| `Effect/` | _(global)_ | VFX + item effect data | `AfterImageEffect`, `HitEffect`, `PoolableVfx`, `SliceEffect`, `ItemEffectData`, `ItemEffectIceData`, `ItemEffectDracula` |
+| `Inventory/` | _(global)_ | Items, loot, equipment | `InventoryBase`, `PlayerInventory`, `ItemInventory`, `ItemData`, `EquipmentData`, `ItemListData`, `EntityDrop`, `ItemDataRegistry` |
+| `Enemies/` | `enemy` | Enemies + AI states | `Enemy`, `EnemySkeleton`, `EnemySlime`, `EnemyDeathRippler`, `EnemyHealth`, `EnemyVfx`, enemy states, `EnemyData`, `EnemyEvents` |
+| `Player/` | `player` | Player character, skills, persistence | `Player`, `PlayerHealth`, `PlayerLevel`, `PlayerCombat`, `PlayerInventory`, `PlayerPersistent`, player states, `SkillBase`, skill objects, `PlayerEvents` |
+| `Pool/` | _(global)_ | Object pools | `PoolManager`, `EnemyPool`, `ItemPickablePool`, `HitEffectPool`, `DamagePopupPool`, `LevelUpEffectPool`, `ArcherArrowPool` |
+| `Scene/` | `scene` | Scene flow, portals, checkpoints | `SceneTransitionManager`, `SceneEntityManager`, `Portal`, `CheckPoint`, `CameraZoneTrigger` |
+| `Quest/` | `Quest` | Quest definitions + tracking | `QuestData`, `KillQuestData`, `RescueNpcQuestData`, `Scavahunt`, `SceneQuestController`, `QuestEvents` |
+| `InteractiveObject/` | _(global)_ | World pickups & chests | `ItemObjectPickable`, `ObjectChestBase`, `ObjectChestDropItem` |
+| `Trap/` | _(global)_ | Hazards | `BearTrap` |
+| `NPC/` | `NPC` | Non-player characters | `Npc`, `RescuableNpc`, `NPCShop`, `NpcMerchant` |
+| `Store/` | _(global)_ | Merchant / crafting | `Store`, `ItemCraft` |
+| `UI/` | `UI` / _(global)_ | All HUD + menus | `UIManager`, `UISkillTree`, `UITreeNode`, `UIConnectedHandler`, `UI_Inventory`, `UILevelUpPanel`, `UIMainMenu`, `UIStatPanel`, `UI_StoreMerchant` |
+| `AnimationEvent/` | _(global)_ | Animator → gameplay glue | `EntityAnimationEvent`, `PlayerAnimationEvent`, `EnemyAnimationEvent`, `SkillAnimationEvent` |
+| `System/` | `System` | Game lifecycle | `GameManager`, `GameMessages`, `MyMenu` |
+| `BackGround/` | _(global)_ | Parallax | `ParrallexBG`, `ParrallexController` |
+| `Sound/` | _(global)_ | Audio | `SoundManager` |
 
-### 4 Tầng kiến trúc
+---
 
+## 3. Dependency Graph — Thực tế hiện tại
+
+### Mermaid Diagram
+
+```mermaid
+graph TD
+    %% ── L0 Foundation ──────────────────────────────
+    Interfaces
+    Enum
+    Stats
+
+    %% ── L1 Data ─────────────────────────────────────
+    Base --> stateMachine
+    SaveData --> Base
+
+    %% ── L2 Save ──────────────────────────────────────
+    Save --> Base
+    Save --> Interfaces
+    Save --> SaveData
+
+    %% ── L3 Domain ────────────────────────────────────
+    entity --> Base
+    entity --> Interfaces
+    entity --> Stats
+
+    Effect --> Base
+    Effect --> Interfaces
+
+    Inventory --> Base
+    Inventory --> Stats
+
+    %% ── L4 Core ──────────────────────────────────────
+    player --> Base
+    player --> Interfaces
+    player --> stateMachine
+    player --> SaveData
+    player --> entity
+    player --> enemy
+    player --> Inventory
+    player --> Effect
+
+    enemy --> Base
+    enemy --> Interfaces
+    enemy --> entity
+
+    %% ── L5 Systems ───────────────────────────────────
+    Pool --> Base
+    Pool --> player
+    Pool --> enemy
+
+    scene --> Base
+    scene --> Interfaces
+    scene --> player
+
+    Quest --> Base
+    Quest --> Interfaces
+
+    %% ── L6 World ─────────────────────────────────────
+    InteractiveObject --> Base
+    InteractiveObject --> Interfaces
+
+    Trap --> player
+    NPC --> Base
+    NPC --> Interfaces
+    NPC --> player
+
+    store --> Base
+
+    %% ── L7 Presentation ──────────────────────────────
+    UI --> Base
+    UI --> Interfaces
+    UI --> entity
+    UI --> player
+    UI --> enemy
+    UI --> Quest
+    UI --> SaveData
+
+    AnimationEvent --> Base
+    AnimationEvent --> player
+    AnimationEvent --> enemy
+
+    %% ── L8 Composition ───────────────────────────────
+    Bootstrap --> Base
+    Bootstrap --> Save
+    Bootstrap --> scene
+    System --> Base
+    System --> Interfaces
+    BackGround --> Base
+
+    %% ── BACK-EDGES (vi phạm layer model) ─────────────
+    Base      -->|"⚠️ back-edge"| player
+    Base      -->|"⚠️ back-edge"| scene
+    stateMachine -->|"⚠️ back-edge"| player
+    Effect    -->|"⚠️ back-edge"| player
+    Inventory -->|"⚠️ back-edge"| player
+    enemy     -->|"⚠️ back-edge"| player
+    player    -->|"⚠️ back-edge"| UI
 ```
-┌─────────────────────────────────────────────────────┐
-│              LAYER 4 — Presentation                 │
-│   UI/, VFX (EntityVfx), AnimationEvent, BackGround  │
-├─────────────────────────────────────────────────────┤
-│              LAYER 3 — Domain / Logic               │
-│   Entity, Player, Enemy, StateMachine,              │
-│   Combat, Skills, Inventory, Quest, Stats           │
-├─────────────────────────────────────────────────────┤
-│              LAYER 2 — Infrastructure               │
-│   EventBus, ServiceLocator, ObjectPool,             │
-│   SaveManager, GameBootstrapper, Pool               │
-├─────────────────────────────────────────────────────┤
-│              LAYER 1 — Data                         │
-│   ScriptableObjects: CharacterData, EnemyData,      │
-│   ItemData, QuestData, SkillBaseDefinition...       │
-│   Save structs: PlayerSaveData, ItemSaveEntry...    │
-└─────────────────────────────────────────────────────┘
-```
 
-### Các Design Pattern đi kèm
+---
 
-| Pattern | Hiện diện | Ví dụ cụ thể |
+## 4. Bảng dependencies (để check khi vẽ)
+
+| Package | Phụ thuộc CLEAN ✓ | Phụ thuộc BACK-EDGE ⚠️ |
 |---|---|---|
-| **Layered Architecture** | Chính | 4 tầng như trên |
-| **Event-Driven** | Cross-cutting | `EventBus<T>` dùng xuyên tất cả tầng |
-| **State Machine** | Trong Domain layer | `StateMachine` cho Player, Enemy, Boss |
-| **Service Locator** | Trong Infrastructure | `ServiceLocator.Get<SaveManager>()` |
-| **Object Pool** | Trong Infrastructure | `ObjectPool<T>` cho Enemy, VFX, Skills |
-| **Data-Driven Design** | Trong Data layer | ScriptableObject cho mọi config |
-| **Component-Based** | Unity native | MonoBehaviour composition |
+| `Base` | `stateMachine` | `player` (CameraResolutionFitter), `scene` (CameraResolutionFitter) |
+| `stateMachine` | — | `player` (StateMachine.cs) |
+| `Interfaces` | — | — |
+| `Enum` | — | — |
+| `Stats` | — | — |
+| `SaveData` | `Base` | — |
+| `Save` | `Base`, `Interfaces`, `SaveData` | — ✅ |
+| `entity` | `Base`, `Interfaces`, `Stats` | — |
+| `Effect` | `Base`, `Interfaces` | `player` (ItemEffectData/Dracula/Ice) |
+| `Inventory` | `Base`, `Stats` | `player` (PlayerInventory, ItemInventory) |
+| `enemy` | `Base`, `Interfaces`, `entity` | `player` (EnemyDeathRippler boss) |
+| `player` | `Base`, `Interfaces`, `stateMachine`, `SaveData`, `entity`, `enemy`, `Inventory`, `Effect` | `UI` (Player.cs) |
+| `Pool` | `Base`, `player`, `enemy` | — |
+| `scene` | `Base`, `Interfaces`, `player` | — |
+| `Quest` | `Base`, `Interfaces` | — |
+| `InteractiveObject` | `Base`, `Interfaces` | — |
+| `Trap` | `player` | — |
+| `NPC` | `Base`, `Interfaces`, `player` | — |
+| `store` | `Base` | — |
+| `UI` | `Base`, `Interfaces`, `entity`, `player`, `enemy`, `Quest`, `SaveData` | — |
+| `AnimationEvent` | `Base`, `player`, `enemy` | — |
+| `System` | `Base`, `Interfaces` | — |
+| `BackGround` | `Base` | — |
+| `Sound` | — | — |
 
 ---
 
-## 2. PACKAGE DIAGRAM — Cấu trúc thư mục & Namespace
+## 5. Back-edges còn lại (sau session 2026-06-28)
 
-```
-Assets/_Scripts/
-│
-├── Base/              (namespace: Base)         ← Foundation utilities
-├── StateMachine/      (namespace: stateMachine) ← Generic FSM
-├── Interfaces/        (namespace: Interfaces)   ← Contracts
-├── Enum/              (global)                  ← Shared enums
-├── Stats/             (namespace: Stats)        ← Stat ScriptableObjects
-│
-├── Entity/            (global)                  ← Core entity abstraction
-│
-├── Player/            (namespace: player)
-│   ├── PlayerBase/    ← Player MonoBehaviours
-│   ├── PlayerState/   ← All player FSM states
-│   ├── PlayerSkill/   ← Skill logic & skill objects
-│   │   └── Domain-Skill/
-│   ├── PlayerInventory/
-│   └── Data/          ← CharacterData, SkillBaseDefinition
-│
-├── Enemies/           (namespace: enemy)
-│   ├── EnemyState/    ← Shared enemy FSM states
-│   ├── EnemySkeleton/
-│   ├── EnemySlime/
-│   ├── EnemyBoss/     ← EnemyDeathRippler + states
-│   └── Data/          ← EnemyData
-│
-├── Quest/             (namespace: Quest)
-├── Inventory/         (global)
-│   └── Data/          ← ItemData, EquipmentData, ItemCraftData
-├── Save/              (namespace: Save)
-├── NPC/               (namespace: NPC)
-├── Store/             (global)
-├── Effect/            (global)
-│   └── Data/          ← ItemEffectData variants
-│
-├── UI/                (namespace: UI)
-│   ├── UISkillTree/
-│   ├── UI_Inventory/
-│   ├── UILevelUp/
-│   └── UI_StoreMerchant/
-│
-├── Scene/             (namespace: scene)
-├── System/            (namespace: System)
-├── Sound/             (global)
-├── Pool/              (global)
-├── AnimationEvent/    (global)
-├── Trap/              (global)
-├── InteractiveObject/ (global)
-└── BackGround/        (global)
-```
+| # | Back-edge | Vị trí | Cách fix dự kiến |
+|---|---|---|---|
+| 1 | `Base → player` | `CameraResolutionFitter.cs` | Di chuyển file sang `scene/` hoặc `player/` |
+| 2 | `Base → scene` | `CameraResolutionFitter.cs` | Cùng với #1 |
+| 3 | `stateMachine → player` | `StateMachine.cs` | Xem xét nội dung — có thể chỉ là stale using |
+| 4 | `Effect → player` | `ItemEffectData.cs`, `ItemEffectIceData.cs`, `ItemEffectDracula.cs` | DIP qua `IItemEffectTarget` (đã có trong `entity`) — cần migrate |
+| 5 | `Inventory → player` | `PlayerInventory.cs`, `ItemInventory.cs` | DIP qua `IItemEffectTarget` — cùng fix với #4 |
+| 6 | `enemy → player` | `EnemyDeathRippler.cs` | EventBus hoặc interface `IPlayerTarget` |
+| 7 | `player → UI` | `Player.cs` | EventBus để open UI thay vì gọi UIManager trực tiếp |
 
 ---
 
-## 3. PACKAGE DEPENDENCY DIAGRAM
+## 6. Cycles đã được phá (completed)
 
-### Sơ đồ phụ thuộc
-
-```
-[ Enum ]  [ Interfaces ]  [ Base ]  [ StateMachine ]
-   ↑            ↑            ↑             ↑
-   └────────────┴────────────┴─────────────┘
-                             │
-                        [ Entity ] ←──── [ Stats ]
-                        /       \
-                       ↓         ↓
-                  [ Player ]   [ Enemy ]
-                       │
-                  [ Inventory ] ←── [ Effect ]
-                       │         ↖── [ Store ]
-                  [ Quest ]
-                       │
-                  [ Save ] ←──────────────┐
-                       ↑                  │
-                  [ UI ] ──────────────────┤
-                  [ NPC ] ────────────────►│
-                  [ Scene ] ──────────────►│
-                  [ System ]
-                  [ Pool ]
-```
-
-### Bảng phụ thuộc chi tiết
-
-| Package | Phụ thuộc vào |
+| Cycle | Technique |
 |---|---|
-| `Base` | _(không phụ thuộc ai)_ |
-| `Interfaces` | _(không phụ thuộc ai)_ |
-| `Enum` | _(không phụ thuộc ai)_ |
-| `StateMachine` | _(không phụ thuộc ai)_ |
-| `Stats` | `Enum` |
-| `Entity` | `Base`, `Interfaces`, `StateMachine`, `Stats`, `Enum` |
-| `Player` | `Entity`, `Base`, `Interfaces`, `Stats`, `Inventory`, `Save`, `Effect`, `Enum` |
-| `Enemy` | `Entity`, `Base`, `Interfaces`, `Stats`, `Enum` |
-| `Inventory` | `Stats`, `Effect`, `Enum` |
-| `Quest` | `Base`, `Save` |
-| `Save` | `Player`, `Inventory`, `Quest`, `UI` |
-| `UI` | `Base`, `Player`, `Inventory`, `Quest`, `Stats` |
-| `NPC` | `Base`, `Quest` |
-| `Scene` | `Base`, `Save`, `Player` |
-| `Pool` | `Player`, `Enemy`, `Base` |
-| `Effect` | `Base` |
-| `Store` | `Inventory` |
-| `System` | `Base` |
-| `AnimationEvent` | `Entity`, `Player`, `Enemy` |
-| `InteractiveObject` | `Inventory`, `Base` |
+| `player ↔ Effect` (ElectricEffect) | Parameter injection — spawner truyền `float damage` |
+| `Inventory ↔ Pool` | EventBus — `DropItemRequestedEvent` |
+| `entity ↔ Inventory` | Relocate `EntityDrop` → Inventory; event-driven spawn |
+| `Inventory ↔ player` (loot/effect target) | `IItemEffectTarget` ở `entity` layer |
+| `player ↔ UI` (SkillTree reset) | EventBus `SkillTreeResetEvent`; `ISkillTreeState` ở Interfaces |
+| `Save → player` | `IIPlayerPersistent.RestoreFromSaveData()` — SaveManager delegate xuống interface, không reference Player types |
 
 ---
 
-## 4. CLASS DIAGRAM — Chi tiết từng package
-
-> **Ký hiệu:**
-> - `──extends──►` : Kế thừa (Inheritance)
-> - `──implements──►` : Triển khai interface
-> - `──depends──►` : Phụ thuộc / sử dụng
-> - `(abstract)` : Class trừu tượng
-> - `«interface»` : Interface
-> - `«SO»` : ScriptableObject
-
----
-
-### Package: Base
-
-```
-EventBus<T>
-
-IEventBinding<T>  «interface»
-    └── EventBinding<T>  ──implements──► IEventBinding<T>
-
-«interface» IEvent
-
-ServiceLocator
-ObjectPool<T>
-MonoBehaviourPool  (MonoBehaviour)
-GameBootstrapper   (static)
-Helper             (MonoBehaviour)
-CameraResolutionFitter (MonoBehaviour)
-DebugCustom
-```
-
----
-
-### Package: Interfaces
-
-```
-«interface» IHit
-«interface» IHitVFX
-«interface» ICounterable
-«interface» ICollectable
-«interface» IInteractable
-```
-
----
-
-### Package: StateMachine
-
-```
-StateMachine
-    └── depends──► EntityState
-```
-
----
-
-### Package: Stats
-
-```
-«SO» MajorStats
-«SO» OffensiveStats
-«SO» DefensiveStats
-
-Stat   (referenced by all Stats SOs as field)
-```
-
----
-
-### Package: Entity
-
-```
-Entity  (abstract, MonoBehaviour)
-    ├── field──► EntityStat
-    ├── field──► EntityHealth
-    ├── field──► EntityVfx
-    ├── field──► EntityCombat
-    └── field──► StateMachine
-
-EntityStat        (MonoBehaviour)
-    └── depends──► MajorStats, OffensiveStats, DefensiveStats
-
-EntityHealth      (abstract, MonoBehaviour) ──implements──► IHit
-
-EntityVfx         (abstract, MonoBehaviour) ──implements──► IHitVFX
-
-EntityCombat      (MonoBehaviour)
-    └── depends──► EntityStat, EntityVfx
-
-EntityState
-    └── depends──► StateMachine
-
-EntityStatusHandler (MonoBehaviour)
-    └── depends──► EntityHealth, EntityVfx
-
-EntityDropManager (MonoBehaviour)
-```
-
----
-
-### Package: Player
-
-```
-Entity
-    └── Player  (MonoBehaviour)
-            ├── field──► PlayerHealth
-            ├── field──► PlayerCombat
-            ├── field──► PlayerVfx
-            ├── field──► PlayerLevel
-            ├── field──► PlayerInventory
-            ├── field──► SkillButtonHandler
-            └── field──► AfterImageEffect
-
-PlayerHealth    ──extends──► EntityHealth
-PlayerCombat    ──extends──► EntityCombat
-PlayerVfx       ──extends──► EntityVfx
-PlayerStats     ──extends──► EntityStat
-PlayerLevel     (MonoBehaviour)  ──depends──► EventBus<EnemyDiedEvent>
-PlayerInteract  (MonoBehaviour)  ──implements──► IInteractable
-SkillButtonHandler (MonoBehaviour)
-
-PlayerInventory (MonoBehaviour)  ──extends──► InventoryBase
-
-── Player States ──
-
-EntityState
-    └── PlayerState  (abstract)
-            ├── PlayerIdleState
-            ├── PlayerMoveState
-            ├── PlayerJumpState
-            ├── PlayerFallState
-            ├── PlayerWallSildeState
-            ├── PlayerWallJumpState
-            ├── PlayerDashState
-            ├── PlayerAttackState
-            │       └── PlayerJumpAttackState  ──extends──► PlayerAttackState
-            ├── PlayerCounterState
-            ├── PlayerKnockBackState
-            ├── PlayerDeadState
-            ├── PlayerDismantleState
-            └── PlayerDomainExpasionState
-
-── Skills ──
-
-SkillBase  (MonoBehaviour)
-    ├── SkillDash
-    ├── SkillCounter
-    ├── SkillDismantle
-    ├── SkillTimeEcho
-    └── DomainExpasionSkill
-
-── Skill Objects ──
-
-SkillObject_Base  (MonoBehaviour)
-    ├── SkillProjectileBase  ──extends──► SkillObject_Base
-    ├── SkillObjectTimeEcho  ──extends──► SkillObject_Base
-    ├── SkillObjectDismantle ──extends──► SkillObject_Base
-    └── DomainExpasionSkillObject ──extends──► SkillObject_Base
-
-── Data ──
-
-«SO» CharacterData
-«SO» SkillBaseDefinition
-```
-
----
-
-### Package: Enemy
-
-```
-Entity
-    └── Enemy  (abstract, MonoBehaviour)  ──implements──► ICounterable
-            ├── EnemySkeleton
-            └── EnemySlime
-            └── EnemyDeathRippler
-
-EnemyHealth  ──extends──► EntityHealth
-EnemyVfx     ──extends──► EntityVfx
-EnemyPool    (MonoBehaviour)  ──depends──► ObjectPool<Enemy>
-
-── Enemy States ──
-
-EntityState
-    └── EnemyState  (abstract)
-            ├── EnemyIdleState
-            ├── EnemyMoveState
-            ├── EnemyChaseState
-            ├── EnemyAttackState
-            └── EnemyStunState
-
-EnemySkeletonDeathState  ──extends──► EnemyState
-EnemySlimeDeathState     ──extends──► EnemyState
-
-EnemyGroundedState  ──extends──► EnemyState
-    ├── EnemyDeathRipplerTeleportState     ──extends──► EnemyGroundedState
-    └── EnemyDeathRipplerTeleportBackState ──extends──► EnemyGroundedState
-
-EnemyDeathRipplerIdleState    ──extends──► EnemyState
-EnemyDeathRipplerChaseState   ──extends──► EnemyState
-EnemyDeathRipplerBattleState  ──extends──► EnemyState
-EnemyDeathRipplerAttackState  ──extends──► EnemyState
-EnemyDeathRipplerStunState    ──extends──► EnemyState
-EnemyDeathRipplerDeathState   ──extends──► EnemyState
-
-── Data ──
-
-«SO» EnemyData
-```
-
----
-
-### Package: Stats
-
-```
-«SO» MajorStats
-    └── field──► Stat (x4: Strength, Agility, Intelligence, Vitality)
-
-«SO» OffensiveStats
-    └── field──► Stat (x5: Damage, CritChance, CritPower, AttackMultiplier, ElementalDamage)
-
-«SO» DefensiveStats
-    └── field──► Stat (x6: MaxHealth, Armor, Evasion, ElementalResistance, KnockBackThreshold, HealthRegen)
-
-Stat
-```
-
----
-
-### Package: Inventory
-
-```
-InventoryBase  (MonoBehaviour)
-    └── PlayerInventory  ──extends──► InventoryBase
-
-ItemInventory
-    ├── depends──► ItemData
-    └── depends──► EntityStat
-
-ItemInventoryEquipment
-    └── depends──► ItemInventory
-
-── Data ──
-
-«SO» ItemData
-    └── EquipmentData  ──extends──► ItemData
-            └── ItemCraftData  ──extends──► EquipmentData
-
-ItemModifier
-ItemListData
-```
-
----
-
-### Package: Quest
-
-```
-«SO» QuestData  (abstract)
-    ├── KillQuestData      ──extends──► QuestData  ──depends──► EventBus<EnemyDiedEvent>
-    ├── RescueNpcQuestData ──extends──► QuestData  ──depends──► EventBus<NpcRescuedEvent>
-    └── Scavahunt          ──extends──► QuestData
-
-SceneQuestController  (MonoBehaviour)
-    ├── depends──► QuestData
-    └── depends──► SaveManager
-```
-
----
-
-### Package: Save
-
-```
-SaveManager  (MonoBehaviour)
-    ├── depends──► PlayerSaveData
-    ├── depends──► ItemDataRegistry
-    └── depends──► ServiceLocator
-
-«SO» ItemDataRegistry
-    └── depends──► ItemData
-
-PlayerSaveData
-    ├── ItemSaveEntry      (nested)
-    ├── EquipSaveEntry     (nested)
-    ├── SkillTreeSaveData  (nested)
-    │       └── NodeSaveEntry (nested)
-    ├── SceneStateData     (nested)
-    └── QuestProgressEntry (nested)
-
-SaveSystemTester  (MonoBehaviour)
-```
-
----
-
-### Package: NPC
-
-```
-Npc  (MonoBehaviour)  ──implements──► IInteractable
-    └── RescuableNpc  ──extends──► Npc
-            └── depends──► EventBus<NpcRescuedEvent>
-
-NPCMerchant  (MonoBehaviour)
-```
-
----
-
-### Package: Effect
-
-```
-AfterImageEffect  (MonoBehaviour)
-AfterImageGhost   (MonoBehaviour)
-HitEffect         (MonoBehaviour)
-PoolableVfx       (MonoBehaviour)
-
-ItemEffectData    (abstract)
-    ├── ItemEffectIceData   ──extends──► ItemEffectData
-    └── ItemEffectDracula   ──extends──► ItemEffectData
-```
-
----
-
-### Package: UI
-
-```
-UIManager  (MonoBehaviour)
-
-── HUD ──
-SkillButton          (MonoBehaviour)  ──depends──► SkillButtonHandler
-SkillCooldownUI      (MonoBehaviour)  ──depends──► SkillButtonHandler
-SkillCooldownConnector (MonoBehaviour)
-UIQuestHUD           (MonoBehaviour)  ──depends──► EventBus<QuestProgressEvent>
-HealthBar            (MonoBehaviour)
-
-── Menus ──
-UIMainMenu           (MonoBehaviour)  ──depends──► SaveManager
-UICanvasChange       (MonoBehaviour)
-UIFloating_Panel     (MonoBehaviour)
-UIMenu_Toggle        (MonoBehaviour)
-
-── Skill Tree ──
-UISkillTree          (MonoBehaviour)
-UITreeNode           (MonoBehaviour)
-UIConnectedHandler   (MonoBehaviour)
-UIConnectedLine      (MonoBehaviour)
-UIToolTip            (MonoBehaviour)
-UISkillToolTip       (MonoBehaviour)
-
-── Inventory ──
-UiItemSlotBase       (MonoBehaviour)
-    ├── UIItemSlot       ──extends──► UiItemSlotBase
-    └── UIEquipmentSlot  ──extends──► UiItemSlotBase
-
-UI_Inventory         (MonoBehaviour)
-UIItemActionPanel    (MonoBehaviour)
-UIEquipmentActionPanel (MonoBehaviour)
-UIStatPanel          (MonoBehaviour)  ──depends──► EntityStat
-
-── Level Up ──
-UILevelUpPanel       (MonoBehaviour)  ──depends──► EventBus<PlayerLevelUpEvent>
-
-── Store / Merchant ──
-UI_StoreMerchant     (MonoBehaviour)
-UI_StoreItemEntry    (MonoBehaviour)
-UI_CatergoriestSlot  (MonoBehaviour)
-UI_CarftIngerdientSlot (MonoBehaviour)
-UI_ItemDetailsSlot   (MonoBehaviour)
-```
-
----
-
-### Package: Scene
-
-```
-PersistentObject     (MonoBehaviour)
-SceneSpawnPoint      (MonoBehaviour)
-CameraConfinerBounds (MonoBehaviour)
-CameraZoneTrigger    (MonoBehaviour)
-SceneEntityManager   (MonoBehaviour)  ──depends──► SaveManager
-```
-
----
-
-### Package: System
-
-```
-GameManager  (MonoBehaviour)
-    ├── depends──► ServiceLocator
-    └── depends──► EventBus<GamePauseChangedEvent>
-
-GameMessages  (static)
-MyMenu        (MonoBehaviour)
-```
-
----
-
-### Package: Pool
-
-```
-SkillObjectDismantlePool  (MonoBehaviour)  ──depends──► ObjectPool<SkillObjectDismantle>
-SkillObjectTimeEchoPool   (MonoBehaviour)  ──depends──► ObjectPool<SkillObjectTimeEcho>
-```
-
----
-
-### Package: AnimationEvent
-
-```
-EntityAnimationEvent  (MonoBehaviour)  ──depends──► Entity
-PlayerAnimationEvent  (MonoBehaviour)  ──depends──► Player
-EnemyAnimationEvent   (MonoBehaviour)  ──depends──► Enemy
-SkillAnimationEvent   (MonoBehaviour)  ──depends──► SkillBase
-```
-
----
-
-### Package: InteractiveObject
-
-```
-ObjectChestBase       (MonoBehaviour)
-    ├── ObjectChestDropItem    ──extends──► ObjectChestBase
-    └── ObjectChestDropMission ──extends──► ObjectChestBase
-
-ItemObjectPickable    (MonoBehaviour)  ──implements──► ICollectable
-```
-
----
-
-### Package: Trap
-
-```
-BearTrap  (MonoBehaviour)  ──implements──► IHit
-```
-
----
-
-### Package: BackGround
-
-```
-ParrallexBG         (MonoBehaviour)
-ParrallexController (MonoBehaviour)
-    └── depends──► ParrallexBG
-```
-
----
-
-### Package: Sound
-
-```
-SoundManager  (MonoBehaviour)
-    └── depends──► ServiceLocator
-```
-
----
-
-## 5. TỔNG KẾT QUAN HỆ QUAN TRỌNG
-
-### Chuỗi kế thừa Entity
-
-```
-MonoBehaviour
-    └── Entity (abstract)
-            ├── Player
-            └── Enemy (abstract)
-                    ├── EnemySkeleton
-                    ├── EnemySlime
-                    └── EnemyDeathRippler  (Boss)
-```
-
-### Chuỗi kế thừa Health
-
-```
-MonoBehaviour + IHit
-    └── EntityHealth (abstract)
-            ├── PlayerHealth
-            └── EnemyHealth
-```
-
-### Chuỗi kế thừa VFX
-
-```
-MonoBehaviour + IHitVFX
-    └── EntityVfx (abstract)
-            ├── PlayerVfx
-            └── EnemyVfx
-```
-
-### Chuỗi kế thừa State
-
-```
-EntityState
-    ├── PlayerState (abstract)
-    │       └── [14 player states]
-    └── EnemyState (abstract)
-            ├── [5 shared enemy states]
-            ├── EnemySkeletonDeathState
-            ├── EnemySlimeDeathState
-            ├── EnemyGroundedState
-            │       ├── EnemyDeathRipplerTeleportState
-            │       └── EnemyDeathRipplerTeleportBackState
-            └── [6 boss-specific states]
-```
-
-### Chuỗi kế thừa Item Data
-
-```
-ScriptableObject
-    └── ItemData
-            └── EquipmentData
-                    └── ItemCraftData
-```
-
-### Chuỗi kế thừa Quest
-
-```
-ScriptableObject
-    └── QuestData (abstract)
-            ├── KillQuestData
-            ├── RescueNpcQuestData
-            └── Scavahunt
-```
+## 7. Intentional Globals (không namespace)
+
+| Type | Lý do không đặt namespace |
+|---|---|
+| `Enum/` (7 enums) | Pure leaf — `namespace Enum` clash với `System.Enum` |
+| `EntityAnimationEvent` | Shared base cho player + enemy anim events — tránh `player→enemy` cycle |
+| `GameManager` | Root service qua ServiceLocator — tránh lan rộng `namespace System` bug |
+| `entity` package types | Folder `Entity/` collision với class `Entity` — dùng global để tránh nhập nhằng |

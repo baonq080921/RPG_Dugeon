@@ -418,3 +418,109 @@
 | 200 | 0.333 | 66.7% |
 
 > Sau 100 armor, mỗi điểm thêm chỉ cho lợi nhuận rất nhỏ — tránh tank build bất khả chiến bại ✅
+
+---
+
+## 10. Đối chiếu Sheet ↔ Asset thực tế *(mismatch log — 28/06/2026)*
+
+> Các số ở Mục 1–9 là **thiết kế mục tiêu**. Khi đọc giá trị thật trong `.asset`, nhiều chỗ đã **lệch**. Cần đồng bộ trước khi tin vào sanity-check.
+
+### 10.1 Skill Tree — Cost thật trong asset ≠ Mục 8
+
+| Node (asset) | Cost asset | Cost sheet (Mục 8) | Lệch |
+|---|---|---|---|
+| QuickDash | 1 | 1 | ✅ |
+| EchoStep / Upgrade | 2 / 3 | 2 / 3 | ✅ |
+| TimeLostShard / Upgrade | 2 / 3 | 2 / 3 | ✅ |
+| TimeEcho | 1 | 1 | ✅ |
+| EchoTimeLessAttack | **5** | 2 | ❌ |
+| EchoTimeMahoAttack | **8** | 3 | ❌ |
+| HealingWeep | 2 | 2 | ✅ |
+| TimeEchoHealingCD | **4** | 3 | ❌ |
+| Dismantle / Rewind | **3 / 6** | 2 / 3 | ❌ |
+| DomainExpansion | **10** | 5 | ❌ |
+
+- **Tổng tất cả node = 50 SP.** Nhưng có **4 node mang nhánh xung khắc** (`confilctNode`) nên KHÔNG mua được hết.
+- Một build hoàn chỉnh (chọn 1 nhánh mỗi chỗ xung khắc):
+  - Nhẹ nhất (TimeEcho đi nhánh Heal): **32 SP**
+  - Nặng nhất (TimeEcho đi nhánh Maho-Attack): **39 SP**
+- → **Ngân sách SP mục tiêu tại boss = 40** (đủ cho build nặng nhất + đệm).
+
+### 10.2 Enemy — Level/Exp/Drop thật ≠ Mục 6
+
+| Enemy (asset) | Level thật | BaseExp thật | SkillPoint | Gold | Sheet nói Level |
+|---|---|---|---|---|---|
+| EnemySkeleton | **1** | 20 | 5 | 10 | 5 ❌ |
+| EnemyArcher | **1** | 20 | 5 | 20 | *(thiếu trong sheet)* ❌ |
+| EnemySlimeData (big) | 2 | 50 | 5 | 15 | 3 ❌ |
+| EnemySlime Normal | 1 | 25 | 5 | 10 | 2 ❌ |
+| EnemySlime Small | 1 | 12 | 3 | 5 | 1 ✅ |
+| **EnemyDeathRippler (BOSS)** | **1** ⚠️ | 20 | 1 | 10 | 10 ❌❌ |
+
+**Vấn đề lớn nhất:**
+1. **Boss đang Level 1, BaseExp 20** — không phải L10/500 như sanity-check. Toàn bộ phép tính độ khó ở Mục 9 KHÔNG áp dụng cho asset hiện tại.
+2. **Mọi quái cho 5 SkillPoint/mạng.** Chỉ ~8 mạng là đủ full skill tree (40 SP). Hiện 3 phòng có ~15 quái → ~75 SP → **thừa gần gấp đôi**.
+3. **Archer** không có trong sheet nhưng lại là quái chính ở Room2/3.
+
+### 10.3 Kinh tế SP — Mục 8 lỗi thời
+
+Mục 8 giả định SP đến từ rương + quest (~13 điểm). Thực tế **enemy drop 5 SP/mạng** (`EnemyDrop.DropGoldAndSkillPoint`), nên nguồn SP chủ yếu là **giết quái**, không phải rương. → Cần tính lại theo số quái (xem Mục 11).
+
+---
+
+## 11. Bố trí quái theo phòng — Room Pacing & Budget *(28/06/2026)*
+
+> **Mục tiêu:** đến khi vào phòng boss, player **vừa đủ**: (a) SP full skill tree, (b) Gold mua đồ chuẩn bị, (c) Level đủ để boss "vừa đủ khó".
+
+### 11.1 Ngân sách mục tiêu tại cửa boss
+
+| Tài nguyên | Mục tiêu | Khởi điểm | Cần từ dungeon |
+|---|---|---|---|
+| **Skill Point** | 40 (full build nặng nhất) | 3 (`_startingSkillPoints`) | **~37** |
+| **Gold** | ~200 (chi ~180 mua đồ boss) | 50 (`_startingMoney`) | **~150** |
+| **Player Level** | **L4** (3 lần chọn stat) — xem ghi chú | L1 | **903 XP** cộng dồn |
+
+> **Ghi chú Level:** sanity-check Mục 9 nhắm L6 (2.821 XP) — **không thực tế** cho dungeon 4 phòng ít quái (cần ~35–40 mạng). Với ~18 quái, mốc khả thi là **L4** (903 XP). Muốn L6 thì phải ~2× số quái hoặc tăng mạnh BaseExp.
+
+### 11.2 Drop đề xuất mỗi loại quái *(set trong `EnemyData`)*
+
+> Hạ **SkillPoint/mạng từ 5 → 2–3** để SP "vừa đủ" thay vì thừa.
+
+| Loại | Level | SkillPoint | Gold | BaseExp |
+|---|---|---|---|---|
+| Skeleton (thường) | 1 | **2** | 8 | 45 |
+| Archer | 2–3 | **2** | 10 | 55 |
+| Slime Normal | 2 | **2** | 8 | 45 |
+| Slime Large | 3 | **3** | 15 | 70 |
+| Skeleton Elite | 4 | **3** | 15 | 70 |
+| **Boss Rippler** | **4–5** ⚠️ | 1 | 10 | 400 |
+
+### 11.3 Số lượng & level quái mỗi phòng
+
+> Quy mô map: nhỏ → ít quái, lớn → nhiều quái. (Hiện trạng quét được: Room1=6 skel, Room2=1 skel+2 archer+3 slime, Room3=1 skel+2 archer, Room4=boss.)
+
+| Phòng | Quy mô | Đội hình đề xuất | Σ quái | SP | Gold | XP |
+|---|---|---|---|---|---|---|
+| **Room 1** (mở màn) | Nhỏ | 5× Skeleton L1 | 5 | 10 | 40 | 225 |
+| **Room 2** | Vừa | 4× (Skel/Slime L2) + 2× Archer L2 | 6 | 12 | 52 | 290 |
+| **Room 3** (sát boss) | Lớn | 3× (Slime/Archer L3) + 2× Skeleton Elite L4 + 2× Archer L3 | 7 | 16 | 74 | 385 |
+| **Room 4** | Boss | 1× Rippler L4–5 (+minion last-attack) | — | — | — | — |
+| **CỘNG** | | | **18** | **38** | **166** | **900** |
+
+### 11.4 Kiểm chứng "vừa đủ"
+
+| Tài nguyên | Khởi điểm + drop | Mục tiêu | Kết luận |
+|---|---|---|---|
+| Skill Point | 3 + 38 = **41** | 32–39 (full build) | ✅ vừa đủ + đệm nhỏ |
+| Gold | 50 + 166 = **216** | chi ~180 | ✅ dư ~36 |
+| XP | **900** | 903 (L4) | ✅ chạm L4 ngay cửa boss |
+
+### 11.5 Việc cần làm để áp dụng
+
+1. **Boss `EnemyData`:** đổi Level 1 → **4–5**, BaseExp 20 → **400** (để boss đáng giá & độ khó đúng). Tinh chỉnh HP/Damage ở `RipplerOffensiveStats`/`RipplerDefensiveStat` theo Mục 9.
+2. **Hạ SkillPoint** trong `EnemyData` mọi quái: 5 → **2** (elite 3) — nếu không SP thừa gấp đôi.
+3. **Set Level quái tăng dần theo phòng** (1 → 2 → 3–4) để XP không bị phạt bởi công thức `1 − (PL−EL)×0.05` và giữ độ khó.
+4. **Thêm 3 quái** so với hiện tại (15 → 18) và phân bố lại như bảng 11.3.
+5. Cập nhật Mục 6 & 8 cho khớp asset (hoặc sửa asset cho khớp sheet) — hiện đang lệch.
+
+> **Đòn bẩy tinh chỉnh:** muốn khó hơn → giảm Gold/SP mỗi mạng hoặc giảm số quái; muốn dễ hơn → tăng. Giữ tỉ lệ XP để mốc Level đúng kỳ vọng.
